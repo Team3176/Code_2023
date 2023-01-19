@@ -168,7 +168,6 @@ Code_2022.code-workspace
 BuildConstants.java
 **/BuildConstants.java
 /src/main/java/team3176/robot/BuildConstants.java
-.wpilib
 
 # End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
 
