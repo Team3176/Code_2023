@@ -1,4 +1,4 @@
-package team3176.robot.subsystems.arm;
+package team3176.robot.constants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -10,11 +10,9 @@ package team3176.robot.subsystems.arm;
  */
 public final class ArmConstants {
 
-    public static final int FLYWHEEL_FALCON1_CAN_ID = 50;
-    public static final int FLYWHEEL_FALCON2_CAN_ID = 51;
-    // for testing
-    // public static final int FLYWHEEL_FALCON1_CAN_ID = 5;
-    // public static final int FLYWHEEL_FALCON2_CAN_ID = 10;
+    public static final int ARM_SHOULDER_FALCON_CAN_ID = 50;
+    public static final int ARM_ELBOW_FALCON_CAN_ID = 50;
+    public static final int ARM_WRIST_FALCON_CAN_ID = 50;
 
     public static final int kPIDLoopIndex = 0;
     public static final int kTimeoutMS = 30;
@@ -23,10 +21,9 @@ public final class ArmConstants {
 
     public static final int TICKS_PER_REV = 2048;
 
-    public static final int MAX_TICKSPER100MS = 2048; //TODO: FIND THE ACTUAL MAX
+    public static final int MAX_TICKSPER100MS = 2048; 
 
-    public static final String kShuffleboardPercentName1 = "Flywheel1%Set";
-    public static final String kShuffleboardPercentName2 = "Flywheel2%Set";
+    public static final String kShuffleboardPercentName1 = "ArmShoulder%Set";
 
     // Constant order: P, I, D, FF, IZone
     public static final double[][] PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
