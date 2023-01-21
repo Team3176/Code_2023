@@ -1,4 +1,4 @@
-package team3176.robot.subsystems.arm;
+package team3176.robot.constants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean

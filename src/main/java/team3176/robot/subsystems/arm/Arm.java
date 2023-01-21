@@ -30,10 +30,14 @@ public class Arm extends SubsystemBase {
         m_forwardLimit = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
     }
 
-    private Limit(){
-        m_forwardLimit.isPressed();
-        m_reverseLimit.isPressed();
+    private boolean getForwardLimitSwitch(){
+        return m_forwardLimit.isPressed();
     }
+
+    private boolean getReverseLimitSwitch() {
+        return m_reverseLimit.isPressed();
+    }
+
     @Override
     public void periodic(){
         m_wrist.updatePID();
