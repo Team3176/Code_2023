@@ -52,7 +52,6 @@ public class RobotContainer {
   //private final Intake m_Intake;
   private final Signalling m_Signalling;
   private final Vision m_Vision;
-  private final Arm m_arm;
 
   private SendableChooser<String> m_autonChooser;
   // private static final String m_B = "s_Block";
@@ -83,7 +82,6 @@ public class RobotContainer {
   private static final String m_TrapDriveRot = "s_TrapDriveRot";
 
   public RobotContainer() {
-    m_arm = Arm.getInstance();
     m_Controller = Controller.getInstance();
     //m_Drivetrain= Drivetrain.getInstance();
     //m_Intake = Intake.getInstance();
