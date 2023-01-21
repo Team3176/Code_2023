@@ -1,4 +1,4 @@
-package team3176.robot.subsystems.arm;
+package team3176.robot.constants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -10,7 +10,7 @@ package team3176.robot.subsystems.arm;
  */
 public final class ArmConstants {
 
-    public static final int FLYWHEEL_FALCON1_CAN_ID = 50;
+    public static final int JOINT_MOTOR1_CAN_ID = 50; //TODO: Update CAN ID
     public static final int FLYWHEEL_FALCON2_CAN_ID = 51;
     // for testing
     // public static final int FLYWHEEL_FALCON1_CAN_ID = 5;
