@@ -4,6 +4,8 @@
 
 package team3176.robot;
 
+import team3176.robot.commands.intakeSpin;
+import team3176.robot.commands.intakeStop;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
@@ -14,13 +16,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import java.util.HashMap;
 import java.util.Map;
 //import team3176.robot.subsystems.*;
 //import team3176.robot.subsystems.arm.*;
-import team3176.robot.subsystems.claw.*;
+//import team3176.robot.subsystems.claw.*;
 import team3176.robot.subsystems.controller.*;
 //import team3176.robot.subsystems.drivetrain.*;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
@@ -46,8 +49,8 @@ public class RobotContainer {
   //private final SwerveSubsystem m_SwerveSubsystem;
   //private final CoordSys m_CoordSys;
   //private final Arm m_Arm;
-  private final Claw m_Claw;
-  private final Controller m_Controller;
+  //private final Claw m_Claw;
+  private final CommandXboxController m_Controller;
   //private final Drivetrain m_Drivetrain;
   private final Intake m_Intake;
   private final Signalling m_Signalling;
@@ -83,10 +86,10 @@ public class RobotContainer {
 
   public RobotContainer() {
     //m_Arm = Arm.getInstance();
-    m_Claw = Claw.getInstance();
-    m_Controller = Controller.getInstance();
+    //m_Claw = Claw.getInstance();
+    m_Controller = new CommandXboxController(0);
     //m_Drivetrain= Drivetrain.getInstance();
-    m_Intake = Intake.getInstance();
+    m_Intake = new Intake();
     m_Signalling = Signalling.getInstance();
     m_Vision = Vision.getInstance();
 
@@ -143,6 +146,11 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    m_Controller.a().whileTrue(new intakeSpin());
+    m_Controller.b().whileTrue(new intakeStop());
+    
+    
+    
     //m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
