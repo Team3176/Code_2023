@@ -20,7 +20,7 @@ public class JointSparkmax
     public JointSparkmax(int deviceID) 
     {
         
-        m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
+        m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);  
 
         m_motor.restoreFactoryDefaults();
 
