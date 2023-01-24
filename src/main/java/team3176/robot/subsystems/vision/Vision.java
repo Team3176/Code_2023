@@ -9,6 +9,8 @@ import java.util.Arrays;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,18 +23,30 @@ public class Vision extends SubsystemBase {
 
   public NetworkTableInstance tableInstance;
   public NetworkTable limelightTable;
-  public NetworkTableEntry tv;
-  public NetworkTableEntry tx;
-  public NetworkTableEntry ty;
-  public NetworkTableEntry tshort;
-  public NetworkTableEntry tlong;
-  public NetworkTableEntry thor;
-  public NetworkTableEntry tvert;
-  public NetworkTableEntry tcornxy;
-  private NetworkTableEntry tl;
-  private NetworkTableEntry pipeline;
-  private NetworkTableEntry camMode;
-  private NetworkTableEntry ledMode;
+  public DoubleTopic tgtValid;
+  public DoubleSubscriber tv;
+  public DoubleTopic xOffset;
+  public DoubleSubscriber tx;
+  public DoubleTopic yOffset;
+  public DoubleSubscriber ty;
+  public DoubleTopic tShort;
+  public DoubleSubscriber tshort;
+  public DoubleTopic tLong;
+  public DoubleSubscriber tlong;
+  public DoubleTopic tHor;
+  public DoubleSubscriber thor;
+  public DoubleTopic tVert;
+  public DoubleSubscriber tvert;
+  public DoubleTopic tCornXY;
+  public DoubleSubscriber tcornxy;
+  private DoubleTopic tL;
+  private DoubleSubscriber tl;
+  private DoubleTopic Pipeline;
+  private DoubleSubscriber pipeline;
+  private DoubleTopic camMODE;
+  private DoubleSubscriber camMode;
+  private DoubleTopic LEDMode;
+  private DoubleSubscriber ledMode;
     
   private double activePipeline = 1;
   private double startTime;
@@ -88,19 +102,31 @@ public class Vision extends SubsystemBase {
    * Can be called to force update of VisionClient data structure
    */
   public void updateVisionData(){
-    tv = limelightTable.getEntry("tv");
-    tx = limelightTable.getEntry("tx");
-    ty = limelightTable.getEntry("ty");
-    tshort = limelightTable.getEntry("tshort");
-    tlong = limelightTable.getEntry("tlong");
-    thor = limelightTable.getEntry("thor");
-    tvert = limelightTable.getEntry("tvert");
-    tcornxy = limelightTable.getEntry("tcornxy");
-    tl = limelightTable.getEntry("tl");
-    pipeline = limelightTable.getEntry("pipeline");
-    camMode = limelightTable.getEntry("camMode");
-    ledMode = limelightTable.getEntry("ledMode");
-    activePipeline = pipeline.getDouble(0);
+    tgtValid = limelightTable.getDoubleTopic("tv");
+    tv = tgtValid.subscribe( 0.0);
+    xOffset = limelightTable.getDoubleTopic("tx");
+    tx = xOffset.subscribe(0.0);
+    yOffset = limelightTable.getDoubleTopic("ty");
+    ty = yOffset.subscribe(0.0);
+    tShort = limelightTable.getDoubleTopic("tshort");
+    tshort = tShort.subscribe(0.0);
+    tLong = limelightTable.getDoubleTopic("tlong");
+    tlong = tLong.subscribe(0.0);
+    tHor = limelightTable.getDoubleTopic("thor");
+    thor = tHor.subscribe(0.0);
+    tVert = limelightTable.getDoubleTopic("tvert");
+    tvert = tVert.subscribe(0.0);
+    tCornXY = limelightTable.getDoubleTopic("tcornxy");
+    tcornxy = tCornXY.subscribe(0.0);
+    tL = limelightTable.getDoubleTopic("tl");
+    tl = tL.subscribe(0.0);
+    Pipeline = limelightTable.getDoubleTopic("pipeline");
+    pipeline = Pipeline.subscribe(0.0);
+    camMODE = limelightTable.getDoubleTopic("camMode");
+    camMode = camMODE.subscribe(0.0);
+    LEDMode = limelightTable.getDoubleTopic("ledMode");
+    ledMode = LEDMode.subscribe(0.0);
+    activePipeline = pipeline.get();
   }
 
   public void targetRecogControlLoop(){
@@ -127,7 +153,7 @@ public class Vision extends SubsystemBase {
 
     publishAllData();
 
-    SmartDashboard.putNumber("Latency (ms)", ((Timer.getFPGATimestamp() - startTime) * 1000) + tl.getDouble(0) + 11);
+    SmartDashboard.putNumber("Latency (ms)", ((Timer.getFPGATimestamp() - startTime) * 1000) + tl.get() + 11);
   }
 
   public void separateCornArray(){
@@ -206,7 +232,7 @@ public class Vision extends SubsystemBase {
   }
 
   public boolean getVisionProcessing(){
-    return camMode.getNumber(0).equals(0.0);
+    return camMode.get() == 0.0;
   }
 
   public void setActivePipeline(int newPipeline){
@@ -221,9 +247,9 @@ public class Vision extends SubsystemBase {
   private void publishAllData(){
     SmartDashboard.putNumber("initialVelocity", initialVelocity);
 
-    SmartDashboard.putBoolean("Has Targets", (tv.getDouble(0) == 1));
-    SmartDashboard.putNumber("tshort", tshort.getDouble(0));
-    SmartDashboard.putNumber("tvert", tvert.getDouble(0));
+    SmartDashboard.putBoolean("Has Targets", (tv.get() == 1));
+    SmartDashboard.putNumber("tshort", tshort.get());
+    SmartDashboard.putNumber("tvert", tvert.get());
 
     double numTargets = tcornx.size();
     SmartDashboard.putNumber("Number of Targets", numTargets);
@@ -234,11 +260,11 @@ public class Vision extends SubsystemBase {
 
     SmartDashboard.putNumber("Distance According to Camera", deltaXCam);
 
-    SmartDashboard.putNumber("Approx. Latency (ms)", ((Timer.getFPGATimestamp() - startTime) * 1000) + tl.getDouble(0) + 11);
+    SmartDashboard.putNumber("Approx. Latency (ms)", ((Timer.getFPGATimestamp() - startTime) * 1000) + tl.get() + 11);
   }
 
   public double getCurrentPipeline(){
-    return pipeline.getDouble(0);
+    return pipeline.get();
   }
 
   public void switchLEDs(LEDState newLEDState){
@@ -323,7 +349,7 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putBoolean("VisionSpinCorrectionOn", isVisionSpinCorrectionOn);
   }
   public void setVisionSpinCorrectionOn(){
-    if (this.tv.getBoolean(false)) { 
+    if (this.tv.get() == 1) { 
       setVisionSpinCorrection(true);
       SmartDashboard.putBoolean("VisionSpinCorrectionOn", true);
     }
@@ -342,7 +368,7 @@ public class Vision extends SubsystemBase {
 
   public double getVisionSpinCorrection() {
     updateVisionData();
-    this.visionSpinCorrection = 1 * visionSpinLockPID.calculate(this.tx.getDouble(0), 0);
+    this.visionSpinCorrection = 1 * visionSpinLockPID.calculate(this.tx.get(), 0);
     return visionSpinCorrection;
   }
 }
