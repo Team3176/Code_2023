@@ -6,6 +6,7 @@ package team3176.robot;
 
 import team3176.robot.commands.intakeSpin;
 import team3176.robot.commands.intakeStop;
+import team3176.robot.commands.intakeposition;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
@@ -146,7 +147,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    m_Controller.a().whileTrue(new intakeSpin());
+    m_Controller.a().whileTrue(new intakeposition());
     m_Controller.b().whileTrue(new intakeStop());
     
     

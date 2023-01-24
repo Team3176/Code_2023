@@ -4,6 +4,7 @@
 
 package team3176.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -14,39 +15,49 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 public class Intake extends SubsystemBase {
     private TalonSRX motorcontrol = new TalonSRX(22);
-    public static final int kTimeoutMs = 0;
-    public static final int kPID_LOOP_IDX = 0;
-    public static final double ALLOWABLE_CLOSED_LOOP_ERROR = 0;
   /** Creates a new Intake. */
   public Intake() {
 
-    motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0); 
-    this.motorcontrol.configNominalOutputForward(0, motorcontrol.kTIMEOUT_MS);
-    this.motorcontrol.configNominalOutputReverse(0, motorcontrol.kTIMEOUT_MS);
-    this.motorcontrol.configPeakOutputForward(1.0, motorcontrol.kTIMEOUT_MS);
-    this.motorcontrol.configPeakOutputReverse(-1.0, motorcontrol.kTIMEOUT_MS);
-    
-    this.motorcontrol.configAllowableClosedloopError(motorcontrol.kPID_LOOP_IDX, motorcontrol.ALLOWABLE_CLOSED_LOOP_ERROR, motorcontrol.kTIMEOUT_MS);
+    motorcontrol.configFactoryDefault();
+		
+		/* Config the sensor used for Primary PID and sensor direction */
+    motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
-    this.motorcontrol.config_kF(motorcontrol.kPID_LOOP_IDX, motorcontrol.PIDFConstants[0][3], motorcontrol.kTIMEOUT_MS);
-    this.motorcontrol.config_kP(motorcontrol.kPID_LOOP_IDX, motorcontrol.PIDFConstants[0][0], motorcontrol.kTIMEOUT_MS);
-    this.motorcontrol.config_kI(motorcontrol.kPID_LOOP_IDX, motorcontrol.PIDFConstants[0][1], motorcontrol.kTIMEOUT_MS);
-    this.motorcontrol.config_kD(motorcontrol.kPID_LOOP_IDX, motorcontrol.PIDFConstants[0][2], motorcontrol.kTIMEOUT_MS);
-    this.motorcontrol.config_IntegralZone(motorcontrol.kPID_LOOP_IDX, motorcontrol.PIDFConstants[0][4], motorcontrol.kTIMEOUT_MS);
-    this.motorcontrol.setInverted(true);
+		/* Ensure sensor is positive when output is positive */
+		motorcontrol.setSensorPhase(true);
+
+    // motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0); 
+    // motorcontrol.configNominalOutputForward(0, motorconstants.kTIMEOUT_MS);
+    // motorcontrol.configNominalOutputReverse(0, motorconstants.kTIMEOUT_MS);
+    // motorcontrol.configPeakOutputForward(1.0, motorconstants.kTIMEOUT_MS);
+    // motorcontrol.configPeakOutputReverse(-1.0, motorconstants.kTIMEOUT_MS);
+    
+    motorcontrol.configAllowableClosedloopError(motorconstants.kPID_LOOP_IDX, motorconstants.ALLOWABLE_CLOSED_LOOP_ERROR, motorconstants.kTIMEOUT_MS);
+
+    motorcontrol.config_kF(motorconstants.kPID_LOOP_IDX, motorconstants.kF, motorconstants.kTIMEOUT_MS);
+    motorcontrol.config_kP(motorconstants.kPID_LOOP_IDX, motorconstants.kP, motorconstants.kTIMEOUT_MS);
+    motorcontrol.config_kI(motorconstants.kPID_LOOP_IDX, motorconstants.kI, motorconstants.kTIMEOUT_MS);
+    motorcontrol.config_kD(motorconstants.kPID_LOOP_IDX, motorconstants.kD, motorconstants.kTIMEOUT_MS);
+    motorcontrol.config_IntegralZone(motorconstants.kPID_LOOP_IDX, motorconstants.kIzone, motorconstants.kTIMEOUT_MS);
+    motorcontrol.setInverted(true);
   }
 
   public void spinVelocityPercent(double pct) {
     motorcontrol.set(TalonSRXControlMode.PercentOutput, pct);
    
   }
- 
+  public void set(TalonSRXControlMode position, int i) {
+    double currentPos = motorcontrol.getSelectedSensorPosition();
+    motorcontrol.set(position, currentPos + i);
+  }
   
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+ 
 }
 
 
