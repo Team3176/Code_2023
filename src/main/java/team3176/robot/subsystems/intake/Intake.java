@@ -5,12 +5,15 @@
 package team3176.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 //import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.fasterxml.jackson.databind.JsonSerializable.Base;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 public class Intake extends SubsystemBase {
@@ -21,7 +24,7 @@ public class Intake extends SubsystemBase {
     motorcontrol.configFactoryDefault();
 		
 		/* Config the sensor used for Primary PID and sensor direction */
-    motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
 		/* Ensure sensor is positive when output is positive */
 		motorcontrol.setSensorPhase(true);
@@ -40,17 +43,22 @@ public class Intake extends SubsystemBase {
     motorcontrol.config_kD(motorconstants.kPID_LOOP_IDX, motorconstants.kD, motorconstants.kTIMEOUT_MS);
     motorcontrol.config_IntegralZone(motorconstants.kPID_LOOP_IDX, motorconstants.kIzone, motorconstants.kTIMEOUT_MS);
     motorcontrol.setInverted(true);
+    
+    motorcontrol.configNominalOutputReverse(0, motorconstants.kTIMEOUT_MS);
+    motorcontrol.configPeakOutputReverse(-1, motorconstants.kTIMEOUT_MS);
+    motorcontrol.configPeakOutputForward(1, motorconstants.kTIMEOUT_MS);
+    motorcontrol.configNominalOutputForward(0, motorconstants.kTIMEOUT_MS);
   }
 
   public void spinVelocityPercent(double pct) {
     motorcontrol.set(TalonSRXControlMode.PercentOutput, pct);
    
   }
-  public void set(TalonSRXControlMode position, int i) {
-    double currentPos = motorcontrol.getSelectedSensorPosition();
-    motorcontrol.set(position, currentPos + i);
-  }
   
+  public void set(int i) {
+    double currentPos = motorcontrol.getSelectedSensorPosition(0);
+    motorcontrol.set(ControlMode.Position, currentPos + i);
+  }
 
   @Override
   public void periodic() {

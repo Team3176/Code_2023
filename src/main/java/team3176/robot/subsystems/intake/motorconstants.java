@@ -12,9 +12,9 @@ public class motorconstants {
     public static final double ALLOWABLE_CLOSED_LOOP_ERROR = 0;
 
 
-    public static final double kP = .5;
+    public static final double kP = .25;
 	public static final double kI = 0;
-	public static final double kD = .10;
+	public static final double kD = 0;
 	public static final double kF = 0;
 	public static final int kIzone = 0;
     

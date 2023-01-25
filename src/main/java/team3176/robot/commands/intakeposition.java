@@ -4,6 +4,7 @@
 
 package team3176.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -24,7 +25,7 @@ public class intakeposition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Intake.set(TalonSRXControlMode.Position, 100);
+    m_Intake.set(1000);
   }
 
   // Called once the command ends or is interrupted.
