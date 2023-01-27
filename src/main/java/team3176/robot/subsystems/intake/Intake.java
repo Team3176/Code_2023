@@ -15,13 +15,23 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.fasterxml.jackson.databind.JsonSerializable.Base;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
+import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends SubsystemBase {
     private TalonSRX motorcontrol = new TalonSRX(22);
+    private I2C.Port m_I2C = I2C.Port.kOnboard;
+    private DigitalInput linebreak = new DigitalInput(0);
+    private ColorSensorV3 m_ColorSensor = new ColorSensorV3(m_I2C);
+    private boolean isInIntake;
   /** Creates a new Intake. */
   public Intake() {
 
     motorcontrol.configFactoryDefault();
+    isInIntake = false;
 		
 		/* Config the sensor used for Primary PID and sensor direction */
     motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
@@ -63,6 +73,15 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (linebreak.get() == false)
+    {
+      isInIntake = true;
+    }
+    else
+    {
+      isInIntake = false;
+    }
+    SmartDashboard.setDefaultBoolean(getName(), isInIntake);
   }
 
  
