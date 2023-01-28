@@ -4,9 +4,6 @@
 
 package team3176.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import team3176.robot.subsystems.intake.Intake;
 

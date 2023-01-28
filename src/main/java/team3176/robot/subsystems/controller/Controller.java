@@ -416,59 +416,59 @@ public class Controller {
 
   /* Returns the object of the named button */
 
-  public JoystickButton getTransStick_Button1() {return transStick_Button1;}
-  public JoystickButton getTransStick_Button2() {return transStick_Button2;}
-  public JoystickButton getTransStick_Button3() {return transStick_Button3;}
-  public JoystickButton getTransStick_Button4() {return transStick_Button4;}
-  public JoystickButton getTransStick_Button5() {return transStick_Button5;}
-  public JoystickButton getTransStick_Button6() {return transStick_Button6;}
-  public JoystickButton getTransStick_Button7() {return transStick_Button7;}
-  public JoystickButton getTransStick_Button8() {return transStick_Button8;}
-  public JoystickButton getTransStick_Button9() {return transStick_Button9;}
-  public JoystickButton getTransStick_Button10() {return transStick_Button10;}
-  public JoystickButton getTransStick_Button11() {return transStick_Button11;}
-  public JoystickButton getTransStick_Button12() {return transStick_Button12;}
-  public JoystickButton getTransStick_Button13() {return transStick_Button13;}
-  public JoystickButton getTransStick_Button14() {return transStick_Button14;}
-  public JoystickButton getTransStick_Button15() {return transStick_Button15;}
-  public JoystickButton getTransStick_Button16() {return transStick_Button16;}
+//   public JoystickButton getTransStick_Button1() {return transStick_Button1;}
+//   public JoystickButton getTransStick_Button2() {return transStick_Button2;}
+//   public JoystickButton getTransStick_Button3() {return transStick_Button3;}
+//   public JoystickButton getTransStick_Button4() {return transStick_Button4;}
+//   public JoystickButton getTransStick_Button5() {return transStick_Button5;}
+//   public JoystickButton getTransStick_Button6() {return transStick_Button6;}
+//   public JoystickButton getTransStick_Button7() {return transStick_Button7;}
+//   public JoystickButton getTransStick_Button8() {return transStick_Button8;}
+//   public JoystickButton getTransStick_Button9() {return transStick_Button9;}
+//   public JoystickButton getTransStick_Button10() {return transStick_Button10;}
+//   public JoystickButton getTransStick_Button11() {return transStick_Button11;}
+//   public JoystickButton getTransStick_Button12() {return transStick_Button12;}
+//   public JoystickButton getTransStick_Button13() {return transStick_Button13;}
+//   public JoystickButton getTransStick_Button14() {return transStick_Button14;}
+//   public JoystickButton getTransStick_Button15() {return transStick_Button15;}
+//   public JoystickButton getTransStick_Button16() {return transStick_Button16;}
  
-  public POVButton getTransStick_HAT_0() {return transStick_HAT_0;}
-  public POVButton getTransStick_HAT_45() {return transStick_HAT_45;}
-  public POVButton getTransStick_HAT_90() {return transStick_HAT_90;}
-  public POVButton getTransStick_HAT_135() {return transStick_HAT_135;}
-  public POVButton getTransStick_HAT_180() {return transStick_HAT_180;}
-  public POVButton getTransStick_HAT_225() {return transStick_HAT_225;}
-  public POVButton getTransStick_HAT_270() {return transStick_HAT_270;}
-  public POVButton getTransStick_HAT_315() {return transStick_HAT_315;}
+//   public POVButton getTransStick_HAT_0() {return transStick_HAT_0;}
+//   public POVButton getTransStick_HAT_45() {return transStick_HAT_45;}
+//   public POVButton getTransStick_HAT_90() {return transStick_HAT_90;}
+//   public POVButton getTransStick_HAT_135() {return transStick_HAT_135;}
+//   public POVButton getTransStick_HAT_180() {return transStick_HAT_180;}
+//   public POVButton getTransStick_HAT_225() {return transStick_HAT_225;}
+//   public POVButton getTransStick_HAT_270() {return transStick_HAT_270;}
+//   public POVButton getTransStick_HAT_315() {return transStick_HAT_315;}
 
 
   
-  public JoystickButton getRotStick_Button1() {return rotStick_Button1;}
-  public JoystickButton getRotStick_Button2() {return rotStick_Button2;}
-  public JoystickButton getRotStick_Button3() {return rotStick_Button3;}
-  public JoystickButton getRotStick_Button4() {return rotStick_Button4;}
-  public JoystickButton getRotStick_Button5() {return rotStick_Button5;}
-  public JoystickButton getRotStick_Button6() {return rotStick_Button6;}
-  public JoystickButton getRotStick_Button7() {return rotStick_Button7;}
-  public JoystickButton getRotStick_Button8() {return rotStick_Button8;}
-  public JoystickButton getRotStick_Button9() {return rotStick_Button9;}
-  public JoystickButton getRotStick_Button10() {return rotStick_Button10;}
-  public JoystickButton getRotStick_Button11() {return rotStick_Button11;}
-  public JoystickButton getRotStick_Button12() {return rotStick_Button12;}
-  public JoystickButton getRotStick_Button13() {return rotStick_Button13;}
-  public JoystickButton getRotStick_Button14() {return rotStick_Button14;}
-  public JoystickButton getRotStick_Button15() {return rotStick_Button15;}
-  public JoystickButton getRotStick_Button16() {return rotStick_Button16;}
+//   public JoystickButton getRotStick_Button1() {return rotStick_Button1;}
+//   public JoystickButton getRotStick_Button2() {return rotStick_Button2;}
+//   public JoystickButton getRotStick_Button3() {return rotStick_Button3;}
+//   public JoystickButton getRotStick_Button4() {return rotStick_Button4;}
+//   public JoystickButton getRotStick_Button5() {return rotStick_Button5;}
+//   public JoystickButton getRotStick_Button6() {return rotStick_Button6;}
+//   public JoystickButton getRotStick_Button7() {return rotStick_Button7;}
+//   public JoystickButton getRotStick_Button8() {return rotStick_Button8;}
+//   public JoystickButton getRotStick_Button9() {return rotStick_Button9;}
+//   public JoystickButton getRotStick_Button10() {return rotStick_Button10;}
+//   public JoystickButton getRotStick_Button11() {return rotStick_Button11;}
+//   public JoystickButton getRotStick_Button12() {return rotStick_Button12;}
+//   public JoystickButton getRotStick_Button13() {return rotStick_Button13;}
+//   public JoystickButton getRotStick_Button14() {return rotStick_Button14;}
+//   public JoystickButton getRotStick_Button15() {return rotStick_Button15;}
+//   public JoystickButton getRotStick_Button16() {return rotStick_Button16;}
 
-  public POVButton getRotStick_HAT_0() {return rotStick_HAT_0;}
-  public POVButton getRotStick_HAT_45() {return rotStick_HAT_45;}
-  public POVButton getRotStick_HAT_90() {return rotStick_HAT_90;}
-  public POVButton getRotStick_HAT_135() {return rotStick_HAT_135;}
-  public POVButton getRotStick_HAT_180() {return rotStick_HAT_180;}
-  public POVButton getRotStick_HAT_225() {return rotStick_HAT_225;}
-  public POVButton getRotStick_HAT_270() {return rotStick_HAT_270;}
-  public POVButton getRotStick_HAT_315() {return rotStick_HAT_315;}
+//   public POVButton getRotStick_HAT_0() {return rotStick_HAT_0;}
+//   public POVButton getRotStick_HAT_45() {return rotStick_HAT_45;}
+//   public POVButton getRotStick_HAT_90() {return rotStick_HAT_90;}
+//   public POVButton getRotStick_HAT_135() {return rotStick_HAT_135;}
+//   public POVButton getRotStick_HAT_180() {return rotStick_HAT_180;}
+//   public POVButton getRotStick_HAT_225() {return rotStick_HAT_225;}
+//   public POVButton getRotStick_HAT_270() {return rotStick_HAT_270;}
+//   public POVButton getRotStick_HAT_315() {return rotStick_HAT_315;}
 
 
   // public Trigger getOp_A() {return op_A;}

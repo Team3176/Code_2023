@@ -1,6 +1,6 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// // Copyright (c) FIRST and other WPILib contributors.
+// // Open Source Software; you can modify and/or share it under the terms of
+// // the WPILib BSD license file in the root directory of this project.
 
 package team3176.robot.subsystems.vision;
 
@@ -17,7 +17,7 @@ import team3176.robot.constants.VisionConstants;
 import edu.wpi.first.math.controller.PIDController;
 public class Vision extends SubsystemBase {
   
-  private static Vision instance = new Vision();
+private static Vision instance = new Vision();
 
   public NetworkTableInstance tableInstance;
   public NetworkTable limelightTable;

@@ -28,11 +28,10 @@ import java.util.Map;
 import team3176.robot.subsystems.controller.*;
 //import team3176.robot.subsystems.drivetrain.*;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
-import team3176.robot.subsystems.intake.*;
 import team3176.robot.subsystems.signalling.*;
 import team3176.robot.subsystems.vision.*;
 import team3176.robot.subsystems.intake.Intake;
-import team3176.robot.subsystems.vision.Vision;
+// import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.arm.*;
 //import team3176.robot.commands.autons.*;
 //import team3176.robot.commands.claw.*;
@@ -54,11 +53,11 @@ public class RobotContainer {
   private final CommandXboxController m_Controller;
   //private final Drivetrain m_Drivetrain;
   private final Intake m_Intake;
-  private final Signalling m_Signalling;
-  private final Vision m_Vision;
+  // private final Signalling m_Signalling;
+  // private final Vision m_Vision;
 
   private SendableChooser<String> m_autonChooser;
-  // private static final String m_B = "s_Block";
+  private static final String m_B = "s_Block";
   private static final String m_M = "s_ExitTarmac";
   private static final String M_EXITANDTUR_STRING = "s_ExitAndTurn";
   private static final String m_6L = "s_Move6inToTheLeft";
@@ -91,8 +90,8 @@ public class RobotContainer {
     m_Controller = new CommandXboxController(0);
     //m_Drivetrain= Drivetrain.getInstance();
     m_Intake = new Intake();
-    m_Signalling = Signalling.getInstance();
-    m_Vision = Vision.getInstance();
+    // m_Signalling = Signalling.getInstance();
+    // m_Vision = Vision.getInstance();
 
     m_PDH = new PowerDistribution(1, ModuleType.kRev);
     m_PDH.clearStickyFaults();
@@ -116,7 +115,7 @@ public class RobotContainer {
 
     m_autonChooser = new SendableChooser<>();
     m_autonChooser.setDefaultOption("Auto: ExitTarmac", m_M);
-    // m_autonChooser.addOption("Auto: Block", m_B);
+    m_autonChooser.addOption("Auto: Block", m_B);
     m_autonChooser.addOption("Auto: Move 6in Left", m_6L);
     m_autonChooser.addOption("Auto: ExitAndTurn", M_EXITANDTUR_STRING);
     m_autonChooser.addOption("Auto: Move 6in Right", m_6R);
@@ -147,8 +146,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    m_Controller.a().whileTrue(new intakeposition());
-    m_Controller.b().whileTrue(new intakeStop());
+    // m_Controller.a().whileTrue(new intakeposition());
+    // m_Controller.b().whileTrue(new intakeStop());
     
     
     
