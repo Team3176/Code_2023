@@ -4,6 +4,8 @@
 
 package team3176.robot;
 
+import team3176.robot.commands.pipeSwitch;
+import team3176.robot.commands.switchLED;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
@@ -20,12 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 //import team3176.robot.subsystems.*;
 //import team3176.robot.subsystems.arm.*;
-import team3176.robot.subsystems.claw.*;
+//import team3176.robot.subsystems.claw.*;
 import team3176.robot.subsystems.controller.*;
 //import team3176.robot.subsystems.drivetrain.*;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
-import team3176.robot.subsystems.intake.*;
-import team3176.robot.subsystems.signalling.*;
+//import team3176.robot.subsystems.intake.*;
+//import team3176.robot.subsystems.signalling.*;
 import team3176.robot.subsystems.vision.*;
 import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.arm.*;
@@ -37,6 +39,7 @@ import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.vision.*;
 //import team3176.robot.commands.test.*;
 //import team3176.robot.commands.util.*;
+import team3176.robot.subsystems.vision.Vision.LEDState;
 
 public class RobotContainer {
 
@@ -136,6 +139,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    m_Controller.operator.a().onTrue(new switchLED());
+    m_Controller.operator.b().onTrue(new pipeSwitch(0));
+    m_Controller.operator.y().onTrue(new pipeSwitch(1));
     //m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
