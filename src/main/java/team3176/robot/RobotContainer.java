@@ -4,9 +4,9 @@
 
 package team3176.robot;
 
-import team3176.robot.commands.intakeSpin;
-import team3176.robot.commands.intakeStop;
-import team3176.robot.commands.intakeposition;
+import team3176.robot.commands.IntakeSpin;
+import team3176.robot.commands.IntakeStop;
+import team3176.robot.commands.IntakePosition;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
@@ -89,14 +89,14 @@ public class RobotContainer {
     //m_Claw = Claw.getInstance();
     m_Controller = new CommandXboxController(0);
     //m_Drivetrain= Drivetrain.getInstance();
-    m_Intake = new Intake();
+    m_Intake = Intake.getInstance();
     // m_Signalling = Signalling.getInstance();
     // m_Vision = Vision.getInstance();
 
     m_PDH = new PowerDistribution(1, ModuleType.kRev);
     m_PDH.clearStickyFaults();
 
-    m_Compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+    m_Compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     // TODO: ADD A WAY TO CLEAR STICKY FAULTS
     // m_Compressor.disable(); //HAVE TO TELL IT TO DISABLE FOR IT TO NOT AUTO START
     m_Compressor.enableDigital();
@@ -146,8 +146,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    // m_Controller.a().whileTrue(new intakeposition());
-    // m_Controller.b().whileTrue(new intakeStop());
+    m_Controller.a().onTrue(new IntakePosition());
+    m_Controller.b().onTrue(new IntakeStop());
     
     
     

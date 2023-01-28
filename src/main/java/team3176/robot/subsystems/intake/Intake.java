@@ -7,10 +7,15 @@ package team3176.robot.subsystems.intake;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.ColorSensorV3;
@@ -19,15 +24,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Intake extends SubsystemBase {
     private TalonSRX motorcontrol = new TalonSRX(22);
     private I2C.Port m_I2C = I2C.Port.kOnboard;
+    private DoubleSolenoid piston;
     private DigitalInput linebreak; 
     private ColorSensorV3 m_ColorSensor = new ColorSensorV3(m_I2C);
     private boolean isInIntake;
     private boolean isCone;
     private boolean isCube;
+    private static Intake instance = new Intake();
   /** Creates a new Intake. */
   public Intake() {
 
     motorcontrol.configFactoryDefault();
+    piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
     isInIntake = false;
     isCone = false;
     isCube = false;
@@ -71,6 +79,18 @@ public class Intake extends SubsystemBase {
   public void set(int i) {
     double currentPos = motorcontrol.getSelectedSensorPosition(0);
     motorcontrol.set(ControlMode.Position, currentPos + i);
+  }
+
+  public void Extend() {
+    piston.set(Value.kForward);
+  }
+
+  public void Retract() {
+    piston.set(Value.kReverse);
+  }
+
+  public static Intake getInstance(){
+    return instance;
   }
 
   @Override

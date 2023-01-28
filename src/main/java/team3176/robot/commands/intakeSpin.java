@@ -7,10 +7,10 @@ package team3176.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import team3176.robot.subsystems.intake.Intake;
 
-public class intakeSpin extends CommandBase {
-  private Intake m_Intake = new Intake();
+public class IntakeSpin extends CommandBase {
+  private Intake m_Intake = Intake.getInstance();
   /** Creates a new intakeSpin. */
-  public intakeSpin() {
+  public IntakeSpin() {
     addRequirements(m_Intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
