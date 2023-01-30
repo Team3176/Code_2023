@@ -23,6 +23,7 @@ import team3176.robot.commands.drivetrain.TrapezoidDrive;
 import team3176.robot.commands.drivetrain.TrapezoidDriveRotate;
 import team3176.robot.commands.drivetrain.TrapezoidRotate;
 //import team3176.robot.commands.util.*;
+import team3176.robot.constants.LoggerConstants;
 //import team3176.robot.subsystems.*;
 import team3176.robot.subsystems.controller.*;
 import team3176.robot.subsystems.controller.Controller;
@@ -52,7 +53,7 @@ public class RobotContainer {
     //m_Compressor.enableDigital();
 
 
-    if (!MasterConstants.IS_TUNING_MODE) {
+    if (!LoggerConstants.IS_TUNING_MODE) {
       m_Drivetrain.setDefaultCommand(new SwerveDrive(
           () -> m_Controller.getForward(),
           () -> m_Controller.getStrafe(),
