@@ -8,13 +8,21 @@ import edu.wpi.first.math.util.Units;
 //import team3176.robot.constants.MasterConstants;
 
 public class DrivetrainConstants extends DrivetrainHardwareMap {
-    // IDs for SwerveSubsystem motors and solenoids
+    // IDs for Drivetrain motors and solenoids
 
     
 
+    public static final double POD0_LOCATION_X = 1.0;   // <---TODO: REPLACE WITH MEASURED VALUES
+    public static final double POD0_LOCATION_Y = 1.0;   // <---TODO: REPLACE WITH MEASURED VALUES
+    public static final double POD1_LOCATION_X = 1.0;   // <---TODO: REPLACE WITH MEASURED VALUES
+    public static final double POD1_LOCATION_Y = -1.0;   // <---TODO: REPLACE WITH MEASURED VALUES
+    public static final double POD2_LOCATION_X = -1.0;   // <---TODO: REPLACE WITH MEASURED VALUES
+    public static final double POD2_LOCATION_Y = 1.0;   // <---TODO: REPLACE WITH MEASURED VALUES
+    public static final double POD3_LOCATION_X = -1.0;   // <---TODO: REPLACE WITH MEASURED VALUES
+    public static final double POD3_LOCATION_Y = -1.0;   // <---TODO: REPLACE WITH MEASURED VALUES
   
 
-    // SwerveSubsystem dimensions for kinematics and odometry
+    // Drivetrain dimensions for kinematics and odometry
     public static final double LENGTH_IN_METERS_2022 = 0.581; // measured in inches as 24.75
     public static final double LENGTH_IN_INCHES_2022 = Units.metersToInches(LENGTH_IN_METERS_2022); //58.1 * (1.0/2.54); // 22.87 inches but measured in cm as 58.1cm
 
@@ -49,22 +57,12 @@ public class DrivetrainConstants extends DrivetrainHardwareMap {
 
     //public static final double LENGTH_CENTER_TO_CENTER = 23.5;
     //public static final double WIDTH_CENTER_TO_CENTER = 23.5;
-    public static final Translation2d FR_POD_LOCATION = new Translation2d(-Units.inchesToMeters(LENGTH) / 2, Units.inchesToMeters(WIDTH) / 2); //FR where +x=forward and +y=port
-    public static final Translation2d FL_POD_LOCATION = new Translation2d(Units.inchesToMeters(LENGTH) / 2, Units.inchesToMeters(WIDTH) / 2);   //FL where +x=forward and +y=port
-    public static final Translation2d BL_POD_LOCATION = new Translation2d(-Units.inchesToMeters(LENGTH) / 2, -Units.inchesToMeters(WIDTH) / 2); //BL where +x=forward and +y=port
-    public static final Translation2d BR_POD_LOCATION = new Translation2d(Units.inchesToMeters(LENGTH) / 2, -Units.inchesToMeters(WIDTH) / 2);   //BR where +x=forward and +y=port
-    
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-        FR_POD_LOCATION,
-        FL_POD_LOCATION,
-        BL_POD_LOCATION,
-        BR_POD_LOCATION
+        new Translation2d(-Units.inchesToMeters(LENGTH) / 2, Units.inchesToMeters(WIDTH) / 2),  //FR where +x=forward and +y=port
+        new Translation2d(Units.inchesToMeters(LENGTH) / 2, Units.inchesToMeters(WIDTH) / 2),   //FL where +x=forward and +y=port
+        new Translation2d(-Units.inchesToMeters(LENGTH) / 2, -Units.inchesToMeters(WIDTH) / 2), //BL where +x=forward and +y=port
+        new Translation2d(Units.inchesToMeters(LENGTH) / 2, -Units.inchesToMeters(WIDTH) / 2)   //BR where +x=forward and +y=port
     );
-        //new Translation2d(-Units.inchesToMeters(LENGTH) / 2, Units.inchesToMeters(WIDTH) / 2),  //FR where +x=forward and +y=port
-        //new Translation2d(Units.inchesToMeters(LENGTH) / 2, Units.inchesToMeters(WIDTH) / 2),   //FL where +x=forward and +y=port
-        //new Translation2d(-Units.inchesToMeters(LENGTH) / 2, -Units.inchesToMeters(WIDTH) / 2), //BL where +x=forward and +y=port
-        //new Translation2d(Units.inchesToMeters(LENGTH) / 2, -Units.inchesToMeters(WIDTH) / 2)   //BR where +x=forward and +y=port
-    //);
 
     /* NOTE: Related to above decomposition of pod locations where
      *               O (Chassis center) = 0,0,
@@ -94,7 +92,7 @@ public class DrivetrainConstants extends DrivetrainHardwareMap {
      // Below line contains offset needed to rotate raw navx angle output such that +x=fore and +y=port
     public static final double GYRO_ROTATIONAL_OFFSET_2022_practiceBot = 0; 
     public static final double GYRO_ROTATIONAL_OFFSET_2022_actualBot = 0; 
-    public static final double GYRO_ROTATIONAL_OFFSET_FOR_RIO_MOUNTING = (LoggerConstants.IS_PRACTICE_BOT) ? GYRO_ROTATIONAL_OFFSET_2022_practiceBot : GYRO_ROTATIONAL_OFFSET_2022_actualBot; 
+    public static final double GYRO_ROTATIONAL_OFFSET_FOR_RIO_MOUNTING = (MasterConstants.IS_PRACTICE_BOT) ? GYRO_ROTATIONAL_OFFSET_2022_practiceBot : GYRO_ROTATIONAL_OFFSET_2022_actualBot; 
 
     public static final double[] AUTON_THETA_CONTROLLER_PIDF = { 3.0 /*kP*/, 0.0 /*kI*/, 0.0 /*kD*/, 0.0 /*kF*/};
 
