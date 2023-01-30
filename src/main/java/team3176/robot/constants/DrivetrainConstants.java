@@ -92,7 +92,7 @@ public class DrivetrainConstants extends DrivetrainHardwareMap {
      // Below line contains offset needed to rotate raw navx angle output such that +x=fore and +y=port
     public static final double GYRO_ROTATIONAL_OFFSET_2022_practiceBot = 0; 
     public static final double GYRO_ROTATIONAL_OFFSET_2022_actualBot = 0; 
-    public static final double GYRO_ROTATIONAL_OFFSET_FOR_RIO_MOUNTING = (MasterConstants.IS_PRACTICE_BOT) ? GYRO_ROTATIONAL_OFFSET_2022_practiceBot : GYRO_ROTATIONAL_OFFSET_2022_actualBot; 
+    public static final double GYRO_ROTATIONAL_OFFSET_FOR_RIO_MOUNTING = (LoggerConstants.IS_PRACTICE_BOT) ? GYRO_ROTATIONAL_OFFSET_2022_practiceBot : GYRO_ROTATIONAL_OFFSET_2022_actualBot; 
 
     public static final double[] AUTON_THETA_CONTROLLER_PIDF = { 3.0 /*kP*/, 0.0 /*kI*/, 0.0 /*kD*/, 0.0 /*kF*/};
 
