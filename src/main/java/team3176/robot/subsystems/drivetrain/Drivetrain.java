@@ -19,7 +19,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.DoubleTopic;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,6 +59,11 @@ public class Drivetrain extends SubsystemBase {
   private static Drivetrain instance;
   private AHRS m_NavX;
   public SwerveDriveOdometry odom;
+
+  public NetworkTableInstance inst;
+  public NetworkTable table;
+  public DoubleTopic dblTopic;
+  public DoublePublisher dblPub;
   //private Controller controller = Controller.getInstance();
   //private Vision m_Vision = Vision.getInstance();
   public enum coordType {
@@ -109,6 +118,13 @@ public class Drivetrain extends SubsystemBase {
   //private final DrivetrainIOInputs inputs = new DrivetrainIOInputs();
 
   private Drivetrain(DrivetrainIO io) {
+    inst = NetworkTableInstance.getDefault();
+    table = inst.getTable("datatable");
+    
+    dblTopic = table.getDoubleTopic("Angle");
+
+    dblPub = dblTopic.publish();
+    
     this.io = io;
     
     //check for duplicates
@@ -349,6 +365,11 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    dblPub.set(3.0);
+
+
+
+
     // This method will be called once per scheduler every 500ms
     
     this.arraytrack++;
