@@ -14,20 +14,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import team3176.robot.subsystems.arm.*;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import java.util.HashMap;
 import java.util.Map;
 //import team3176.robot.subsystems.*;
 //import team3176.robot.subsystems.arm.*;
-import team3176.robot.subsystems.claw.*;
+//import team3176.robot.subsystems.claw.*;
 import team3176.robot.subsystems.controller.*;
 //import team3176.robot.subsystems.drivetrain.*;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
-import team3176.robot.subsystems.intake.*;
+//import team3176.robot.subsystems.intake.*;
 import team3176.robot.subsystems.signalling.*;
 import team3176.robot.subsystems.vision.*;
-import team3176.robot.subsystems.intake.Intake;
+//import team3176.robot.subsystems.intake.Intake;
 import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.arm.*;
 //import team3176.robot.commands.autons.*;
@@ -46,12 +47,12 @@ public class RobotContainer {
   //private final SwerveSubsystem m_SwerveSubsystem;
   //private final CoordSys m_CoordSys;
   //private final Arm m_Arm;
-  private final Claw m_Claw;
   private final Controller m_Controller;
   //private final Drivetrain m_Drivetrain;
-  private final Intake m_Intake;
+  //private final Intake m_Intake;
   private final Signalling m_Signalling;
   private final Vision m_Vision;
+  private final Arm m_arm;
 
   private SendableChooser<String> m_autonChooser;
   // private static final String m_B = "s_Block";
@@ -82,11 +83,10 @@ public class RobotContainer {
   private static final String m_TrapDriveRot = "s_TrapDriveRot";
 
   public RobotContainer() {
-    //m_Arm = Arm.getInstance();
-    m_Claw = Claw.getInstance();
+    m_arm = Arm.getInstance();
     m_Controller = Controller.getInstance();
     //m_Drivetrain= Drivetrain.getInstance();
-    m_Intake = Intake.getInstance();
+    //m_Intake = Intake.getInstance();
     m_Signalling = Signalling.getInstance();
     m_Vision = Vision.getInstance();
 
