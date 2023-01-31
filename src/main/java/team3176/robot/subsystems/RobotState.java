@@ -36,7 +36,7 @@ public class RobotState extends SubsystemBase {
     RETRACTED
   }
 
-  enum e_IntakeDetectsPossessionOf {
+  enum e_IntakeDetectsImHolding {
     CONE,
     CUBE,
     NOTHING,
@@ -64,13 +64,13 @@ public class RobotState extends SubsystemBase {
     IsFLOORCUBE,  // Means Arm is in Floor Position to deposit cube
   }
 
-  enum e_CurrentGameElementImCollecting{
+  enum e_CurrentGameElementImWanting{
     CONE,
     CUBE,
     NONE
   }
 
-  enum e_CurrentGameElementImPossessing{
+  enum e_CurrentGameElementImHolding{
     CONE,
     CUBE,
     NONE
