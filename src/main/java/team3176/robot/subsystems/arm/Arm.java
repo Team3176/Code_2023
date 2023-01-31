@@ -21,7 +21,7 @@ public class Arm extends SubsystemBase {
     private SparkMaxLimitSwitch m_reverseLimit;
     public JointSparkmax m_wrist;
     private static Arm instance;
-    private CANSparkMax m_motor;
+    private CANSparkMax m_motor = new CANSparkMax(0, null);
     
     
     private Arm() {

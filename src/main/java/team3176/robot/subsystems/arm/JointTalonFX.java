@@ -9,8 +9,11 @@ import team3176.robot.constants.ArmConstants;
 //import team3176.robot.subsystems.FlywheelIO.FlywheelIOInputs;
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JointTalonFX extends SubsystemBase {
@@ -136,3 +139,4 @@ public class JointTalonFX extends SubsystemBase {
   */
   
 }
+
