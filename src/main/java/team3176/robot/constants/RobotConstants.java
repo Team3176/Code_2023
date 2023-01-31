@@ -64,4 +64,8 @@ public final class RobotConstants {
   public static enum Mode {
     REAL, REPLAY, SIM
   }
+
+  public static enum Status {
+    STABLE, OK, OPTIONALCHECK, WARNING
+  }
 }

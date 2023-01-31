@@ -7,6 +7,7 @@ package team3176.robot.subsystems.signalling;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import team3176.robot.constants.RobotConstants.Status;
 
 public class Signalling extends SubsystemBase {
   
@@ -46,9 +47,57 @@ public class Signalling extends SubsystemBase {
     
     m_led.setData(m_ledBuffer);
   }
-
-  public static Signalling getInstance(){
-    return instance;
+public void setState(Status state){
+  if (state == Status.STABLE){
+    green();
+  }
+  if (state == Status.OK){
+    yellow();
+  }
+  if (state == Status.OPTIONALCHECK){
+    orange();
+  }
+  if (state == Status.WARNING){
+    red();
+  }
+}
+  
+  
+ public void red() {
+  for (var i = 45; i < 60; i++) {
+    // Sets the specified LED to the RGB values for red
+    m_ledBuffer.setRGB(i, 225, 0, 0);
   }
 
+  m_led.setData(m_ledBuffer);
+}
+
+public void green() {
+  for (var i = 0; i < 15; i++) {
+    // Sets the specified LED to the RGB values for green
+    m_ledBuffer.setRGB(i, 0, 225, 0);
+  }
+ 
+  m_led.setData(m_ledBuffer);
+}
+  public void yellow() {
+  for (var i = 15; i < 30; i++) {
+    // Sets the specified LED to the RGB values for yellow
+    m_ledBuffer.setRGB(i, 225, 225, 0);
+  }
+  
+  m_led.setData(m_ledBuffer);
+}
+  public void orange() {
+  for (var i = 30; i < 45; i++) {
+    // Sets the specified LED to the RGB values for orange
+    m_ledBuffer.setRGB(i, 255, 117, 25);
+  }  
+  
+  m_led.setData(m_ledBuffer);
+}
+public static Signalling getInstance(){
+    return instance;
+  }
+  
 }
