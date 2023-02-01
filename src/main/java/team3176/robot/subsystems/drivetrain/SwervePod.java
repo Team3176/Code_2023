@@ -387,7 +387,6 @@ public class SwervePod {
 
 
 
-        //private NetworkTableEntry distanceEntry = tab.add("Distance to target", 0) .getEntry();
      
         //public void calculate() {
         //  double distance = ...;
