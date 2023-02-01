@@ -4,6 +4,8 @@
 
 package team3176.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -94,6 +96,11 @@ public class Intake extends SubsystemBase {
 
   public static Intake getInstance(){
     return instance;
+  }
+
+  //Cool example of a subsystem holding basic commands
+  public Command stopIntakeCommand() {
+    return this.runOnce(() -> this.spinVelocityPercent(0));
   }
 
   @Override
