@@ -10,13 +10,13 @@ package team3176.robot.constants;
  */
 public final class ArmConstants {
 
-<<<<<<< HEAD
     public static final int JOINT_MOTOR1_CAN_ID = 50; //TODO: Update CAN ID
-=======
     public static final int ARM_SHOULDER_FALCON_CAN_ID = 50;
     public static final int ARM_ELBOW_FALCON_CAN_ID = 50;
     public static final int ARM_WRIST_FALCON_CAN_ID = 50;
->>>>>>> efcf5c5d2031a62d3637c85576fdf4fe3d1f9957
+
+   
+
 
     public static final int kPIDLoopIndex = 0;
     public static final int kTimeoutMS = 30;
@@ -27,12 +27,9 @@ public final class ArmConstants {
 
     public static final int MAX_TICKSPER100MS = 2048; 
 
-<<<<<<< HEAD
-    public static final String kShuffleboardPercentName1 = "Flywheel1%Set";
+    //public static final String kShuffleboardPercentName1 = "Flywheel1%Set";
 
-=======
-    public static final String kShuffleboardPercentName1 = "ArmShoulder%Set";
->>>>>>> efcf5c5d2031a62d3637c85576fdf4fe3d1f9957
+    //public static final String kShuffleboardPercentName1 = "ArmShoulder%Set";
 
     // Constant order: P, I, D, FF, IZone
     public static final double[][] PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };

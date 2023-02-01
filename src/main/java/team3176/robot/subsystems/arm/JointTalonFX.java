@@ -70,7 +70,7 @@ public class JointTalonFX {
 
   public void percentOutput_1() 
   {
-    double output = SmartDashboard.getNumber(ArmConstants.kShuffleboardPercentName1, 0.0);
+    //double output = SmartDashboard.getNumber(ArmConstants.kShuffleboardPercentName1, 0.0);
     //if (output >= -1 && output <= 1) { flywheelMotor1.set(ControlMode.PercentOutput, output); }
     SmartDashboard.putNumber("Fly1Tics/100msOut", jointMotor.getSelectedSensorVelocity());
   }
