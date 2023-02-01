@@ -5,6 +5,12 @@
 package team3176.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.DoubleTopic;
+import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.networktables.PubSubOption;
+import edu.wpi.first.networktables.TimestampedDouble;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -30,10 +36,16 @@ public class Intake extends SubsystemBase {
     private boolean isInIntake;
     private boolean isCone;
     private boolean isCube;
-    private static Intake instance = new Intake();
+    private static Intake instance = Intake.getInstance();
+    DoublePublisher dblPub;
+    final DoubleSubscriber dblSub;
+    DoubleTopic dblTopic;
   /** Creates a new Intake. */
-  public Intake() {
-
+  public Intake(){
+    dblSub = dblTopic.subscribe(0,PubSubOption.keepDuplicates(true), PubSubOption.pollStorage(10));
+    dblPub = dblTopic.publish();
+    dblPub = dblTopic.publish(PubSubOption.keepDuplicates(true));
+    dblPub = dblTopic.publishEx("double","{\"myprop\": 5}");
     motorcontrol.configFactoryDefault();
     piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
     isInIntake = false;
@@ -43,6 +55,9 @@ public class Intake extends SubsystemBase {
     SmartDashboard.setDefaultBoolean("isInIntake", isInIntake);
     SmartDashboard.setDefaultBoolean("isCone", isCone);
     SmartDashboard.setDefaultBoolean("isCube", isCube);
+    //Network tables
+    
+
 		
 		/* Config the sensor used for Primary PID and sensor direction */
     motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
@@ -100,6 +115,21 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
+    dblPub.setDefault(0.0);
+    dblPub.set(1.0);
+    dblPub.set(2.0, 0);
+    long time = NetworkTablesJNI.now();
+    dblPub.set(3.0, time);
+    myFunc(dblPub);
+    dblPub.close();
+    //double val = dblSub.get();
+    double val = dblSub.get(-1.0);
+    //double val = dblSub.getAsDouble();
+    TimestampedDouble tsVal = dblSub.getAtomic();
+    TimestampedDouble[] tsUpdates = dblSub.readQueue();
+    double[] valUpdates = dblSub.readQueueValues();
+
+  
 
     if ((0.35 <= detectedColor.red && detectedColor.red <= 0.379) && 
         (0.466 <= detectedColor.green && detectedColor.green <= 0.516) && 
@@ -143,7 +173,12 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putBoolean("isInIntake", isInIntake);
    }
 
- 
+  private void myFunc(DoublePublisher dblPub2) {
+  }
+  public void close() {
+    // stop publishing
+    dblPub.close();
+  }
 }
 
 
