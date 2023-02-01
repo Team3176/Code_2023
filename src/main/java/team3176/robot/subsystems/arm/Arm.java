@@ -19,15 +19,15 @@ public class Arm extends SubsystemBase {
 
     private SparkMaxLimitSwitch m_forwardLimit;
     private SparkMaxLimitSwitch m_reverseLimit;
-    public JointSparkmax m_wrist;
+    //public JointSparkmax m_wrist;
     private static Arm instance;
     private CANSparkMax m_motor = new CANSparkMax(0, null);
     
     
     private Arm() {
-        m_wrist = new JointSparkmax(6);
-        m_reverseLimit = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
-        m_forwardLimit = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
+        //m_wrist = new JointSparkmax(6);
+        //m_reverseLimit = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
+        //m_forwardLimit = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
     }
 
     private boolean getForwardLimitSwitch(){
@@ -40,9 +40,9 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic(){
-        m_wrist.updatePID();
+        //m_wrist.updatePID();
         //m_wrist.motorMove();
-        m_wrist.motorMovePercentOutput();
+        //m_wrist.motorMovePercentOutput();
     }
     public static Arm getInstance() {
         if(instance == null) {instance = new Arm();}
