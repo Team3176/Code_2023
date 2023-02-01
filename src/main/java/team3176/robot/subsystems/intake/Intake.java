@@ -21,17 +21,9 @@ import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.BooleanTopic;
-import edu.wpi.first.networktables.DoubleTopic;
-
 public class Intake extends SubsystemBase {
     private TalonSRX motorcontrol = new TalonSRX(22);
     private I2C.Port m_I2C = I2C.Port.kOnboard;
-    private NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    private NetworkTable intakeTable;
-    private DoubleTopic pctTopic;
     private DoubleSolenoid piston;
     private DigitalInput linebreak; 
     private ColorSensorV3 m_ColorSensor = new ColorSensorV3(m_I2C);
@@ -45,11 +37,9 @@ public class Intake extends SubsystemBase {
 
     motorcontrol.configFactoryDefault();
     piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
-    intakeTable = inst.getTable("IntakeTable");
     isInIntake = false;
     isCone = false;
-    isSquircle = false;
-    isExtended = false;
+    isCube = false;
     linebreak = new DigitalInput(0);
     SmartDashboard.setDefaultBoolean("isInIntake", isInIntake);
     SmartDashboard.setDefaultBoolean("isCone", isCone);
@@ -87,19 +77,17 @@ public class Intake extends SubsystemBase {
    
   }
   
-  public void setPosition(int i) {
+  public void set(int i) {
     double currentPos = motorcontrol.getSelectedSensorPosition(0);
     motorcontrol.set(ControlMode.Position, currentPos + i);
   }
 
   public void Extend() {
     piston.set(Value.kForward);
-    isExtended = true;
   }
 
   public void Retract() {
     piston.set(Value.kReverse);
-    isExtended = false;
   }
 
   public static Intake getInstance(){
@@ -132,29 +120,26 @@ public class Intake extends SubsystemBase {
         (0.382 <= detectedColor.green && detectedColor.green <= 0.458) && 
         (0.227 <= detectedColor.blue && detectedColor.blue <= 0.375))
     {
-      isSquircle = true;
+      isCube = true;
     }
     else 
     {
-      isSquircle = false;
+      isCube = false;
     }
-    SmartDashboard.putBoolean("isSquircle", isSquircle);
+    SmartDashboard.putBoolean("isCube", isCube);
 
 
 
     // Code stating if something is in the Intake
-    if (isExtended = true) 
+    if (linebreak.get() == false)
     {
-      if (linebreak.get() == false)
-      {
-        isInIntake = true;
-        // System.out.println("False");
-      }
-      else
-      {
-        isInIntake = false;
-        // System.out.println("True");
-      }
+      // isInIntake = true;
+      System.out.println("False");
+    }
+    else
+    {
+      // isInIntake = false;
+      System.out.println("True");
     }
     SmartDashboard.putBoolean("isInIntake", isInIntake);
    }
