@@ -4,9 +4,9 @@
 
 package team3176.robot;
 
-import team3176.commands.ClawClose;
-import team3176.commands.ClawIdle;
-import team3176.commands.ClawOpen;
+import team3176.robot.commands.ClawClose;
+import team3176.robot.commands.ClawIdle;
+import team3176.robot.commands.ClawOpen;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;

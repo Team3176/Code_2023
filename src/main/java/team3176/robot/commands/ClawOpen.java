@@ -5,40 +5,35 @@
 package team3176.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import team3176.robot.subsystems.vision.Vision;
+import team3176.robot.subsystems.claw.Claw;
 
-public class pipeSwitch extends CommandBase {
-  private final Vision m_Vision = Vision.getInstance();
-  public double desiredPipe;
-  public boolean done;
-  /** Creates a new pipeSwitch. */
-  public pipeSwitch(double chosenPipe) {
+public class ClawOpen extends CommandBase {
+  /** Creates a new ClawOpen. */
+  private Claw m_Claw = Claw.getInstance();
+  public ClawOpen() {
     // Use addRequirements() here to declare subsystem dependencies.
-    desiredPipe = chosenPipe;
-    addRequirements(m_Vision);
+    addRequirements(m_Claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    done = false;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    done = true;
+  public void execute() 
+  {
+    m_Claw.Open();
+    m_Claw.spinVelocityPercent(0.3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_Vision.pipeSetter.set(desiredPipe);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return done;
+    return false;
   }
 }

@@ -5,46 +5,35 @@
 package team3176.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import team3176.robot.subsystems.vision.Vision;
-import team3176.robot.subsystems.vision.Vision.LEDState;
+import team3176.robot.subsystems.claw.Claw;
 
-public class switchLED extends CommandBase {
-  private final Vision m_Vision = Vision.getInstance();
-  public LEDState lState;
-  public boolean done;
-  /** Creates a new switchLED. */
-  public switchLED() {
+public class ClawIdle extends CommandBase {
+  /** Creates a new ClawIdle. */
+  private Claw m_Claw = Claw.getInstance();
+  public ClawIdle() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_Vision);
+    addRequirements(m_Claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    if(m_Vision.getLEDState() == 1){
-      lState = LEDState.ON;
-    }
-    else{
-      lState = LEDState.OFF;
-    }
-    done = false;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    done = true;
+  public void execute() 
+  {
+    m_Claw.Idle();
+    m_Claw.spinVelocityPercent(-0.3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_Vision.switchLEDs(lState);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return done;
+    return false;
   }
 }
