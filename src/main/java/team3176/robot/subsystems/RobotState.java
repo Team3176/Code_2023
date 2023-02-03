@@ -4,7 +4,11 @@
 
 package team3176.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -18,6 +22,8 @@ public class RobotState extends SubsystemBase {
   private final RobotStateIO io;
   private final RobotStateIOInputs inputs = new RobotStateIOInputs();
   private static RobotState instance;
+
+  private Alliance alliance; 
 
   enum e_ClawPositionState {
     OPEN,
@@ -81,6 +87,11 @@ public class RobotState extends SubsystemBase {
     this.io = io;
   }
 
+  public void update() {
+    if (DriverStation.isFMSAttached() && (alliance == null)) {
+      alliance = DriverStation.getAlliance();
+    }
+  }
 
   public static RobotState getInstance() {
     if(instance == null) {instance = new RobotState(new RobotStateIO() {});}
