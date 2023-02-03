@@ -48,6 +48,16 @@ public class Units3176{
         return i / .1 / 6.17 / 2048.0 / (1.0/10.21) / 12.0; 
 
     }
+    /*
+     * adding meters support for new WPILIB SI preference
+     */
+    public static double ums2mps(double i) {
+        return ums2fps(i) * 0.3048;
+    }
+    public static double mps2ums(double i) {
+        return fps2ums(i) * 0.3048;
+    }
+
 
     public static double feetPerSecond2metersPerSecond(double i) {
         return i / 3.2808; 

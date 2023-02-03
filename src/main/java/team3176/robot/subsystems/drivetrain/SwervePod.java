@@ -191,7 +191,7 @@ public class SwervePod {
             this.lastEncoderPos = desired_optimized.angle.getRadians(); 
         }
         azimuthController.set(turnOutput * SwervePodConstants2022.AZIMUTH_SPARKMAX_MAX_OUTPUTPERCENT);
-        this.velTicsPer100ms = Units3176.fps2ums(desiredState.speedMetersPerSecond);
+        this.velTicsPer100ms = Units3176.mps2ums(desiredState.speedMetersPerSecond);
         thrustController.set(TalonFXControlMode.Velocity, velTicsPer100ms);
     }
     /**
@@ -227,8 +227,8 @@ public class SwervePod {
         thrustController.set(TalonFXControlMode.Velocity, velTicsPer100ms);
     }
     public SwerveModulePosition getPosition() {
-        double fps = Units3176.ums2fps(thrustController.getSelectedSensorPosition());
-        return new SwerveModulePosition(fps,Rotation2d.fromDegrees(azimuthEncoder.getAbsolutePosition()));
+        double mps = Units3176.ums2mps(thrustController.getSelectedSensorPosition());
+        return new SwerveModulePosition(mps,Rotation2d.fromDegrees(azimuthEncoder.getAbsolutePosition()));
     }
 
     /**

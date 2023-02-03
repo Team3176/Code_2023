@@ -191,9 +191,9 @@ public class Drivetrain extends SubsystemBase {
   
    /**
     * public facing drive command that allows command to specify if the command is field centric or not
-    * @param forwardCommand feet per second
-    * @param strafeCommand feet per second
-    * @param spinCommand feet per second
+    * @param forwardCommand meters per second
+    * @param strafeCommand meters per second
+    * @param spinCommand meters per second
     * @param type  FIELD CENTRIC or ROBOT_CENTRIC
     */
   public void drive(double forwardCommand, double strafeCommand, double spinCommand, coordType type) {
@@ -214,9 +214,9 @@ public class Drivetrain extends SubsystemBase {
   }
    /**
    * 
-   * @param forwardCommand feet per second
-   * @param strafeCommand  feet per second
-   * @param spinCommand    feet per second
+   * @param forwardCommand meters per second
+   * @param strafeCommand  meters per second
+   * @param spinCommand    meters per second
    */
   private void p_drive(double forwardCommand, double strafeCommand, double spinCommand) {
     this.spinCommandInit = spinCommand;
@@ -242,9 +242,9 @@ public class Drivetrain extends SubsystemBase {
 
   /**
    * Robot Centric Forward, strafe, and spin to set individual pods commanded spin speed and drive speed
-   * @param forwardCommand feet per second
-   * @param strafeCommand  feet per second
-   * @param spinCommand    feet per second
+   * @param forwardCommand meters per second
+   * @param strafeCommand  meters per second
+   * @param spinCommand    meters per second
    */
   private void calculateNSetPodPositions(double forwardCommand, double strafeCommand, double spinCommand) {
 
