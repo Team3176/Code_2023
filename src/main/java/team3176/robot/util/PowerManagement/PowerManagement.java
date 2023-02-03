@@ -16,7 +16,12 @@ import team3176.robot.constants.PowerConstants;
 /** Add your docs here. */
 public class PowerManagement extends SubsystemBase {
     private static PowerManagement instance = new PowerManagement();
-    public static PowerManagement getInstance() {return instance;}
+    public static PowerManagement getInstance() {
+        if (instance == null) {
+            instance = new PowerManagement();
+        }
+        return instance;
+    }
 
     //private int count = 0;
     private PowerDistribution powerDistributionHub;
