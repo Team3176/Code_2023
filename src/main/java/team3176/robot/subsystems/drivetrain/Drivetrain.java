@@ -300,11 +300,25 @@ public class Drivetrain extends SubsystemBase {
     currentDriveMode = wantedDriveMode;
   }
 
- 
+  
   public driveMode getCurrentDriveMode() {
     return currentDriveMode;
   }
- 
+  public Pose2d getPose() {
+    return odom.getPoseMeters();
+  }
+  public void resetPose(Pose2d pose) {
+    odom.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
+      podFR.getPosition(),
+      podFL.getPosition(),
+      podBL.getPosition(),
+      podBR.getPosition()}, pose);
+  }
+  public void setModuleStates(SwerveModuleState[] states) {
+    for (int idx = 0; idx < (pods.size()); idx++) {
+      pods.get(idx).set_module(states[idx]);
+    }
+  }
   /**
    * Sets Turbo mode on or off
    * @param onOrOff Passing a value of true sets Turbo on (ie isTurboOn = true), and passing value of false sets Turbo off (ie isTurboOn = false)
