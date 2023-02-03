@@ -102,6 +102,9 @@ public class Vision extends SubsystemBase {
   }
 
   public static Vision getInstance(){
+    if (instance == null) {
+      instance = new Vision();
+    }
     return instance;
   }
 
