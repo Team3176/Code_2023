@@ -23,14 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 //import team3176.robot.subsystems.*;
 //import team3176.robot.subsystems.arm.*;
-//import team3176.robot.subsystems.claw.*;
+import team3176.robot.subsystems.claw.*;
 import team3176.robot.subsystems.controller.*;
 //import team3176.robot.subsystems.drivetrain.*;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
 //import team3176.robot.subsystems.intake.*;
 //import team3176.robot.subsystems.signalling.*;
 import team3176.robot.subsystems.vision.*;
-import team3176.robot.subsystems.intake.Intake;
+//import team3176.robot.subsystems.intake.Intake;
 import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.arm.*;
 //import team3176.robot.commands.autons.*;
@@ -53,8 +53,8 @@ public class RobotContainer {
   private final Claw m_Claw;
   private final Controller m_Controller;
   //private final Drivetrain m_Drivetrain;
-  private final Intake m_Intake;
-  private final Signalling m_Signalling;
+  //private final Intake m_Intake;
+  //private final Signalling m_Signalling;
   private final Vision m_Vision;
 
   private SendableChooser<String> m_autonChooser;
@@ -90,8 +90,8 @@ public class RobotContainer {
     m_Claw = Claw.getInstance();
     m_Controller = Controller.getInstance();
     //m_Drivetrain= Drivetrain.getInstance();
-    m_Intake = Intake.getInstance();
-    m_Signalling = Signalling.getInstance();
+    //m_Intake = Intake.getInstance();
+    //m_Signalling = Signalling.getInstance();
     m_Vision = Vision.getInstance();
 
     m_PDH = new PowerDistribution(1, ModuleType.kRev);
