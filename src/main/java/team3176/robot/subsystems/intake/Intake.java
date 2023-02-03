@@ -4,6 +4,8 @@
 
 package team3176.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
@@ -58,7 +60,7 @@ public class Intake extends SubsystemBase {
     piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
     isInIntake = false;
     isCone = false;
-    isCube = false;
+    isSquircle = false;
     linebreak = new DigitalInput(0);
     SmartDashboard.setDefaultBoolean("isInIntake", isInIntake);
     SmartDashboard.setDefaultBoolean("isCone", isCone);
@@ -102,17 +104,19 @@ public class Intake extends SubsystemBase {
    
   }
   
-  public void set(int i) {
+  public void setPosition(int i) {
     double currentPos = motorcontrol.getSelectedSensorPosition(0);
     motorcontrol.set(ControlMode.Position, currentPos + i);
   }
 
   public void Extend() {
     piston.set(Value.kForward);
+    isExtended = true;
   }
 
   public void Retract() {
     piston.set(Value.kReverse);
+    isExtended = false;
   }
 
   public static Intake getInstance(){
@@ -120,6 +124,11 @@ public class Intake extends SubsystemBase {
       instance = new Intake();
     }
     return instance;
+  }
+
+  //Cool example of a subsystem holding basic commands
+  public Command stopIntakeCommand() {
+    return this.runOnce(() -> this.spinVelocityPercent(0));
   }
 
   @Override
@@ -162,36 +171,34 @@ public class Intake extends SubsystemBase {
         (0.382 <= detectedColor.green && detectedColor.green <= 0.458) && 
         (0.227 <= detectedColor.blue && detectedColor.blue <= 0.375))
     {
-      isCube = true;
+      isSquircle = true;
     }
     else 
     {
-      isCube = false;
+      isSquircle = false;
     }
-    SmartDashboard.putBoolean("isCube", isCube);
+    SmartDashboard.putBoolean("isSquircle", isSquircle);
 
 
 
     // Code stating if something is in the Intake
-    if (linebreak.get() == false)
+    if (isExtended = true)
     {
-      // isInIntake = true;
-      System.out.println("False");
-    }
-    else
-    {
-      // isInIntake = false;
-      System.out.println("True");
+      if (linebreak.get() == false)
+      {
+        // isInIntake = true;
+        System.out.println("False");
+      }
+      else
+      {
+        // isInIntake = false;
+        System.out.println("True");
+      }
     }
     SmartDashboard.putBoolean("isInIntake", isInIntake);
    }
 
-  private void myFunc(DoublePublisher dblPub2) {
-  }
-  public void close() {
-    // stop publishing
-    dblPub.close();
-  }
+ 
 }
 
 
