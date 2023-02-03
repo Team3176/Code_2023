@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.DoubleTopic;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.networktables.TimestampedDouble;
@@ -19,6 +21,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import java.security.interfaces.XECPublicKey;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
@@ -36,16 +41,19 @@ public class Intake extends SubsystemBase {
     private boolean isInIntake;
     private boolean isCone;
     private boolean isCube;
-    private static Intake instance = Intake.getInstance();
+    private static Intake instance;
     DoublePublisher dblPub;
-    final DoubleSubscriber dblSub;
+    //final DoubleSubscriber dblSub;
     DoubleTopic dblTopic;
+    DoublePublisher XPub;
+    DoublePublisher YPub;
   /** Creates a new Intake. */
   public Intake(){
-    dblSub = dblTopic.subscribe(0,PubSubOption.keepDuplicates(true), PubSubOption.pollStorage(10));
-    dblPub = dblTopic.publish();
-    dblPub = dblTopic.publish(PubSubOption.keepDuplicates(true));
-    dblPub = dblTopic.publishEx("double","{\"myprop\": 5}");
+    //dblSub = dblTopic.subscribe(0,PubSubOption.keepDuplicates(true), PubSubOption.pollStorage(10));
+    //dblPub.setDefault(0.0);
+    //dblPub = dblTopic.publish();
+    //dblPub = dblTopic.publish(PubSubOption.keepDuplicates(true));
+    //dblPub = dblTopic.publishEx("double","{\"myprop\": 5}");
     motorcontrol.configFactoryDefault();
     piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
     isInIntake = false;
@@ -56,7 +64,10 @@ public class Intake extends SubsystemBase {
     SmartDashboard.setDefaultBoolean("isCone", isCone);
     SmartDashboard.setDefaultBoolean("isCube", isCube);
     //Network tables
-    
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    NetworkTable table = inst.getTable("PubSub");
+    XPub = table.getDoubleTopic("X").publish();
+    YPub = table.getDoubleTopic("Y").publish();
 
 		
 		/* Config the sensor used for Primary PID and sensor direction */
@@ -105,6 +116,9 @@ public class Intake extends SubsystemBase {
   }
 
   public static Intake getInstance(){
+    if ( instance == null ) {
+      instance = new Intake();
+    }
     return instance;
   }
 
@@ -115,19 +129,18 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
-    dblPub.setDefault(0.0);
-    dblPub.set(1.0);
-    dblPub.set(2.0, 0);
+    XPub.set(1.0);
+    YPub.set(2.0, 0);
     long time = NetworkTablesJNI.now();
-    dblPub.set(3.0, time);
-    myFunc(dblPub);
-    dblPub.close();
+    //dblPub.set(3.0, time);
+    //myFunc(dblPub);
+    //dblPub.close();
     //double val = dblSub.get();
-    double val = dblSub.get(-1.0);
+    //double val = dblSub.get(-1.0);
     //double val = dblSub.getAsDouble();
-    TimestampedDouble tsVal = dblSub.getAtomic();
-    TimestampedDouble[] tsUpdates = dblSub.readQueue();
-    double[] valUpdates = dblSub.readQueueValues();
+    //TimestampedDouble tsVal = dblSub.getAtomic();
+    //TimestampedDouble[] tsUpdates = dblSub.readQueue();
+    //double[] valUpdates = dblSub.readQueueValues();
 
   
 
