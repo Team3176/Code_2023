@@ -97,6 +97,9 @@ public void green() {
   m_led.setData(m_ledBuffer);
 }
 public static Signalling getInstance(){
+    if (instance == null) {
+      instance = new Signalling();
+    }
     return instance;
   }
   
