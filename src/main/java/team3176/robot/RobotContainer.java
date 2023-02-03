@@ -4,6 +4,8 @@
 
 package team3176.robot;
 
+import team3176.robot.commands.pipeSwitch;
+import team3176.robot.commands.switchLED;
 import team3176.robot.constants.*;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -25,17 +27,37 @@ import team3176.robot.commands.drivetrain.TrapezoidRotate;
 //import team3176.robot.commands.util.*;
 import team3176.robot.constants.LoggerConstants;
 //import team3176.robot.subsystems.*;
+//import team3176.robot.subsystems.arm.*;
+//import team3176.robot.subsystems.claw.*;
 import team3176.robot.subsystems.controller.*;
-import team3176.robot.subsystems.controller.Controller;
 import team3176.robot.subsystems.drivetrain.*;
 import team3176.robot.subsystems.drivetrain.Drivetrain.coordType;
+//import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
+//import team3176.robot.subsystems.intake.*;
+//import team3176.robot.subsystems.signalling.*;
+import team3176.robot.subsystems.vision.*;
+import team3176.robot.subsystems.vision.Vision;
+//import team3176.robot.commands.arm.*;
+//import team3176.robot.commands.autons.*;
+//import team3176.robot.commands.claw.*;
+//import team3176.robot.commands.drivetrain.*;
+//import team3176.robot.commands.intake.*;
+//import team3176.robot.commands.signalling.*;
+//import team3176.robot.commands.vision.*;
+//import team3176.robot.commands.test.*;
+//import team3176.robot.commands.util.*;
+import team3176.robot.subsystems.vision.Vision.LEDState;
 
 public class RobotContainer {
 
   private final PowerDistribution m_PDH;
-  private final Controller m_Controller;
   //private final Compressor m_Compressor;
   private final Drivetrain m_Drivetrain;
+  //private final CoordSys m_CoordSys;
+  //private final Arm m_Arm;
+  private final Controller m_Controller;
+  private final Vision m_Vision;
+
   private SendableChooser<String> m_autonChooser;
   // private static final String m_B = "s_Block";
   private static final String m_M = "s_ExitTarmac";
@@ -43,6 +65,8 @@ public class RobotContainer {
   public RobotContainer() {
     m_Controller = Controller.getInstance();
     m_Drivetrain = Drivetrain.getInstance();
+    //m_Arm = Arm.getInstance();
+    m_Vision = Vision.getInstance();
 
     m_PDH = new PowerDistribution(1, ModuleType.kRev);
     m_PDH.clearStickyFaults();
@@ -79,6 +103,20 @@ public class RobotContainer {
     m_Controller.getTransStick_Button4().whileTrue(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.ROBOT_CENTRIC), m_Drivetrain));
     m_Controller.getTransStick_Button4().onFalse(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.FIELD_CENTRIC), m_Drivetrain));
 
+    m_Controller.operator.a().onTrue(new switchLED());
+    m_Controller.operator.b().onTrue(new pipeSwitch(0));
+    m_Controller.operator.y().onTrue(new pipeSwitch(1));
+    //m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_SwerveSubsystem));
+    //m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_SwerveSubsystem));
+    //m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
+    // m_Controller.getTransStick_Button4().whenPressed(new ToggleCoordSys());
+    //m_Controller.getTransStick_Button4().whileTrue(new InstantCommand(m_CoordSys::setCoordTypeToRobotCentric,m_CoordSys));
+    //m_Controller.getTransStick_Button4().onFalse(new InstantCommand(m_CoordSys::setCoordTypeToFieldCentric,m_CoordSys));
+
+    //m_Controller.getRotStick_Button1().whileTrue(new FlywheelAngleVisionIntAutoFire());
+    //m_Controller.getRotStick_Button1().whileTrue(new VisionSpinCorrectionOn());
+    //m_Controller.getRotStick_Button1().onFalse(new VisionSpinCorrectionOff());
+    //m_Controller.getRotStick_Button2().whileTrue(new ShootVisionAutoFire());
     
 
     // m_Controller.getRotStick_Button5().whenPressed(new
