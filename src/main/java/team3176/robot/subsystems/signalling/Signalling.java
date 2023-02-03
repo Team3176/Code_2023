@@ -19,6 +19,9 @@ public class Signalling extends SubsystemBase {
   }
 
   public static Signalling getInstance(){
+    if (instance == null) {
+      instance = new Signalling();
+    }
     return instance;
   }
 
