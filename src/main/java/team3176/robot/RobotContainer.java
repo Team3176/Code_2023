@@ -4,6 +4,9 @@
 
 package team3176.robot;
 
+import team3176.commands.ClawClose;
+import team3176.commands.ClawIdle;
+import team3176.commands.ClawOpen;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
@@ -164,8 +167,9 @@ public class RobotContainer {
     // m_Controller.getRotStick_Button5().whenPressed(new
     // SwervePodsAzimuthGoHome());
 
-    //m_Controller.operator.a().onTrue(new IntakingDirect2());
-    //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
+    m_Controller.operator.a().onTrue(new ClawOpen());
+    m_Controller.operator.b().onTrue(new ClawClose());
+    m_Controller.operator.x().onTrue(new ClawIdle());
 
     //m_Controller.operator.y().whileTrue(new ShootSetVals());
     //m_Controller.operator.b().onTrue(new FlywheelStop());

@@ -12,22 +12,28 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+// import com.ctre.phoenix.motorcontrol.ControlMode;
+// import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+// import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3176.robot.constants.IntakeConstants;
 import team3176.robot.subsystems.claw.ClawIO.ClawIOInputs;
 
+import edu.wpi.first.wpilibj.I2C;
+import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.util.Color;
+
 public class Claw extends SubsystemBase {
   private DoubleSolenoid piston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.DSOLENOID1_FWD_CHAN, IntakeConstants.DSOLENOID1_REV_CHAN);
-//  private DoubleSolenoid piston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.DSOLENOID2_FWD_CHAN, IntakeConstants.DSOLENOID2_REV_CHAN);
-  private TalonSRX intakeMotor = new TalonSRX(IntakeConstants.INTAKE_MOTOR_CAN_ID);
+  private DoubleSolenoid piston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.DSOLENOID2_FWD_CHAN, IntakeConstants.DSOLENOID2_REV_CHAN);
+  // private TalonSRX intakeMotor = new TalonSRX(IntakeConstants.INTAKE_MOTOR_CAN_ID);
+  private CANSparkMax clawMotor = new CANSparkMax(0, MotorType.kBrushless);
   private boolean pistonSetting = false;
   private boolean motorSetting = false;
-  private DigitalInput ballSensor;
-  private boolean isIntaking = false;
-  public boolean isExtended;
+  private boolean isIdle = false;
 
   private final ClawIO io;
   private final ClawIOInputs inputs = new ClawIOInputs();
@@ -35,36 +41,43 @@ public class Claw extends SubsystemBase {
 
   private Claw(ClawIO io) {
     this.io = io;
-    intakeMotor.setInverted(true);
-    ballSensor = new DigitalInput(IntakeConstants.BALL_SENSOR_DIO);
+    // clawMotor.setInverted(true);
   }
 
-  public void Extend() {
-    isIntaking = true;
+  public void Open() {
+    isIdle = false;
     pistonSetting = true;
     piston1.set(Value.kForward);
-    // piston2.set(Value.kForward);
+    piston2.set(Value.kForward);
   }
 
-  public boolean isExtended() {
-    return this.isIntaking;
+  public boolean isIdle() {
+    return this.isIdle;
   }
 
-  public void Retract() {
-    isIntaking = false;
+  public void Close() {
+    isIdle = false;
     pistonSetting = false;
     piston1.set(Value.kReverse);
-    // piston2.set(Value.kReverse);
+    piston2.set(Value.kReverse);
+  }
+
+  public void Idle()
+  {
+    isIdle = true;
+    pistonSetting = false;
+    piston1.set(Value.kOff);
+    piston2.set(Value.kOff);
   }
 
   public void spinVelocityPercent(double pct) {
-    intakeMotor.set(TalonSRXControlMode.PercentOutput, pct);
+    clawMotor.set(pct);
     motorSetting = true;
     if(pct == 0) {motorSetting = false;}
   }
 
   public void stopMotor() {
-    intakeMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
+    clawMotor.set(0.0);
     motorSetting = false;
   }
 
@@ -81,15 +94,13 @@ public class Claw extends SubsystemBase {
     return instance;
   }
 
-  public boolean getLine() {return ballSensor.get();}
-
 
 
   public void shuffleboardPercentOutput()
   {
     double percent = SmartDashboard.getNumber(IntakeConstants.kShuffleboardPercentName, 0.0);
-    intakeMotor.set(ControlMode.PercentOutput, percent);
-    SmartDashboard.putNumber("IntakeTics/100ms", intakeMotor.getSelectedSensorVelocity());
+    clawMotor.set(percent);
+    SmartDashboard.putNumber("ClawTics/100ms", clawMotor.get());
     if (percent != 0) {
       motorSetting = true;
     }
@@ -99,9 +110,9 @@ public class Claw extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.getInstance().processInputs("Intake", inputs);
-    Logger.getInstance().recordOutput("Intake/Velocity", getIntakeVelocity());
-    Logger.getInstance().recordOutput("Intake/PistonState", getPistonState());
+    Logger.getInstance().processInputs("Claw", inputs);
+    Logger.getInstance().recordOutput("Claw/Velocity", getClawVelocity());
+    Logger.getInstance().recordOutput("Claw/PistonState", getPistonState());
 
   }
 
@@ -117,7 +128,7 @@ public class Claw extends SubsystemBase {
     io.setPiston(isExtend);
   }
 
-  public double getIntakeVelocity() {
+  public double getClawVelocity() {
     return inputs.velocity;
   }
 
