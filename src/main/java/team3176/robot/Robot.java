@@ -44,7 +44,6 @@ import team3176.robot.constants.RobotConstants;
 //import team3176.robot.subsystems.feeder.Feeder;
 //import team3176.robot.subsystems.flywheel.Flywheel;
 //import team3176.robot.subsystems.indexer.Indexer;
-import team3176.robot.subsystems.vision.Vision;
 import team3176.robot.util.God.Alert;
 import team3176.robot.util.God.Alert.AlertType;
 
@@ -66,7 +65,6 @@ public class Robot extends LoggedRobot {
   //private Feeder m_Feeder;
   //private Drivetrain m_Drivetrain;
   //private Controller m_Controller;
-  private Vision m_Vision;
   //private Clarke m_Clarke;
   //private AnalogPotentiometer m_pressureSensor;
 
@@ -197,11 +195,9 @@ public class Robot extends LoggedRobot {
     //m_Feeder = Feeder.getInstance();
     //m_Drivetrain = Drivetrain.getInstance();
     //m_Controller = Controller.getInstance();
-    m_Vision = Vision.getInstance();
 
     //m_pressureSensor = new AnalogPotentiometer(1/*, scale [ex: 250], offset[ex: -25]*/);
 
-    m_Vision.setActivePipeline(2);
     //CameraServer.startAutomaticCapture(); //Fish-I Camera
     // CameraServer.startAutomaticCapture("Fish-I", 0);
 

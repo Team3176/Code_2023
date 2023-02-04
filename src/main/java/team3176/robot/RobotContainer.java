@@ -29,9 +29,7 @@ import team3176.robot.subsystems.controller.*;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
 //import team3176.robot.subsystems.intake.*;
 //import team3176.robot.subsystems.signalling.*;
-import team3176.robot.subsystems.vision.*;
 //import team3176.robot.subsystems.intake.Intake;
-import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.arm.*;
 //import team3176.robot.commands.autons.*;
 //import team3176.robot.commands.claw.*;
@@ -41,11 +39,10 @@ import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.vision.*;
 //import team3176.robot.commands.test.*;
 //import team3176.robot.commands.util.*;
-import team3176.robot.subsystems.vision.Vision.LEDState;
 
 public class RobotContainer {
 
-  private final PowerDistribution m_PDH;
+  //private final PowerDistribution m_PDH;
   private final Compressor m_Compressor;
   //private final SwerveSubsystem m_SwerveSubsystem;
   //private final CoordSys m_CoordSys;
@@ -55,7 +52,6 @@ public class RobotContainer {
   //private final Drivetrain m_Drivetrain;
   //private final Intake m_Intake;
   //private final Signalling m_Signalling;
-  private final Vision m_Vision;
 
   private SendableChooser<String> m_autonChooser;
   // private static final String m_B = "s_Block";
@@ -92,12 +88,11 @@ public class RobotContainer {
     //m_Drivetrain= Drivetrain.getInstance();
     //m_Intake = Intake.getInstance();
     //m_Signalling = Signalling.getInstance();
-    m_Vision = Vision.getInstance();
 
-    m_PDH = new PowerDistribution(1, ModuleType.kRev);
-    m_PDH.clearStickyFaults();
+    // m_PDH = new PowerDistribution(1, ModuleType.kRev);
+    //m_PDH.clearStickyFaults();
 
-    m_Compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+    m_Compressor = new Compressor(PneumaticsModuleType.REVPH);
     // TODO: ADD A WAY TO CLEAR STICKY FAULTS
     // m_Compressor.disable(); //HAVE TO TELL IT TO DISABLE FOR IT TO NOT AUTO START
     m_Compressor.enableDigital();
