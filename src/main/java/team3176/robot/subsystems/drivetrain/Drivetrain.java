@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 // import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -22,6 +24,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -112,7 +115,9 @@ public class Drivetrain extends SubsystemBase {
   private SwervePod podBL;
   private SwervePod podBR;
 
-
+  NetworkTable vision;
+  NetworkTableEntry vision_pose;
+  Pose2d vision_Pose2d = new Pose2d();
   private final DrivetrainIO io;
   //private final DrivetrainIOInputs inputs = new DrivetrainIOInputs();
 
@@ -170,6 +175,8 @@ public class Drivetrain extends SubsystemBase {
     this.forwardCommand = Math.pow(10, -15); // Has to be positive to turn that direction?
     this.strafeCommand = 0.0;
     this.spinCommand = 0.0;
+    vision = NetworkTableInstance.getDefault().getTable("limelight");
+    vision_pose = table.getEntry("botpose");
 
   }
 
@@ -224,14 +231,14 @@ public class Drivetrain extends SubsystemBase {
     this.strafeCommand = strafeCommand;  // TODO: The y is inverted because it is backwards for some reason, why?
     this.spinCommand = spinCommand;
     //System.out.println("forward: "+ forwardCommand + "strafe: " + strafeCommand + "spin: " + spinCommand);
-    if (!isTurboOn) {
-      this.forwardCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
-      this.strafeCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
-      //this.spinCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
-      this.spinCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
-    } else {
-      this.spinCommand *= 2; 
-    }
+    // if (!isTurboOn) {
+    //   this.forwardCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
+    //   this.strafeCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
+    //   //this.spinCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
+    //   this.spinCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
+    // } else {
+    //   this.spinCommand *= 2; 
+    // }
     if(isSpinLocked) {
       this.spinCommand = spinLockPID.calculate(getChassisYaw().getDegrees(), spinLockAngle.getDegrees());
     }
@@ -255,8 +262,13 @@ public class Drivetrain extends SubsystemBase {
       ChassisSpeeds curr_chassisSpeeds = new ChassisSpeeds(forwardCommand,strafeCommand,spinCommand);
       SwerveModuleState[] pod_states = DrivetrainConstants.DRIVE_KINEMATICS.toSwerveModuleStates(curr_chassisSpeeds);
       for (int idx = 0; idx < (pods.size()); idx++) {
-          pods.get(idx).set_module(pod_states[idx]);
+          
+            pods.get(idx).set_module(pod_states[idx]);
+          
       }
+      SmartDashboard.putNumber("spinCommand", spinCommand);
+      SmartDashboard.putNumber("pod0 m/s", pod_states[0].speedMetersPerSecond);
+      
     } else if (currentDriveMode == driveMode.DEFENSE) { // Enter defensive position
       double smallNum = Math.pow(10, -5);
       pods.get(0).set(smallNum, Rotation2d.fromRadians(1.0 * Math.PI / 8.0));
@@ -379,10 +391,17 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     dblPub.set(3.0);
-
-
-
-
+    vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose");
+    double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
+    Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+    double xoffset = Units.inchesToMeters(285.16+ 40.45);
+    double yoffset = Units.inchesToMeters(115.59 + 42.49);
+    cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
+    if( cam_pose != vision_Pose2d) {
+      vision_Pose2d = cam_pose;
+    }
+    
+    SmartDashboard.putNumber("camX",vision_Pose2d.getX());
     // This method will be called once per scheduler every 500ms
     
     this.arraytrack++;
@@ -395,7 +414,8 @@ public class Drivetrain extends SubsystemBase {
       podBL.getPosition(),
       podBR.getPosition()
     });
-
+    SmartDashboard.putNumber("odomx", getPose().getX());
+    SmartDashboard.putNumber("odomy", getPose().getY());
     SmartDashboard.putBoolean("Turbo", isTurboOn);
     // SmartDashboard.putBoolean("Defense", currentDriveMode == driveMode.DEFENSE);
   }

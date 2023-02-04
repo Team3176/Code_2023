@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
@@ -193,23 +194,24 @@ public class SwervePod {
             this.turnOutput = m_turningPIDController2.calculate(this.azimuthEncoderAbsPosition, this.lastEncoderPos);
         } else {
             this.turnOutput = m_turningPIDController2.calculate(this.azimuthEncoderAbsPosition, desired_optimized.angle.getDegrees());
-            if(this.id == 0) {
-                System.out.println(desired_optimized.angle.getDegrees() + " " + this.turnOutput + " " + this.azimuthEncoderAbsPosition );
-            }
             this.lastEncoderPos = desired_optimized.angle.getDegrees(); 
         }
-        
+    
         //azimuthController.set();
         
         azimuthController.set(MathUtil.clamp(this.turnOutput, -0.2, 0.2));
-        this.velTicsPer100ms = Units3176.mps2ums(desiredState.speedMetersPerSecond);
+        this.velTicsPer100ms = Units3176.mps2ums(desired_optimized.speedMetersPerSecond);
         thrustController.set(TalonFXControlMode.Velocity, velTicsPer100ms);
-    }
+        // if(this.id == 0) {
+        //   System.out.println(Math.round(desired_optimized.speedMetersPerSecond * 100
+        //   )/100.0 + " " + Math.round(desired_optimized.angle.getDegrees()) + " " +this.velTicsPer100ms);
+        // }
+    }   
     /*
      * odometry calls
      */
     public SwerveModulePosition getPosition() {
-        double mps = Units3176.ums2mps(thrustController.getSelectedSensorPosition());
+        double mps = Units.feetToMeters(1.0 / Units3176.conversion_feet_to_tics *  thrustController.getSelectedSensorPosition());
         return new SwerveModulePosition(mps,Rotation2d.fromDegrees(azimuthEncoder.getAbsolutePosition()));
     }
 

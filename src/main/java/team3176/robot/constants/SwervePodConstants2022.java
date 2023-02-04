@@ -7,7 +7,7 @@ public final class SwervePodConstants2022 extends DrivetrainHardwareMap {
     private static final double AZIMUTH_GEAR_RATIO = 70.0 / 1.0; // Is the Versa gearbox btwn motor & encoder
     //private static final double AZIMUTH_GEAR_RATIO = 1.0 / 1.0; // Is the Versa gearbox btwn motor & encoder
     //private static final double THRUST_GEAR_RATIO = (54.0 / 14.0) * (48.0 / 30.0);  // 216/35?
-    private static final double THRUST_GEAR_RATIO = (14.0/22.0) * (15.0/45.0);  
+    public static final double THRUST_GEAR_RATIO = (14.0/22.0) * (15.0/45.0);  
 
     
     
