@@ -183,6 +183,9 @@ public void turnOff(int startingLed, int endingLed) {
 }
 
 public static Signalling getInstance(){
+    if (instance == null) {
+      instance = new Signalling();
+    }
     return instance;
   }
   
