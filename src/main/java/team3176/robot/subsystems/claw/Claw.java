@@ -27,8 +27,8 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class Claw extends SubsystemBase {
-  private DoubleSolenoid piston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.DSOLENOID1_FWD_CHAN, IntakeConstants.DSOLENOID1_REV_CHAN);
-  private DoubleSolenoid piston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.DSOLENOID2_FWD_CHAN, IntakeConstants.DSOLENOID2_REV_CHAN);
+  private DoubleSolenoid piston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+  //private DoubleSolenoid piston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.DSOLENOID2_FWD_CHAN, IntakeConstants.DSOLENOID2_REV_CHAN);
   // private TalonSRX intakeMotor = new TalonSRX(IntakeConstants.INTAKE_MOTOR_CAN_ID);
   private CANSparkMax clawMotor = new CANSparkMax(0, MotorType.kBrushless);
   private boolean pistonSetting = false;
@@ -48,7 +48,7 @@ public class Claw extends SubsystemBase {
     isIdle = false;
     pistonSetting = true;
     piston1.set(Value.kForward);
-    piston2.set(Value.kForward);
+    //piston2.set(Value.kForward);
   }
 
   public boolean isIdle() {
@@ -59,7 +59,7 @@ public class Claw extends SubsystemBase {
     isIdle = false;
     pistonSetting = false;
     piston1.set(Value.kReverse);
-    piston2.set(Value.kReverse);
+    //piston2.set(Value.kReverse);
   }
 
   public void Idle()
@@ -67,7 +67,7 @@ public class Claw extends SubsystemBase {
     isIdle = true;
     pistonSetting = false;
     piston1.set(Value.kOff);
-    piston2.set(Value.kOff);
+    //piston2.set(Value.kOff);
   }
 
   public void spinVelocityPercent(double pct) {
