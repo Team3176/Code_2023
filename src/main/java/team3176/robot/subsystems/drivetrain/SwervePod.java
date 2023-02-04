@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -102,16 +104,16 @@ public class SwervePod {
         kF_Thrust = .045; // SwervePodConstants.THRUST_PID[3][id];
 
 
-        this.kP_Azimuth = SwervePodConstants2022.AZIMUTH_PID[0][id];
-        this.kI_Azimuth = SwervePodConstants2022.AZIMUTH_PID[1][id];
-        this.kD_Azimuth = SwervePodConstants2022.AZIMUTH_PID[2][id];
+        this.kP_Azimuth = 0.005;
+        this.kI_Azimuth = 0.0;
+        this.kD_Azimuth = 0.0;
 
 
         
       
         m_turningPIDController2 = new PIDController(kP_Azimuth, kI_Azimuth, kD_Azimuth);
         m_turningPIDController2.setTolerance(0.1);
-        m_turningPIDController2.enableContinuousInput(-Math.PI, Math.PI);
+        m_turningPIDController2.enableContinuousInput(-180, 180);
 
         m_turningPIDController2.reset();
         m_turningPIDController2.setP(this.kP_Azimuth);
@@ -183,14 +185,21 @@ public class SwervePod {
      * @param desiredState 
      */
     public void set_module(SwerveModuleState desiredState) {
-        SwerveModuleState desired_optimized = SwerveModuleState.optimize(desiredState, Rotation2d.fromRadians(azimuthEncoderAbsPosition));
-        if (this.podThrust > (-Math.pow(10,-10)) && this.podThrust < (Math.pow(10,-10))) {      
+        this.azimuthEncoderAbsPosition = azimuthEncoder.getAbsolutePosition();
+        SwerveModuleState desired_optimized = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(this.azimuthEncoderAbsPosition));
+        if (desiredState.speedMetersPerSecond > (-Math.pow(10,-10)) && desiredState.speedMetersPerSecond  < (Math.pow(10,-10))) {      
             this.turnOutput = m_turningPIDController2.calculate(this.azimuthEncoderAbsPosition, this.lastEncoderPos);
         } else {
-            this.turnOutput = m_turningPIDController2.calculate(this.azimuthEncoderAbsPosition, desired_optimized.angle.getRadians());
-            this.lastEncoderPos = desired_optimized.angle.getRadians(); 
+            this.turnOutput = m_turningPIDController2.calculate(this.azimuthEncoderAbsPosition, desired_optimized.angle.getDegrees());
+            if(this.id == 0) {
+                System.out.println(desired_optimized.angle.getDegrees() + " " + this.turnOutput + " " + this.azimuthEncoderAbsPosition );
+            }
+            this.lastEncoderPos = desired_optimized.angle.getDegrees(); 
         }
-        azimuthController.set(turnOutput * SwervePodConstants2022.AZIMUTH_SPARKMAX_MAX_OUTPUTPERCENT);
+        
+        //azimuthController.set();
+        
+        azimuthController.set(MathUtil.clamp(this.turnOutput, -0.2, 0.2));
         this.velTicsPer100ms = Units3176.mps2ums(desiredState.speedMetersPerSecond);
         thrustController.set(TalonFXControlMode.Velocity, velTicsPer100ms);
     }
