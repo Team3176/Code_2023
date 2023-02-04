@@ -47,55 +47,141 @@ public class Signalling extends SubsystemBase {
     
     m_led.setData(m_ledBuffer);
   }
-public void setState(Status state){
-  if (state == Status.STABLE){
-    green();
-  }
-  if (state == Status.OK){
+public void setState(Status ledState){
+
+  switch (ledState) {
+    case STABLE:
+      green();
+      break;
+    case OK:
+     yellow();
+     break;
+  case OPTIONALCHECK:
+     orange();
+      break;
+  case WARNING:
+     red();
+      break;
+  case ISCONE:
     yellow();
-  }
-  if (state == Status.OPTIONALCHECK){
-    orange();
-  }
-  if (state == Status.WARNING){
-    red();
-  }
+    break;
+  case ISCUBE:
+    blue();
+    break;
+  case REQUESTCONE:
+    yellow();
+    break;
+  case REQUESTCUBE:
+    blue();
+    break;
+  case OFF:
+    turnOff();
+    break;
+
+    default:
+
+
 }
   
-  
- public void red() {
-  for (var i = 45; i < 60; i++) {
+ 
+public void red() {
+  red(STARTINGLED, ENDINGLED);
+ }
+
+ public void red(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
     // Sets the specified LED to the RGB values for red
     m_ledBuffer.setRGB(i, 225, 0, 0);
   }
 
   m_led.setData(m_ledBuffer);
 }
-
 public void green() {
-  for (var i = 0; i < 15; i++) {
+  green(STARTINGLED, ENDINGLED);
+ }
+public void green(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
     // Sets the specified LED to the RGB values for green
     m_ledBuffer.setRGB(i, 0, 225, 0);
   }
  
   m_led.setData(m_ledBuffer);
 }
-  public void yellow() {
-  for (var i = 15; i < 30; i++) {
+public void yellow() {
+  yellow(STARTINGLED, ENDINGLED);
+  
+  public void yellow(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
     // Sets the specified LED to the RGB values for yellow
     m_ledBuffer.setRGB(i, 225, 225, 0);
   }
   
   m_led.setData(m_ledBuffer);
 }
-  public void orange() {
-  for (var i = 30; i < 45; i++) {
+public void orange() {
+  orange(STARTINGLED, ENDINGLED);
+  
+  public void orange(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
     // Sets the specified LED to the RGB values for orange
     m_ledBuffer.setRGB(i, 255, 117, 25);
   }  
   
   m_led.setData(m_ledBuffer);
 }
+public void orange(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
+    // Sets the specified LED to the RGB values for orange
+    m_ledBuffer.setRGB(i, 255, 117, 25);
+  }  
+  
+  m_led.setData(m_ledBuffer);
+}
+public void gold() {
+  gold(STARTINGLED, ENDINGLED);
+  
+  public void gold(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
+    // Sets the specified LED to the RGB values for gold
+    m_ledBuffer.setRGB(i, 204, 204, 0);
+  }  
+  
+  m_led.setData(m_ledBuffer);
+}
+public void purple() {
+  purple(STARTINGLED, ENDINGLED);
+  
+  public void purple(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
+    // Sets the specified LED to the RGB values for purple
+    m_ledBuffer.setRGB(i, 102, 0, 204);
+  }  
+  
+  m_led.setData(m_ledBuffer);
+}
+public void blue() {
+  blue(STARTINGLED, ENDINGLED);
+  
+  public void blue(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
+    // Sets the specified LED to the RGB values for blue
+    m_ledBuffer.setRGB(i, 0, 0, 255);
+  }  
+  
+  m_led.setData(m_ledBuffer);
+}
+public void turnOff() {
+  turnOff(STARTINGLED, ENDINGLED);
+
+public void turnOff(int startingLed, int endingLed) {
+  for (var i = startingLed; i < endingLed; i++) {
+    // Turn off all the LEDS
+    m_ledBuffer.setRGB(i, 0, 0, 0);
+  }
+
+  m_led.setData(m_ledBuffer);
+}
+
 public static Signalling getInstance(){
     return instance;
   }
