@@ -42,7 +42,8 @@ public class Intake extends SubsystemBase {
     private ColorSensorV3 m_ColorSensor = new ColorSensorV3(m_I2C);
     private boolean isInIntake;
     private boolean isCone;
-    private boolean isCube;
+    private boolean isSquircle;
+    private boolean isExtended;
     private static Intake instance;
     DoublePublisher dblPub;
     //final DoubleSubscriber dblSub;
@@ -61,10 +62,11 @@ public class Intake extends SubsystemBase {
     isInIntake = false;
     isCone = false;
     isSquircle = false;
+    isExtended = false;
     linebreak = new DigitalInput(0);
     SmartDashboard.setDefaultBoolean("isInIntake", isInIntake);
     SmartDashboard.setDefaultBoolean("isCone", isCone);
-    SmartDashboard.setDefaultBoolean("isCube", isCube);
+    SmartDashboard.setDefaultBoolean("isSquircle", isSquircle);
     //Network tables
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("PubSub");
