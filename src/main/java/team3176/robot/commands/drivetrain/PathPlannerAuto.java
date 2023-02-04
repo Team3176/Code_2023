@@ -16,8 +16,11 @@ import team3176.robot.constants.DrivetrainConstants;
 import team3176.robot.subsystems.drivetrain.Drivetrain;
 
 public class PathPlannerAuto {
+    Command auto;
+    public PathPlannerAuto() {
+
     Drivetrain driveSubsystem = Drivetrain.getInstance();
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("FullAuto", new PathConstraints(4, 3));
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("auto1", new PathConstraints(2, 2));
 
     // This is just an example event map. It would be better to have a constant, global event map
     // in your code that will be used by all path following commands.
@@ -38,5 +41,10 @@ public class PathPlannerAuto {
         driveSubsystem // The drive subsystem. Used to properly set the requirements of path following commands
     );
 
-    Command fullAuto = autoBuilder.fullAuto(pathGroup);
+    auto = autoBuilder.fullAuto(pathGroup);
+    }
+    public Command getauto(){
+        return auto;
+    }
+
 }
