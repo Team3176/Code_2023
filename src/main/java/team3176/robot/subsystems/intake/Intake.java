@@ -16,6 +16,7 @@ import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.networktables.TimestampedDouble;
 import edu.wpi.first.wpilibj.DigitalInput;
+import team3176.robot.subsystems.intake.motorconstants;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -128,6 +129,11 @@ public class Intake extends SubsystemBase {
     return instance;
   }
 
+  public Boolean getLinebreak()
+  {
+    return linebreak.get();
+  }
+
   //Cool example of a subsystem holding basic commands
   public Command stopIntakeCommand() {
     return this.runOnce(() -> this.spinVelocityPercent(0));
@@ -184,17 +190,16 @@ public class Intake extends SubsystemBase {
 
 
     // Code stating if something is in the Intake
-    if (isExtended = true)
+    if (m_ColorSensor.getProximity() <= 1800)
     {
       if (linebreak.get() == false)
       {
-        // isInIntake = true;
-        System.out.println("False");
+        isInIntake = true;
+        setPosition(1000);
       }
       else
       {
-        // isInIntake = false;
-        System.out.println("True");
+        isInIntake = false;
       }
     }
     SmartDashboard.putBoolean("isInIntake", isInIntake);

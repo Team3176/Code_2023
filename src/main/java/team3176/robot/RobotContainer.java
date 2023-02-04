@@ -4,10 +4,7 @@
 
 package team3176.robot;
 
-import team3176.robot.commands.IntakeSpin;
-import team3176.robot.commands.IntakeStop;
 import team3176.robot.commands.IntakeExtendSpin;
-import team3176.robot.commands.IntakeConveyorForward;
 import team3176.robot.commands.IntakeRetractSpinot;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,8 +27,6 @@ import java.util.Map;
 import team3176.robot.subsystems.controller.*;
 //import team3176.robot.subsystems.drivetrain.*;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
-import team3176.robot.subsystems.signalling.*;
-import team3176.robot.subsystems.vision.*;
 import team3176.robot.subsystems.intake.Intake;
 // import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.arm.*;

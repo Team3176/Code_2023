@@ -45,7 +45,6 @@ import team3176.robot.constants.RobotConstants;
 //import team3176.robot.subsystems.flywheel.Flywheel;
 //import team3176.robot.subsystems.indexer.Indexer;
 import team3176.robot.subsystems.intake.Intake;
-import team3176.robot.subsystems.vision.Vision;
 import team3176.robot.util.God.Alert;
 import team3176.robot.util.God.Alert.AlertType;
 
@@ -67,7 +66,6 @@ public class Robot extends LoggedRobot {
   //private Feeder m_Feeder;
   //private Drivetrain m_Drivetrain;
   //private Controller m_Controller;
-  private Vision m_Vision;
   //private Clarke m_Clarke;
   //private AnalogPotentiometer m_pressureSensor;
 
