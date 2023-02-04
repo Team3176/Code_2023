@@ -11,12 +11,14 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class JointTalonFX {
+public class JointTalonFX extends SubsystemBase {
 
   private TalonFX jointMotor;
 
@@ -25,13 +27,17 @@ public class JointTalonFX {
   private static JointTalonFX instance;
   private boolean isSmartDashboardTestControlsShown;
   public String mode = "";
-
-  public JointTalonFX(int can_id)
+  private DigitalInput bottomLimiter;
+  private DigitalInput topLimiter;
+  private int intent;
+  public JointTalonFX()
   {
     //this.io = io;
 
-    jointMotor = new TalonFX(can_id);
-
+    jointMotor = new TalonFX(ArmConstants.ARM_SHOULDER_FALCON_CAN_ID);
+    bottomLimiter = new DigitalInput(ArmConstants.limiter1Channel);
+    topLimiter = new DigitalInput(ArmConstants.limiter2Channel);
+    this.intent = 0;
 
     jointMotor.configFactoryDefault();
     jointMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, ArmConstants.kPIDLoopIndex, ArmConstants.kTimeoutMS);
@@ -52,11 +58,13 @@ public class JointTalonFX {
     jointMotor.config_IntegralZone(0, ArmConstants.PIDFConstants[0][4]);
   }
 
-  public void spinMotors(double ticksPer100ms) {
+  public void spinMotors(double ticksPer100ms) 
+  {
     jointMotor.set(TalonFXControlMode.Velocity, ticksPer100ms);
   }
 
-  public void spinMotors(double ticksPer100msForMotor1, double ticksPer100msForMotor2) {
+  public void spinMotors(double ticksPer100msForMotor1, double ticksPer100msForMotor2) 
+  {
     jointMotor.set(TalonFXControlMode.Velocity, ticksPer100msForMotor1);
   }
 
@@ -80,7 +88,8 @@ public class JointTalonFX {
     jointMotor.set(TalonFXControlMode.PercentOutput, 0.0);
   }
 
-    public void putSmartDashboardControlCommands() {
+    public void putSmartDashboardControlCommands() 
+    {
     SmartDashboard.putNumber("Arm 1 PCT", 0);
     isSmartDashboardTestControlsShown = true;
     }
@@ -90,8 +99,23 @@ public class JointTalonFX {
       jointMotor.set(TalonFXControlMode.PercentOutput, SmartDashboard.getNumber("Arm 1 PCT", 0));
     }
 
+  // Called by the engageMotor methods in this class. The engageMotor methods are accessed from outside commands, and that
+  // method accesses this one to actually set the motor
+  public void setMotorWithLimiterBound(ControlMode mode, double set)
+  {
+    if (topLimiter.get() && bottomLimiter.get()) {
+      jointMotor.set(mode, set);
+    } else if (!topLimiter.get() && (this.intent == -1 || intent == 0) && bottomLimiter.get()) {
+      jointMotor.set(mode, set);
+    } else if (!bottomLimiter.get() && (this.intent == 1 || this.intent == 0) && topLimiter.get()) {
+      jointMotor.set(mode, set);
+    } else {
+      jointMotor.set(mode, set);
+    }
+  }
   /* 
-  public void runVoltage(double volts) {
+  public void runVoltage(double volts) 
+  {
     io.setVoltage(volts);
   }
 
@@ -106,17 +130,16 @@ public class JointTalonFX {
   }
 
   @Override
-  public void simulationPeriodic() {
+  public void simulationPeriodic() 
+  {
     // This method will be called once per scheduler run during simulation
   }
   */
 
-  /* 
+
   public static JointTalonFX getInstance() {
-    if(instance == null) {instance = new Arm(new ArmIO() {});}
+    if(instance == null) {instance = new JointTalonFX();}
     return instance;
   }
-  */
-  
 }
 
