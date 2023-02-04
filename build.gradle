@@ -40,6 +40,12 @@ deploy {
 
 def deployArtifact = deploy.targets.roborio.artifacts.frcJava
 
+task deleteDir(type: Delete) {
+    project.delete 'build'
+}
+
+def cleanBuild = ['deletedDir'] 
+
 // Set to true to use debug for JNI.
 wpi.java.debugJni = false
 
