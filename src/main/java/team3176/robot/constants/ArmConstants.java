@@ -14,6 +14,8 @@ public final class ArmConstants {
     public static final int ARM_SHOULDER_FALCON_CAN_ID = 50;
     public static final int ARM_ELBOW_FALCON_CAN_ID = 50;
     public static final int ARM_WRIST_FALCON_CAN_ID = 50;
+    public static final int ELBOW_INTAKE_LIMIT = 1;
+    public static final int ELBOW_EXTEND_LIMIT = 2;
 
    
 
