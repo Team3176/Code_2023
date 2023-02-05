@@ -10,8 +10,7 @@ package team3176.robot.constants;
  */
 public final class ArmConstants {
 
-    public static final int JOINT_MOTOR1_CAN_ID = 05; //TODO: Update CAN ID
-    public static final int ARM_SHOULDER_FALCON_CAN_ID = 50;
+    public static final int ARM_SHOULDER_FALCON_CAN_ID = 5;
     public static final int ARM_ELBOW_FALCON_CAN_ID = 50;
     public static final int ARM_WRIST_FALCON_CAN_ID = 50;
     public static final int limiter1Channel = 1;
