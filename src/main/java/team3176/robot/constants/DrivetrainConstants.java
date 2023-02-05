@@ -5,6 +5,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 //import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.math.util.Units;
+import team3176.robot.Robot;
+import team3176.robot.constants.RobotConstants;
+import team3176.robot.constants.RobotConstants.RobotType;
 
 public class DrivetrainConstants extends DrivetrainHardwareMap {
     // IDs for Drivetrain motors and solenoids
@@ -22,14 +25,25 @@ public class DrivetrainConstants extends DrivetrainHardwareMap {
   
 
     // Drivetrain dimensions for kinematics and odometry
-    public static final double LENGTH_IN_METERS_2022 = 0.581; // measured in inches as 24.75
-    public static final double LENGTH_IN_INCHES_2022 = Units.metersToInches(LENGTH_IN_METERS_2022); //58.1 * (1.0/2.54); // 22.87 inches but measured in cm as 58.1cm
+    public static final double EBOT_LENGTH_IN_INCHES_2023 = 29.5; 
+    public static final double EBOT_LENGTH_IN_METERS_2023 = Units.inchesToMeters(EBOT_LENGTH_IN_INCHES_2023);
+    public static final double CHASSIS_LENGTH_IN_INCHES_2023 = 30; 
+    public static final double CHASSIS_LENGTH_IN_METERS_2023 = Units.inchesToMeters(EBOT_LENGTH_IN_INCHES_2023);
 
-    public static final double WIDTH_IN_METERS_2022 = 0.61595; // measured in inches as 24.25in   24.75
-    public static final double WIDTH_IN_INCHES_2022 = Units.metersToInches(WIDTH_IN_METERS_2022); //64.0 * (1.0/2.54); // 25.197 inches but measured in cm as 64.0cm
 
-    public static double LENGTH = .61;
-    public static double WIDTH = .61;
+    public static final double EBOT_WIDTH_IN_INCHES_2023 = 30;
+    public static final double EBOT_WIDTH_IN_METERS_2023 = Units.inchesToMeters(EBOT_WIDTH_IN_INCHES_2023);
+    public static final double CHASSIS_WIDTH_IN_INCHES_2023 = 29.5;
+    public static final double CHASSIS_WIDTH_IN_METERS_2023 = Units.inchesToMeters(CHASSIS_WIDTH_IN_INCHES_2023);
+
+    
+//    public static double LENGTH = (RobotConstants.isEBOT()) ? EBOT_LENGTH_IN_METERS_2023 : 0 ; 
+//    public static double WIDTH = (RobotConstants.isEBOT()) ? EBOT_WIDTH_IN_METERS_2023 : 0 ; 
+ 
+    public static double LENGTH = EBOT_LENGTH_IN_METERS_2023;
+    public static double WIDTH = EBOT_WIDTH_IN_METERS_2023;
+    
+    
     public static double DRIVE_ENCODER_UNITS_PER_REVOLUTION;
 
     public static final double WHEEL_DIAMETER_INCHES = 3.00; // Inches
@@ -57,18 +71,18 @@ public class DrivetrainConstants extends DrivetrainHardwareMap {
     //public static final double LENGTH_CENTER_TO_CENTER = 23.5;
     //public static final double WIDTH_CENTER_TO_CENTER = 23.5;
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-        new Translation2d(LENGTH / 2.0, -WIDTH / 2.0),  //FR where +x=forward and +y=port
+        new Translation2d(LENGTH / 2.0, -WIDTH / 2.0),  //FR where +x=forward and -y=starboard
         new Translation2d(LENGTH / 2.0, WIDTH / 2.0),   //FL where +x=forward and +y=port
-        new Translation2d(-LENGTH / 2.0, WIDTH / 2.0), //BL where +x=forward and +y=port
-        new Translation2d(-LENGTH / 2.0, -WIDTH/ 2.0)   //BR where +x=forward and +y=port
+        new Translation2d(-LENGTH / 2.0, WIDTH / 2.0), //BL where -x=backward(aft) and +y=port
+        new Translation2d(-LENGTH / 2.0, -WIDTH/ 2.0)   //BR where -x=backward(aft) and -y=starboard
     );
 
     /* NOTE: Related to above decomposition of pod locations where
      *               O (Chassis center) = 0,0,
-     *              FR (front right pod) = -x +y, 
+     *              FR (front right pod) = -x -y, 
      *              FL (front left pod) = +x, +y,
-     *              BL (back left pod) = -x, -y, 
-     *              BR (back right pod) = +x -y
+     *              BL (back left pod) = -x, +y, 
+     *              BR (back right pod) = -x -y
      *      and +x is considered the forward direction (fore) and +y is 
      *      considered the direction to port on the chassis
      *      IT MUST BE NOTED that with current orientation of NavX-MXP on the 2021 bot

@@ -20,7 +20,7 @@ import team3176.robot.util.God.Alert.AlertType;
  * constants are needed, to reduce verbosity.
  */
 public final class RobotConstants {
-  private static final RobotType robot = RobotType.ROBOT_2022S;
+  private static final RobotType robot = RobotType.PROTCHASSIS;
   public static final double loopPeriodSecs = 0.02;
   public static final boolean tuningMode = false;
 
@@ -30,9 +30,9 @@ public final class RobotConstants {
 
   public static RobotType getRobot() {
     if (RobotBase.isReal()) {
-      if (robot == RobotType.ROBOT_SIMBOT) { // Invalid robot selected
+      if (robot == RobotType.SIMBOT) { // Invalid robot selected
         invalidRobotAlert.set(true);
-        return RobotType.ROBOT_2022S;
+        return RobotType.PRODBOT;
       } else {
         return robot;
       }
@@ -43,10 +43,16 @@ public final class RobotConstants {
 
   public static Mode getMode() {
     switch (getRobot()) {
-      case ROBOT_2022S:
+      case EBOT:
         return RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
 
-      case ROBOT_SIMBOT:
+      case PRODBOT:
+        return RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
+      
+        case PROTCHASSIS:
+        return RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
+
+      case SIMBOT:
         return Mode.SIM;
 
       default:
@@ -55,11 +61,36 @@ public final class RobotConstants {
   }
 
   public static final Map<RobotType, String> logFolders =
-      Map.of(RobotType.ROBOT_2022S, "/media/sda2");
+      Map.of(RobotType.PRODBOT, "/media/sda2");
 
+  public static boolean isEBOT() {
+    if (getRobot() == RobotType.EBOT) {
+      return true;
+    } else return false;
+  } 
+  
+  public static boolean isPRODBOT() {
+    if (getRobot() == RobotType.PRODBOT) {
+      return true;
+    } else return false;
+  } 
+
+  public static boolean isPROTCHASSIS() {
+    if (getRobot() == RobotType.PRODBOT) {
+      return true;
+    } else return false;
+  } 
+
+  public static boolean isSIMBOT() {
+    if (getRobot() == RobotType.PRODBOT) {
+      return true;
+    } else return false;
+  } 
+  
   public static enum RobotType {
-    ROBOT_2022S, ROBOT_SIMBOT
+    EBOT, PRODBOT, PROTCHASSIS, SIMBOT
   }
+
 
   public static enum Mode {
     REAL, REPLAY, SIM
