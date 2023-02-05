@@ -27,21 +27,25 @@ public class DrivetrainConstants extends DrivetrainHardwareMap {
     // Drivetrain dimensions for kinematics and odometry
     public static final double EBOT_LENGTH_IN_INCHES_2023 = 29.5; 
     public static final double EBOT_LENGTH_IN_METERS_2023 = Units.inchesToMeters(EBOT_LENGTH_IN_INCHES_2023);
-    public static final double CHASSIS_LENGTH_IN_INCHES_2023 = 30; 
-    public static final double CHASSIS_LENGTH_IN_METERS_2023 = Units.inchesToMeters(EBOT_LENGTH_IN_INCHES_2023);
+    public static final double PROTCHASSIS_LENGTH_IN_INCHES_2023 = 30; 
+    public static final double PROTCHASSIS_LENGTH_IN_METERS_2023 = Units.inchesToMeters(PROTCHASSIS_LENGTH_IN_INCHES_2023);
+    public static final double PRODBOT_LENGTH_IN_INCHES_2023 = 30; 
+    public static final double PRODBOT_LENGTH_IN_METERS_2023 = Units.inchesToMeters(PRODBOT_LENGTH_IN_INCHES_2023);
 
 
     public static final double EBOT_WIDTH_IN_INCHES_2023 = 30;
     public static final double EBOT_WIDTH_IN_METERS_2023 = Units.inchesToMeters(EBOT_WIDTH_IN_INCHES_2023);
-    public static final double CHASSIS_WIDTH_IN_INCHES_2023 = 29.5;
-    public static final double CHASSIS_WIDTH_IN_METERS_2023 = Units.inchesToMeters(CHASSIS_WIDTH_IN_INCHES_2023);
+    public static final double PROTCHASSIS_WIDTH_IN_INCHES_2023 = 29.5;
+    public static final double PROTCHASSIS_WIDTH_IN_METERS_2023 = Units.inchesToMeters(PROTCHASSIS_WIDTH_IN_INCHES_2023);
+    public static final double PRODBOT_WIDTH_IN_INCHES_2023 = 29.5;
+    public static final double PRODBOT_WIDTH_IN_METERS_2023 = Units.inchesToMeters(PRODBOT_WIDTH_IN_INCHES_2023);
 
     
 //    public static double LENGTH = (RobotConstants.isEBOT()) ? EBOT_LENGTH_IN_METERS_2023 : 0 ; 
 //    public static double WIDTH = (RobotConstants.isEBOT()) ? EBOT_WIDTH_IN_METERS_2023 : 0 ; 
  
-    public static double LENGTH = EBOT_LENGTH_IN_METERS_2023;
-    public static double WIDTH = EBOT_WIDTH_IN_METERS_2023;
+    public static double LENGTH = PROTCHASSIS_LENGTH_IN_METERS_2023;
+    public static double WIDTH = PROTCHASSIS_WIDTH_IN_METERS_2023;
     
     
     public static double DRIVE_ENCODER_UNITS_PER_REVOLUTION;
