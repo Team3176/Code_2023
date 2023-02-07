@@ -2,17 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package team3176.robot.subsystems.arm;
+package team3176.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import team3176.robot.subsystems.arm.Shoulder;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 public class ExtendArm extends CommandBase {
   public String mode = "";
-  JointTalonFX m_Andrew = JointTalonFX.getInstance();
+  Shoulder m_Andrew = Shoulder.getInstance();
   private int set;
-  private static ExtendArm instance;
+  //private static ExtendArm instance;
 
   public ExtendArm() {
     addRequirements(m_Andrew);
@@ -20,7 +22,7 @@ public class ExtendArm extends CommandBase {
 
   @Override
   public void initialize() {
-
+    System.out.println("Shoulder position:  " + m_Andrew.getCurrentPosition());
   }
 
   @Override
@@ -39,8 +41,5 @@ public class ExtendArm extends CommandBase {
     return false;
   }
 
-  public static ExtendArm getInstance() {
-    if(instance == null) {instance = new ExtendArm();}
-    return instance;
-  }
+ 
 }

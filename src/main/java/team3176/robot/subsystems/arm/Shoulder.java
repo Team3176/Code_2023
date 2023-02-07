@@ -18,22 +18,22 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class JointTalonFX extends SubsystemBase {
+public class Shoulder extends SubsystemBase {
 
   private TalonFX jointMotor;
 
  // private final FlywheelIO io;
  // private final FlywheelIOInputs inputs = new FlywheelIOInputs();
-  private static JointTalonFX instance;
+  private static Shoulder instance;
   private boolean isSmartDashboardTestControlsShown;
   public String mode = "";
   private DigitalInput bottomLimiter;
   private DigitalInput topLimiter;
   private int intent;
-  public JointTalonFX()
+  public Shoulder()
   {
     //this.io = io;
-
+    System.out.println("Shoulder has been constructed");
     jointMotor = new TalonFX(ArmConstants.ARM_SHOULDER_FALCON_CAN_ID);
     bottomLimiter = new DigitalInput(ArmConstants.limiter1Channel);
     topLimiter = new DigitalInput(ArmConstants.limiter2Channel);
@@ -135,10 +135,12 @@ public class JointTalonFX extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
   */
+  public double getCurrentPosition(){
+    return jointMotor.getSelectedSensorPosition();
+  }
 
-
-  public static JointTalonFX getInstance() {
-    if(instance == null) {instance = new JointTalonFX();}
+  public static Shoulder getInstance() {
+    if(instance == null) {instance = new Shoulder();}
     return instance;
   }
 }
