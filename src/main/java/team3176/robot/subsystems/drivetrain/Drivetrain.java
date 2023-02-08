@@ -432,43 +432,20 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     dblPub.set(3.0);
     
-      vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpodr");
-      double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
-      System.out.println(vision_pose_array[0]);
+    vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose");
+    double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
+    System.out.println(vision_pose_array[0]);
+    Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+    double xoffset = Units.inchesToMeters(285.16+ 40.45);
+    double yoffset = Units.inchesToMeters(115.59 + 42.49);
+    cam_pose = cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
+    //System.out.println("it's working");
+    //update the pose estimator with correct timestamped values
+    //this.poseEstimator.addVisionMeasurement(cam_pose, Timer.getFPGATimestamp());
+    SmartDashboard.putNumber("camX",cam_pose.getX());
       
-      //vision_pose = table.getDoubleArrayTopic("botpose").subscribe(new double[6]);
-    
-
-      
-      
-        //if(vision_pose_array.length == 0);{
-        //  vision_pose_array = (new double [6]);
-        //}
-        Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-        double xoffset = Units.inchesToMeters(285.16+ 40.45);
-        double yoffset = Units.inchesToMeters(115.59 + 42.49);
-        cam_pose = cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
-        //System.out.println("it's working");
-        //update the pose estimator with correct timestamped values
-        //this.poseEstimator.addVisionMeasurement(cam_pose, Timer.getFPGATimestamp());
-        SmartDashboard.putNumber("camX",cam_pose.getX());
-      
-    
-  // for (TimestampedDoubleArray v : vision_pose.readQueue()) {
-  // double[] vision_pose_array = v.value;
-  // Pose2d cam_pose =new
-  // Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-  // double xoffset = Units.inchesToMeters(285.16+ 40.45);
-  // double yoffset = Units.inchesToMeters(115.59 + 42.49);
-  // cam_pose = cam_pose.transformBy(new Transform2d(new
-  // Translation2d(xoffset,yoffset),new Rotation2d()));
-
-  // //update the pose estimator with correct timestamped values
-  // this.poseEstimator.addVisionMeasurement(cam_pose, v.timestamp);
-  // SmartDashboard.putNumber("camX",cam_pose.getX());
-  // }
-  // update encoders
-  this.poseEstimator.update(getChassisYaw(), getSwerveModulePositions());
+    // update encoders
+    this.poseEstimator.update(getChassisYaw(), getSwerveModulePositions());
     this.odom.update(getChassisYaw(), getSwerveModulePositions());
     
     // This method will be called once per scheduler every 500ms
