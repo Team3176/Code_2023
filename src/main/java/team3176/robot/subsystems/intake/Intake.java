@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import java.security.interfaces.XECPublicKey;
 
@@ -36,7 +37,9 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends SubsystemBase {
-    private TalonSRX motorcontrol = new TalonSRX(22);
+    private TalonSRX backMotorControl = new TalonSRX(22);
+    private TalonSRX frontMotorControl = new TalonSRX(23);
+    private TalonFX rollermotor = new TalonFX(20);
     private I2C.Port m_I2C = I2C.Port.kOnboard;
     private DoubleSolenoid piston;
     private DigitalInput linebreak; 
@@ -58,7 +61,8 @@ public class Intake extends SubsystemBase {
     //dblPub = dblTopic.publish();
     //dblPub = dblTopic.publish(PubSubOption.keepDuplicates(true));
     //dblPub = dblTopic.publishEx("double","{\"myprop\": 5}");
-    motorcontrol.configFactoryDefault();
+    backMotorControl.configFactoryDefault();
+    frontMotorControl.configFactoryDefault();
     piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
     isInIntake = false;
     isCone = false;
@@ -76,40 +80,59 @@ public class Intake extends SubsystemBase {
 
 		
 		/* Config the sensor used for Primary PID and sensor direction */
-    motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    backMotorControl.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    frontMotorControl.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
 		/* Ensure sensor is positive when output is positive */
-		motorcontrol.setSensorPhase(true);
+		backMotorControl.setSensorPhase(true);
+    frontMotorControl.setSensorPhase(true);
 
-    motorcontrol.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0); 
-    motorcontrol.configNominalOutputForward(0, motorconstants.kTIMEOUT_MS);
-    motorcontrol.configNominalOutputReverse(0, motorconstants.kTIMEOUT_MS);
-    motorcontrol.configPeakOutputForward(1.0, motorconstants.kTIMEOUT_MS);
-    motorcontrol.configPeakOutputReverse(-1.0, motorconstants.kTIMEOUT_MS);
-    
-    motorcontrol.configAllowableClosedloopError(motorconstants.kPID_LOOP_IDX, motorconstants.ALLOWABLE_CLOSED_LOOP_ERROR, motorconstants.kTIMEOUT_MS);
+    backMotorControl.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0); 
+    backMotorControl.configNominalOutputForward(0, motorconstants.kTIMEOUT_MS);
+    backMotorControl.configNominalOutputReverse(0, motorconstants.kTIMEOUT_MS);
+    backMotorControl.configPeakOutputForward(1.0, motorconstants.kTIMEOUT_MS);
+    backMotorControl.configPeakOutputReverse(-1.0, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0); 
+    frontMotorControl.configNominalOutputForward(0, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configNominalOutputReverse(0, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configPeakOutputForward(1.0, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configPeakOutputReverse(-1.0, motorconstants.kTIMEOUT_MS);
 
-    motorcontrol.config_kF(motorconstants.kPID_LOOP_IDX, motorconstants.kF, motorconstants.kTIMEOUT_MS);
-    motorcontrol.config_kP(motorconstants.kPID_LOOP_IDX, motorconstants.kP, motorconstants.kTIMEOUT_MS);
-    motorcontrol.config_kI(motorconstants.kPID_LOOP_IDX, motorconstants.kI, motorconstants.kTIMEOUT_MS);
-    motorcontrol.config_kD(motorconstants.kPID_LOOP_IDX, motorconstants.kD, motorconstants.kTIMEOUT_MS);
-    motorcontrol.config_IntegralZone(motorconstants.kPID_LOOP_IDX, motorconstants.kIzone, motorconstants.kTIMEOUT_MS);
-    motorcontrol.setInverted(true);
-    
-    motorcontrol.configNominalOutputReverse(0, motorconstants.kTIMEOUT_MS);
-    motorcontrol.configPeakOutputReverse(-1, motorconstants.kTIMEOUT_MS);
-    motorcontrol.configPeakOutputForward(1, motorconstants.kTIMEOUT_MS);
-    motorcontrol.configNominalOutputForward(0, motorconstants.kTIMEOUT_MS);
+    backMotorControl.configAllowableClosedloopError(motorconstants.kPID_LOOP_IDX, motorconstants.ALLOWABLE_CLOSED_LOOP_ERROR, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configAllowableClosedloopError(motorconstants.kPID_LOOP_IDX, motorconstants.ALLOWABLE_CLOSED_LOOP_ERROR, motorconstants.kTIMEOUT_MS);
+
+    backMotorControl.config_kF(motorconstants.kPID_LOOP_IDX, motorconstants.kF, motorconstants.kTIMEOUT_MS);
+    backMotorControl.config_kP(motorconstants.kPID_LOOP_IDX, motorconstants.kP, motorconstants.kTIMEOUT_MS);
+    backMotorControl.config_kI(motorconstants.kPID_LOOP_IDX, motorconstants.kI, motorconstants.kTIMEOUT_MS);
+    backMotorControl.config_kD(motorconstants.kPID_LOOP_IDX, motorconstants.kD, motorconstants.kTIMEOUT_MS);
+    backMotorControl.config_IntegralZone(motorconstants.kPID_LOOP_IDX, motorconstants.kIzone, motorconstants.kTIMEOUT_MS);
+    backMotorControl.setInverted(true);
+    frontMotorControl.config_kF(motorconstants.kPID_LOOP_IDX, motorconstants.kF, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.config_kP(motorconstants.kPID_LOOP_IDX, motorconstants.kP, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.config_kI(motorconstants.kPID_LOOP_IDX, motorconstants.kI, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.config_kD(motorconstants.kPID_LOOP_IDX, motorconstants.kD, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.config_IntegralZone(motorconstants.kPID_LOOP_IDX, motorconstants.kIzone, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.setInverted(true);
+
+    backMotorControl.configNominalOutputReverse(0, motorconstants.kTIMEOUT_MS);
+    backMotorControl.configPeakOutputReverse(-1, motorconstants.kTIMEOUT_MS);
+    backMotorControl.configPeakOutputForward(1, motorconstants.kTIMEOUT_MS);
+    backMotorControl.configNominalOutputForward(0, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configNominalOutputReverse(0, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configPeakOutputReverse(-1, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configPeakOutputForward(1, motorconstants.kTIMEOUT_MS);
+    frontMotorControl.configNominalOutputForward(0, motorconstants.kTIMEOUT_MS);
   }
 
   public void spinVelocityPercent(double pct) {
-    motorcontrol.set(TalonSRXControlMode.PercentOutput, pct);
-   
+    rollermotor.set(ControlMode.PercentOutput, pct);
   }
   
   public void setPosition(int i) {
-    double currentPos = motorcontrol.getSelectedSensorPosition(0);
-    motorcontrol.set(ControlMode.Position, currentPos + i);
+    double backcurrentPos = backMotorControl.getSelectedSensorPosition(0);
+    double frontcurrentPos = backMotorControl.getSelectedSensorPosition(0);
+    backMotorControl.set(ControlMode.Position, backcurrentPos + i);
+    backMotorControl.set(ControlMode.Position, frontcurrentPos + i);
   }
 
   public void Extend() {
@@ -195,6 +218,7 @@ public class Intake extends SubsystemBase {
       if (linebreak.get() == false)
       {
         isInIntake = true;
+        Retract();
         setPosition(1000);
       }
       else
