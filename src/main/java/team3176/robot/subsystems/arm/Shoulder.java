@@ -35,9 +35,9 @@ public class Shoulder extends SubsystemBase {
   {
     //this.io = io;
     System.out.println("Shoulder has been constructed");
-    jointMotor = new TalonFX(ArmConstants.ARM_SHOULDER_FALCON_CAN_ID);
-    bottomLimiter = new DigitalInput(ArmConstants.limiter1Channel);
-    topLimiter = new DigitalInput(ArmConstants.limiter2Channel);
+    jointMotor = new TalonFX(ArmConstants.SHOULDER_FALCON_CAN_ID);
+    bottomLimiter = new DigitalInput(ArmConstants.SHOULDER_EXTENDED_LIMIT_CHAN);
+    topLimiter = new DigitalInput(ArmConstants.SHOULDER_RETRACTED_LIMIT_CHAN);
     this.intent = 0;
 
     jointMotor.configFactoryDefault();
@@ -46,17 +46,17 @@ public class Shoulder extends SubsystemBase {
     jointMotor.setSensorPhase(true);
     jointMotor.configClosedloopRamp(ArmConstants.kRampRate, ArmConstants.kTimeoutMS);
     
-    jointMotor.config_kP(0, ArmConstants.PIDFConstants[0][0]);
-    jointMotor.config_kI(0, ArmConstants.PIDFConstants[0][1]);
-    jointMotor.config_kD(0, ArmConstants.PIDFConstants[0][2]);
-    jointMotor.config_kF(0, ArmConstants.PIDFConstants[0][3]);
-    jointMotor.config_IntegralZone(0, ArmConstants.PIDFConstants[0][4]);
+    jointMotor.config_kP(0, ArmConstants.Shoulder_PIDFConstants[0][0]);
+    jointMotor.config_kI(0, ArmConstants.Shoulder_PIDFConstants[0][1]);
+    jointMotor.config_kD(0, ArmConstants.Shoulder_PIDFConstants[0][2]);
+    jointMotor.config_kF(0, ArmConstants.Shoulder_PIDFConstants[0][3]);
+    jointMotor.config_IntegralZone(0, ArmConstants.Shoulder_PIDFConstants[0][4]);
 
-    jointMotor.config_kP(0, ArmConstants.PIDFConstants[0][0]);
-    jointMotor.config_kI(0, ArmConstants.PIDFConstants[0][1]);
-    jointMotor.config_kD(0, ArmConstants.PIDFConstants[0][2]);
-    jointMotor.config_kF(0, ArmConstants.PIDFConstants[0][3]);
-    jointMotor.config_IntegralZone(0, ArmConstants.PIDFConstants[0][4]);
+    jointMotor.config_kP(0, ArmConstants.Shoulder_PIDFConstants[0][0]);
+    jointMotor.config_kI(0, ArmConstants.Shoulder_PIDFConstants[0][1]);
+    jointMotor.config_kD(0, ArmConstants.Shoulder_PIDFConstants[0][2]);
+    jointMotor.config_kF(0, ArmConstants.Shoulder_PIDFConstants[0][3]);
+    jointMotor.config_IntegralZone(0, ArmConstants.Shoulder_PIDFConstants[0][4]);
   }
 
   public void spinMotors(double ticksPer100ms) 

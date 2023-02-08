@@ -10,26 +10,27 @@ package team3176.robot.constants;
  */
 public final class ArmConstants {
 
-    public static final int ARM_SHOULDER_FALCON_CAN_ID = 5;
-    public static final int ARM_ELBOW_FALCON_CAN_ID = 50;
-    public static final int ARM_WRIST_FALCON_CAN_ID = 50;
-    public static final int limiter1Channel = 1;
-    public static final int limiter2Channel = 2;
+    //Shoulder 
+    public static final int SHOULDER_FALCON_CAN_ID = 5;
+    public static final int SHOULDER_EXTENDED_LIMIT_CHAN = 1;
+    public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2;
 
-   
+    //Elbow
+    public static final int ELBOW_FALCON_CAN_ID = 6;
+    public static final int ELBOW_FLOOR_LIMIT_CHAN = 3;
+    public static final int ELBOW_PICKUP_LIMIT_CHAN = 4;
 
-    public static final int ELBOW_FLOOR_LIMIT_CHAN = 1;
-    public static final int ELBOW_PICKUP_LIMIT_CHAN = 2;
-    public static final int PICKUP_POSITION = 0;
-    public static final int HIGH_POSITION = 30;
-    public static final int MID_POSITION = 60;
-    public static final int LOW_POSITION = 90;
-    
+    //Elbow Discrete Positions
+    //TODO: These values are just for testing purposes only
+    public static final double PICKUP_POSITION = 0;
+    public static final double HIGH_POSITION = 300;
+    public static final double MID_POSITION = 600;
+    public static final double LOW_POSITION = 900;
 
+    //Wrist
+    public static final int WRIST_FALCON_CAN_ID = 50;
 
-   
-
-
+    //PID 
     public static final int kPIDLoopIndex = 0;
     public static final int kTimeoutMS = 30;
 
@@ -44,5 +45,6 @@ public final class ArmConstants {
     //public static final String kShuffleboardPercentName1 = "ArmShoulder%Set";
 
     // Constant order: P, I, D, FF, IZone
-    public static final double[][] PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
+    public static final double[][] Shoulder_PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
+    public static final double[][] Elbow_PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
 }
