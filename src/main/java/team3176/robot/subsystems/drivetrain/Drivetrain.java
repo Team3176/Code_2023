@@ -29,6 +29,7 @@ import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -439,9 +440,17 @@ public class Drivetrain extends SubsystemBase {
     double xoffset = Units.inchesToMeters(285.16+ 40.45);
     double yoffset = Units.inchesToMeters(115.59 + 42.49);
     cam_pose = cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
-    //System.out.println("it's working");
+    
     //update the pose estimator with correct timestamped values
-    //this.poseEstimator.addVisionMeasurement(cam_pose, Timer.getFPGATimestamp());
+    // for (NetworkTableValue v:  vision_pose.readQueue()){
+    //   double[] vision_pose_array=v.getDoubleArray();
+    //   Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+    //   double xoffset = Units.inchesToMeters(285.16+ 40.45);
+    //   double yoffset = Units.inchesToMeters(115.59 + 42.49);
+    //   cam_pose = cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
+    //   poseEstimator.addVisionMeasurement(cam_pose, v.getTime());
+    // }
+
     SmartDashboard.putNumber("camX",cam_pose.getX());
       
     // update encoders
