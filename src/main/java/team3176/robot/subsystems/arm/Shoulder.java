@@ -30,6 +30,7 @@ public class Shoulder extends SubsystemBase {
   private DigitalInput bottomLimiter;
   private DigitalInput topLimiter;
   private int intent;
+  
   public Shoulder()
   {
     //this.io = io;

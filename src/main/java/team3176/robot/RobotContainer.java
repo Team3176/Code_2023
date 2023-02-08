@@ -53,7 +53,8 @@ public class RobotContainer {
   //private final Intake m_Intake;
   private final Signalling m_Signalling;
   private final Vision m_Vision;
-  private final Shoulder m_arm;
+  private final Shoulder m_Shoulder;
+  private final Elbow m_Elbow;
 
   private SendableChooser<String> m_autonChooser;
   // private static final String m_B = "s_Block";
@@ -84,12 +85,14 @@ public class RobotContainer {
   private static final String m_TrapDriveRot = "s_TrapDriveRot";
 
   public RobotContainer() {
-    m_arm = Shoulder.getInstance();
+    m_Shoulder = Shoulder.getInstance();
+    m_Elbow = Elbow.getInstance();
     m_Controller = Controller.getInstance();
     //m_Drivetrain= Drivetrain.getInstance();
     //m_Intake = Intake.getInstance();
     m_Signalling = Signalling.getInstance();
     m_Vision = Vision.getInstance();
+  
 
     m_PDH = new PowerDistribution(1, ModuleType.kRev);
     m_PDH.clearStickyFaults();
