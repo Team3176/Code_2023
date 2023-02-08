@@ -437,17 +437,17 @@ public class Drivetrain extends SubsystemBase {
     double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
     System.out.println(vision_pose_array[0]);
     Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-    double xoffset = Units.inchesToMeters(285.16+ 40.45);
-    double yoffset = Units.inchesToMeters(115.59 + 42.49);
-    cam_pose = cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
+    
+    //commenting out because I believe we should update the limelight apriltag map
+
+    // double xoffset = Units.inchesToMeters(285.16+ 40.45);
+    // double yoffset = Units.inchesToMeters(115.59 + 42.49);
+    // cam_pose = cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
     
     //update the pose estimator with correct timestamped values
     // for (NetworkTableValue v:  vision_pose.readQueue()){
     //   double[] vision_pose_array=v.getDoubleArray();
     //   Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-    //   double xoffset = Units.inchesToMeters(285.16+ 40.45);
-    //   double yoffset = Units.inchesToMeters(115.59 + 42.49);
-    //   cam_pose = cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
     //   poseEstimator.addVisionMeasurement(cam_pose, v.getTime());
     // }
 
