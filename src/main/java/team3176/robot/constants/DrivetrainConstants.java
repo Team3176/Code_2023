@@ -27,7 +27,7 @@ public class DrivetrainConstants extends DrivetrainHardwareMap {
     // Drivetrain dimensions for kinematics and odometry
     public static final double EBOT_LENGTH_IN_INCHES_2023 = 29.5; 
     public static final double EBOT_LENGTH_IN_METERS_2023 = Units.inchesToMeters(EBOT_LENGTH_IN_INCHES_2023);
-    public static final double PROTCHASSIS_LENGTH_IN_INCHES_2023 = 30; 
+    public static final double PROTCHASSIS_LENGTH_IN_INCHES_2023 = 24.35; 
     public static final double PROTCHASSIS_LENGTH_IN_METERS_2023 = Units.inchesToMeters(PROTCHASSIS_LENGTH_IN_INCHES_2023);
     public static final double PRODBOT_LENGTH_IN_INCHES_2023 = 30; 
     public static final double PRODBOT_LENGTH_IN_METERS_2023 = Units.inchesToMeters(PRODBOT_LENGTH_IN_INCHES_2023);
@@ -35,7 +35,7 @@ public class DrivetrainConstants extends DrivetrainHardwareMap {
 
     public static final double EBOT_WIDTH_IN_INCHES_2023 = 30;
     public static final double EBOT_WIDTH_IN_METERS_2023 = Units.inchesToMeters(EBOT_WIDTH_IN_INCHES_2023);
-    public static final double PROTCHASSIS_WIDTH_IN_INCHES_2023 = 29.5;
+    public static final double PROTCHASSIS_WIDTH_IN_INCHES_2023 = 28.75;
     public static final double PROTCHASSIS_WIDTH_IN_METERS_2023 = Units.inchesToMeters(PROTCHASSIS_WIDTH_IN_INCHES_2023);
     public static final double PRODBOT_WIDTH_IN_INCHES_2023 = 29.5;
     public static final double PRODBOT_WIDTH_IN_METERS_2023 = Units.inchesToMeters(PRODBOT_WIDTH_IN_INCHES_2023);
