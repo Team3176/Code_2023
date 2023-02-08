@@ -433,10 +433,10 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     dblPub.set(3.0);
     
-    vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose");
-    double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
-    System.out.println(vision_pose_array[0]);
-    Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+    // vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose");
+    // double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
+    // System.out.println(vision_pose_array[0]);
+    // Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
     
     //commenting out because I believe we should update the limelight apriltag map
 
@@ -445,11 +445,18 @@ public class Drivetrain extends SubsystemBase {
     // cam_pose = cam_pose.transformBy(new Transform2d(new Translation2d(xoffset,yoffset),new Rotation2d()));
     
     //update the pose estimator with correct timestamped values
+    
     // for (NetworkTableValue v:  vision_pose.readQueue()){
     //   double[] vision_pose_array=v.getDoubleArray();
     //   Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
     //   poseEstimator.addVisionMeasurement(cam_pose, v.getTime());
     // }
+    
+
+    //testing new limelight command
+    LimelightHelpers.LimelightResults r = LimelightHelpers.getLatestResults("limelight");
+    Pose2d cam_pose = r.targetingResults.getBotPose2d();
+    poseEstimator.addVisionMeasurement(cam_pose, r.targetingResults.timestamp_RIOFPGA_capture);
 
     SmartDashboard.putNumber("camX",cam_pose.getX());
       
