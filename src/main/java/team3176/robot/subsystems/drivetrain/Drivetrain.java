@@ -127,6 +127,7 @@ public class Drivetrain extends SubsystemBase {
   NetworkTable vision;
   private boolean hasvisionsubed = false;
   NetworkTableEntry vision_pose;
+  double lastVisionTimeStamp = 0.0;
   private final DrivetrainIO io;
   // private final DrivetrainIOInputs inputs = new DrivetrainIOInputs();
 
@@ -343,11 +344,16 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose) {
-    odom.resetPosition(new Rotation2d(), new SwerveModulePosition[] {
+    odom.resetPosition(getChassisYaw(), new SwerveModulePosition[] {
         podFR.getPosition(),
         podFL.getPosition(),
         podBL.getPosition(),
         podBR.getPosition() }, pose);
+    poseEstimator.resetPosition(getChassisYaw(), new SwerveModulePosition[] {
+          podFR.getPosition(),
+          podFL.getPosition(),
+          podBL.getPosition(),
+          podBR.getPosition() }, pose);
   }
 
   public void setModuleStates(SwerveModuleState[] states) {
@@ -455,10 +461,16 @@ public class Drivetrain extends SubsystemBase {
 
     //testing new limelight command
     LimelightHelpers.LimelightResults r = LimelightHelpers.getLatestResults("limelight");
-    Pose2d cam_pose = r.targetingResults.getBotPose2d();
-    poseEstimator.addVisionMeasurement(cam_pose, r.targetingResults.timestamp_RIOFPGA_capture);
+    SmartDashboard.putNumber("lastTimeStamp",r.targetingResults.timestamp_LIMELIGHT_publish);
+    if(lastVisionTimeStamp != r.targetingResults.timestamp_LIMELIGHT_publish) {
+      lastVisionTimeStamp = r.targetingResults.timestamp_LIMELIGHT_publish;
+      Pose2d cam_pose = r.targetingResults.getBotPose2d();
+      //adding a fudge factor for pipeline and capture of 15 ms
+      poseEstimator.addVisionMeasurement(cam_pose,  Timer.getFPGATimestamp() - (15) / 1000);
 
-    SmartDashboard.putNumber("camX",cam_pose.getX());
+      SmartDashboard.putNumber("camX",cam_pose.getX());
+    }
+    
       
     // update encoders
     this.poseEstimator.update(getChassisYaw(), getSwerveModulePositions());
