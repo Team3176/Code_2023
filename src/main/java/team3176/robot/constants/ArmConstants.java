@@ -11,12 +11,12 @@ package team3176.robot.constants;
 public final class ArmConstants {
 
     //Shoulder 
-    public static final int SHOULDER_FALCON_CAN_ID = 5;
+    public static final int SHOULDER_FALCON_CAN_ID = 6;
     public static final int SHOULDER_EXTENDED_LIMIT_CHAN = 1;
     public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2;
 
     //Elbow
-    public static final int ELBOW_FALCON_CAN_ID = 6;
+    public static final int ELBOW_FALCON_CAN_ID = 5;
     public static final int ELBOW_FLOOR_LIMIT_CHAN = 3;
     public static final int ELBOW_PICKUP_LIMIT_CHAN = 4;
 
@@ -25,7 +25,7 @@ public final class ArmConstants {
     public static final double PICKUP_POSITION = 0;
     public static final double HIGH_POSITION = 300;
     public static final double MID_POSITION = 600;
-    public static final double LOW_POSITION = 900;
+    public static final double FLOOR_POSITION = 900;
 
     //Wrist
     public static final int WRIST_FALCON_CAN_ID = 50;

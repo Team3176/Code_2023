@@ -18,7 +18,6 @@ private DigitalInput floorLimiter;
 private TalonFX elbowMotor;
 private ElbowState currentState;
 private String currentStateString;
-private int currentPosition;
 
 /* Discrete positions for the arm */
 /* This will likely need to be defined elsewhere so that callers have access to this type
@@ -40,7 +39,6 @@ public Elbow() {
 
     currentState = ElbowState.UNKNOWN;
     currentStateString = "Unknown";
-    currentPosition = 0;
 
     System.out.println("Elbow Motor has been constructed");
 
@@ -73,12 +71,25 @@ public void setElbowState(ElbowState targetState ) {
             currentState = targetState;
             currentStateString = "Pickup";
             break;
+       
         case HIGH:
             elbowMotor.set(ControlMode.Position, ArmConstants.HIGH_POSITION);
             currentState = targetState;
             currentStateString = "High";
             break;
-        //TODO: Add the last 2 additional discrete positions
+
+        case MID:
+            elbowMotor.set(ControlMode.Position, ArmConstants.MID_POSITION);
+            currentState= targetState;
+            currentStateString = "mid";
+            break;
+
+        case FLOOR:
+            elbowMotor.set(ControlMode.Position, ArmConstants.FLOOR_POSITION);
+            currentState = targetState;
+            currentStateString = "Floor";
+            break;
+
         default:
             currentStateString = "Invalid";
             break; 
@@ -95,9 +106,9 @@ public ElbowState getElbowState() {
 }
 
 /* Returns the position of the elbow */
-public int getElbowPosition() {
-//TOOD: Look at the API on how to return the position
-    return currentPosition;
+public double getCurrentPosition() {
+    return elbowMotor.getSelectedSensorPosition();
+
 }
 
 public static Elbow getInstance() {

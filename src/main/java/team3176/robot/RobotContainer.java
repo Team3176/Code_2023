@@ -4,6 +4,10 @@
 
 package team3176.robot;
 
+import team3176.robot.commands.arm.ElbowFloor;
+import team3176.robot.commands.arm.ElbowHigh;
+import team3176.robot.commands.arm.ElbowMid;
+import team3176.robot.commands.arm.ElbowPickup;
 import team3176.robot.commands.arm.ExtendArm;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -168,9 +172,12 @@ public class RobotContainer {
     // m_Controller.getRotStick_Button5().whenPressed(new
     // SwervePodsAzimuthGoHome());
 
-    m_Controller.operator.a().whileTrue(new ExtendArm());
+    //m_Controller.operator.a().whileTrue(new ExtendArm());
     //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
-
+    m_Controller.operator.a().whileTrue(new ElbowPickup());
+    m_Controller.operator.b().whileTrue(new ElbowHigh());
+    m_Controller.operator.x().whileTrue(new ElbowMid());
+    m_Controller.operator.y().whileTrue(new ElbowFloor());
     //m_Controller.operator.y().whileTrue(new ShootSetVals());
     //m_Controller.operator.b().onTrue(new FlywheelStop());
 
