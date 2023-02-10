@@ -93,10 +93,10 @@ public class RobotContainer {
     m_PDH = new PowerDistribution(1, ModuleType.kRev);
     m_PDH.clearStickyFaults();
 
-    m_Compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    m_Compressor = new Compressor(PneumaticsModuleType.REVPH);
     // TODO: ADD A WAY TO CLEAR STICKY FAULTS
     // m_Compressor.disable(); //HAVE TO TELL IT TO DISABLE FOR IT TO NOT AUTO START
-    m_Compressor.enableDigital();
+    //m_Compressor.enableDigital();
 
     /* 
     if (!LoggerConstants.IS_TUNING_MODE) {

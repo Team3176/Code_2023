@@ -63,12 +63,12 @@ public class Intake extends SubsystemBase {
     //dblPub = dblTopic.publishEx("double","{\"myprop\": 5}");
     backMotorControl.configFactoryDefault();
     frontMotorControl.configFactoryDefault();
-    piston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
+    piston = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 0);
     isInIntake = false;
     isCone = false;
     isSquircle = false;
     isExtended = false;
-    linebreak = new DigitalInput(0);
+    linebreak = new DigitalInput(1);
     SmartDashboard.setDefaultBoolean("isInIntake", isInIntake);
     SmartDashboard.setDefaultBoolean("isCone", isCone);
     SmartDashboard.setDefaultBoolean("isSquircle", isSquircle);
@@ -137,12 +137,12 @@ public class Intake extends SubsystemBase {
 
   public void Extend() {
     piston.set(Value.kForward);
-    isExtended = true;
+    this.isExtended = true;
   }
 
   public void Retract() {
     piston.set(Value.kReverse);
-    isExtended = false;
+    this.isExtended = false;
   }
 
   public static Intake getInstance(){
@@ -160,6 +160,10 @@ public class Intake extends SubsystemBase {
   //Cool example of a subsystem holding basic commands
   public Command stopIntakeCommand() {
     return this.runOnce(() -> this.spinVelocityPercent(0));
+  }
+
+  public Command RetractIntakeCommand() {
+    return this.runOnce(() -> this.Retract());
   }
 
   @Override
@@ -213,13 +217,16 @@ public class Intake extends SubsystemBase {
 
 
     // Code stating if something is in the Intake
-    if (m_ColorSensor.getProximity() <= 1800)
+    if (m_ColorSensor.getProximity() <= 150)
     {
-      if (linebreak.get() == false)
-      {
-        isInIntake = true;
-        Retract();
-        setPosition(1000);
+    if (linebreak.get() == false)
+    {
+      isInIntake = true;
+      setPosition(1000);
+      if (this.isExtended = true)
+        {
+          // Retract();
+        }
       }
       else
       {
@@ -227,9 +234,11 @@ public class Intake extends SubsystemBase {
       }
     }
     SmartDashboard.putBoolean("isInIntake", isInIntake);
+    SmartDashboard.putBoolean("isExtended", isExtended);
+    SmartDashboard.putNumber("getProximity", m_ColorSensor.getProximity());
+
    }
 
- 
 }
 
 
