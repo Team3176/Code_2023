@@ -5,6 +5,15 @@
 package team3176.robot;
 
 import team3176.robot.constants.*;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -154,9 +163,15 @@ public class RobotContainer {
     String chosen = m_autonChooser.getSelected();
 
     
-    PathPlannerAuto PPSwerveauto = new PathPlannerAuto();
-    return PPSwerveauto.getauto();
-    //return new AutonDrive(0.5,0.0,0.0,4.0);
+    //PathPlannerAuto PPSwerveauto = new PathPlannerAuto();
+    // Simple path without holonomic rotation. Stationary start/end. Max velocity of 4 m/s and max accel of 3 m/s^2
+    PathPlannerTrajectory traj1 = PathPlanner.generatePath(
+    new PathConstraints(2, 2), 
+    new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0)), // position, heading
+    new PathPoint(new Translation2d(2.0, 1.0), Rotation2d.fromDegrees(0)) // position, heading
+    );
+
+    return Drivetrain.getInstance().followTrajectoryCommand(traj1, true);
   }
 
   

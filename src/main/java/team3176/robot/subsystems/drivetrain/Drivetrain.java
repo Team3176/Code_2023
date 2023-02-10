@@ -444,11 +444,12 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     dblPub.set(3.0);
     
-    // vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose");
-    // double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
-    // System.out.println(vision_pose_array[0]);
-    // Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-    
+    vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue");
+    double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
+    //System.out.println(vision_pose_array[0]);
+    Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+    //poseEstimator.addVisionMeasurement(cam_pose,  Timer.getFPGATimestamp() - (15) / 1000);
+    SmartDashboard.putNumber("camX",cam_pose.getX());
     //commenting out because I believe we should update the limelight apriltag map
 
     // double xoffset = Units.inchesToMeters(285.16+ 40.45);
@@ -465,16 +466,17 @@ public class Drivetrain extends SubsystemBase {
     
 
     //testing new limelight command
-    LimelightHelpers.LimelightResults r = LimelightHelpers.getLatestResults("limelight");
-    SmartDashboard.putNumber("lastTimeStamp",r.targetingResults.timestamp_LIMELIGHT_publish);
-    if(lastVisionTimeStamp != r.targetingResults.timestamp_LIMELIGHT_publish) {
-      lastVisionTimeStamp = r.targetingResults.timestamp_LIMELIGHT_publish;
-      Pose2d cam_pose = r.targetingResults.getBotPose2d();
-      //adding a fudge factor for pipeline and capture of 15 ms
-      poseEstimator.addVisionMeasurement(cam_pose,  Timer.getFPGATimestamp() - (15) / 1000);
+    //LimelightHelpers.LimelightResults r = LimelightHelpers.getLatestResults("limelight");
+    // LimelightHelpers.LimelightResults r = LimelightHelpers.getLatestResults("limelight");
+    // SmartDashboard.putNumber("lastTimeStamp",r.targetingResults.timestamp_LIMELIGHT_publish);
+    // if(lastVisionTimeStamp != r.targetingResults.timestamp_LIMELIGHT_publish) {
+    //   lastVisionTimeStamp = r.targetingResults.timestamp_LIMELIGHT_publish;
+    //   Pose2d cam_pose = r.targetingResults.getBotPose2d();
+    //   //adding a fudge factor for pipeline and capture of 15 ms
+    //   poseEstimator.addVisionMeasurement(cam_pose,  Timer.getFPGATimestamp() - (15) / 1000);
 
-      SmartDashboard.putNumber("camX",cam_pose.getX());
-    }
+    //   SmartDashboard.putNumber("camX",cam_pose.getX());
+    // }
     
       
     // update encoders
