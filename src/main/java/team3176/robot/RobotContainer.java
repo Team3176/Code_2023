@@ -99,6 +99,7 @@ public class RobotContainer {
     m_Controller.getTransStick_Button4().whileTrue(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.ROBOT_CENTRIC), m_Drivetrain));
     m_Controller.getTransStick_Button4().onFalse(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.FIELD_CENTRIC), m_Drivetrain));
 
+    m_Controller.getRotStick_Button1().onTrue(m_Drivetrain.TeleopButton());
     //m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
@@ -171,7 +172,7 @@ public class RobotContainer {
     new PathPoint(new Translation2d(2.0, 1.0), Rotation2d.fromDegrees(0)) // position, heading
     );
 
-    return Drivetrain.getInstance().followTrajectoryCommand(traj1, true);
+    return Drivetrain.getInstance().followTrajectoryCommand(true, true);
   }
 
   
