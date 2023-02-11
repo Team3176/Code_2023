@@ -4,11 +4,11 @@
 
 package team3176.robot;
 
-import team3176.robot.commands.arm.ElbowFloor;
-import team3176.robot.commands.arm.ElbowHigh;
-import team3176.robot.commands.arm.ElbowMid;
-import team3176.robot.commands.arm.ElbowPickup;
-import team3176.robot.commands.arm.ExtendArm;
+import team3176.robot.commands.arm.elbow.ElbowFloor;
+import team3176.robot.commands.arm.elbow.ElbowHigh;
+import team3176.robot.commands.arm.elbow.ElbowMid;
+import team3176.robot.commands.arm.elbow.ElbowPickup;
+import team3176.robot.commands.arm.shoulder.ExtendArm;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
