@@ -11,9 +11,9 @@ package team3176.robot.constants;
 public final class ArmConstants {
 
     //Shoulder 
-    public static final int SHOULDER_FALCON_CAN_ID = 6;
-    public static final int SHOULDER_EXTENDED_LIMIT_CHAN = 1;
-    public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2;
+    public static final int SHOULDER_FALCON_CAN_ID = 6; //STOP TOUCHING THE GD CAN IDS
+    public static final int SHOULDER_EXTENDED_LIMIT_CHAN = 1; //PLEASE!!!
+    public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2; //GREAT HEAVENS >:|
 
     //Elbow
     public static final int ELBOW_FALCON_CAN_ID = 5;

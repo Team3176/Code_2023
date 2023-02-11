@@ -9,6 +9,7 @@ import team3176.robot.commands.arm.elbow.ElbowHigh;
 import team3176.robot.commands.arm.elbow.ElbowMid;
 import team3176.robot.commands.arm.elbow.ElbowPickup;
 import team3176.robot.commands.arm.shoulder.ExtendArm;
+import team3176.robot.commands.arm.shoulder.LimitSwitch;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
@@ -173,11 +174,12 @@ public class RobotContainer {
     // SwervePodsAzimuthGoHome());
 
     //m_Controller.operator.a().whileTrue(new ExtendArm());
+    m_Controller.operator.a().whileTrue(new LimitSwitch());
     //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
-    m_Controller.operator.a().whileTrue(new ElbowPickup());
-    m_Controller.operator.b().whileTrue(new ElbowHigh());
-    m_Controller.operator.x().whileTrue(new ElbowMid());
-    m_Controller.operator.y().whileTrue(new ElbowFloor());
+    //m_Controller.operator.a().whileTrue(new ElbowPickup());
+    //m_Controller.operator.b().whileTrue(new ElbowHigh());
+    //m_Controller.operator.x().whileTrue(new ElbowMid());
+    //m_Controller.operator.y().whileTrue(new ElbowFloor());
     //m_Controller.operator.y().whileTrue(new ShootSetVals());
     //m_Controller.operator.b().onTrue(new FlywheelStop());
 

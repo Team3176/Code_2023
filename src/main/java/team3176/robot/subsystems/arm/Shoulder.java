@@ -27,8 +27,8 @@ public class Shoulder extends SubsystemBase {
   private static Shoulder instance;
   private boolean isSmartDashboardTestControlsShown;
   public String mode = "";
-  private DigitalInput bottomLimiter;
-  private DigitalInput topLimiter;
+  private DigitalInput extendLimiter;
+  private DigitalInput retractLimiter;
   private int intent;
   
   public Shoulder()
@@ -36,8 +36,8 @@ public class Shoulder extends SubsystemBase {
     //this.io = io;
     System.out.println("Shoulder has been constructed");
     jointMotor = new TalonFX(ArmConstants.SHOULDER_FALCON_CAN_ID);
-    bottomLimiter = new DigitalInput(ArmConstants.SHOULDER_EXTENDED_LIMIT_CHAN);
-    topLimiter = new DigitalInput(ArmConstants.SHOULDER_RETRACTED_LIMIT_CHAN);
+    extendLimiter = new DigitalInput(ArmConstants.SHOULDER_EXTENDED_LIMIT_CHAN);
+    retractLimiter = new DigitalInput(ArmConstants.SHOULDER_RETRACTED_LIMIT_CHAN);
     this.intent = 0;
 
     jointMotor.configFactoryDefault();
@@ -102,16 +102,28 @@ public class Shoulder extends SubsystemBase {
 
   // Called by the engageMotor methods in this class. The engageMotor methods are accessed from outside commands, and that
   // method accesses this one to actually set the motor
-  public void setMotorWithLimiterBound(ControlMode mode, double set)
+  public void setMotorPosWithLimiterBound(ControlMode mode, double set)
   {
-    if (topLimiter.get() && bottomLimiter.get()) {
+    if (retractLimiter.get() && extendLimiter.get()) {
       jointMotor.set(mode, set);
-    } else if (!topLimiter.get() && (this.intent == -1 || intent == 0) && bottomLimiter.get()) {
+    } else if (!retractLimiter.get() && (this.intent == -1 || intent == 0) && extendLimiter.get()) {
       jointMotor.set(mode, set);
-    } else if (!bottomLimiter.get() && (this.intent == 1 || this.intent == 0) && topLimiter.get()) {
+    } else if (!extendLimiter.get() && (this.intent == 1 || this.intent == 0) && retractLimiter.get()) {
       jointMotor.set(mode, set);
     } else {
       jointMotor.set(mode, set);
+    }
+  }
+  public void setMotorSpdWithLimiterBound(ControlMode mode, double set)
+  {
+    if (retractLimiter.get() && extendLimiter.get()) {
+      jointMotor.set(ControlMode.PercentOutput, set);
+    } else if (!retractLimiter.get() && (this.intent == -1 || intent == 0) && extendLimiter.get()) {
+      jointMotor.set(ControlMode.PercentOutput, set);
+    } else if (!extendLimiter.get() && (this.intent == 1 || this.intent == 0) && retractLimiter.get()) {
+      jointMotor.set(ControlMode.PercentOutput, set);
+    } else {
+      jointMotor.set(ControlMode.PercentOutput, set);
     }
   }
   /* 
@@ -140,6 +152,13 @@ public class Shoulder extends SubsystemBase {
     return jointMotor.getSelectedSensorPosition();
   }
 
+  public boolean getExtendLimiter(){
+    return extendLimiter.get();
+  }
+
+  public boolean getRetractLimiter(){
+    return retractLimiter.get();
+  }
   public static Shoulder getInstance() {
     if(instance == null) {instance = new Shoulder();}
     return instance;
