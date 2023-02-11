@@ -506,39 +506,5 @@ public class Drivetrain extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public Command followTrajectoryCommand(boolean isFirstPath, boolean shouldMirror) {
-    return new SequentialCommandGroup(
-         new InstantCommand(() -> {
-           // Reset odometry for the first path you run during auto
-           if(isFirstPath){
-               this.resetPose(teleopTraj.getInitialHolonomicPose());
-           }
-         }),
-         new PPSwerveControllerCommand(
-             teleopTraj, 
-             this::getPose, // Pose supplier
-             DrivetrainConstants.DRIVE_KINEMATICS, // SwerveDriveKinematics
-             new PIDController(2.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-             new PIDController(2.5, 0, 0), // Y controller (usually the same values as X controller)
-             new PIDController(0.5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-             this::setModuleStates, // Module states consumer
-             shouldMirror, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-             this // Requires this drive subsystem
-         )
-     );
- }
- public Command TeleopButton(){
-  return new InstantCommand(() -> {
-  Pose2d pose = this.getPose();
-  double xposition = pose.getX();
-  double yposition = pose.getY();
-  System.out.println("pose" + xposition + "," + yposition);
-  Drivetrain.getInstance().teleopTraj = PathPlanner.generatePath(
-    new PathConstraints(1, 1), 
-    new PathPoint(new Translation2d(xposition, yposition),new Rotation2d(0), pose.getRotation()), // position, heading
-    new PathPoint(new Translation2d(xposition + 1,yposition),new Rotation2d(0), pose.getRotation()) // position, heading
-    );
-  }).andThen(this.followTrajectoryCommand(false, false));
   
- }
 }

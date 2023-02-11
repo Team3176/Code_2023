@@ -4,6 +4,7 @@ import com.pathplanner.lib.*;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -27,15 +28,21 @@ public class teleopPath extends CommandBase{
         // Drivetrain.getInstance() // Requires this drive subsystem
         // );
         m_Drivetrain = Drivetrain.getInstance();
-        
+        addRequirements(m_Drivetrain);
+
     }
     @Override
     public void initialize(){
+        Pose2d pose = m_Drivetrain.getPose();
+        double xposition = pose.getX();
+        double yposition = pose.getY();
+        System.out.println("pose" + xposition + "," + yposition);
         traj1 = PathPlanner.generatePath(
-        new PathConstraints(2, 2), 
-        new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0)), // position, heading
-        new PathPoint(new Translation2d(2.0, 1.0), Rotation2d.fromDegrees(0)) // position, heading
+          new PathConstraints(1, 1), 
+          new PathPoint(new Translation2d(xposition, yposition),new Rotation2d(0), pose.getRotation()), // position, heading
+          new PathPoint(new Translation2d(xposition + 1,yposition),new Rotation2d(0), pose.getRotation()) // position, heading
         );
+        System.out.println("traj" + traj1.getTotalTimeSeconds());
         swerveCommand = new PPSwerveControllerCommand(traj1, m_Drivetrain::getPose, DrivetrainConstants.DRIVE_KINEMATICS, // SwerveDriveKinematics
         new PIDController(5.0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
         new PIDController(5.0, 0, 0), // Y controller (usually the same values as X controller)
