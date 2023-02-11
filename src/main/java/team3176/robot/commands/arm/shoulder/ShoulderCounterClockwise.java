@@ -29,8 +29,8 @@ public class ShoulderCounterClockwise extends CommandBase {
   public void execute() {
     set = 0.3;
     m_Andrew.setMotorACWithLimiterBound(ControlMode.PercentOutput, set); //Andrew is actually really smart
-    System.out.println("Extend Limiter:  " + m_Andrew.getExtendLimiter());
-    System.out.println("Retract Limiter:  " + m_Andrew.getRetractLimiter());
+    //System.out.println("Extend Limiter:  " + m_Andrew.getExtendLimiter());
+    //System.out.println("Retract Limiter:  " + m_Andrew.getRetractLimiter());
   }
 
 

@@ -116,20 +116,20 @@ public class Shoulder extends SubsystemBase {
   }
   public void setMotorCWithLimiterBound(ControlMode mode, double set)                                    //setMotorC = set motor clockwise
   {
-    System.out.println("fuck");
+    //System.out.println("fuck");
     x = 0;
     while (1 == 1) {
       if (extendLimiter.get() == true && x ==0) {
         jointMotor.set(ControlMode.PercentOutput, -0.3);
-        System.out.println(1);
+        //System.out.println(1);
      } else {
        if (!extendLimiter.get()) {
          jointMotor.set(ControlMode.PercentOutput, 0.1);
           x = 1;
-          System.out.println(2);
+          //System.out.println(2);
         } else {
           jointMotor.set(ControlMode.PercentOutput, 0);
-          System.out.println(3);
+          //System.out.println(3);
       }
     }
   }
@@ -148,7 +148,24 @@ public class Shoulder extends SubsystemBase {
   }
   public void setMotorACWithLimiterBound(ControlMode mode, double set)                                   //setMotorAC = set motor anticlockwise (counterclockwise)
   {                                                                                                      //AC was easier to read than CC
-    if (retractLimiter.get() && extendLimiter.get()) {                                                   //Neither LS is pressed
+        //System.out.println("fuck");
+        x = 0;
+        while (1 == 1) {
+          if (retractLimiter.get() == true && x ==0) {
+            jointMotor.set(ControlMode.PercentOutput, -0.3);
+            //System.out.println(1);
+         } else {
+           if (!retractLimiter.get()) {
+             jointMotor.set(ControlMode.PercentOutput, 0.1);
+              x = 1;
+              //System.out.println(2);
+            } else {
+              jointMotor.set(ControlMode.PercentOutput, 0);
+              //System.out.println(3);
+          }
+        }
+      }
+    /*if (retractLimiter.get() && extendLimiter.get()) {                                                   //Neither LS is pressed
       jointMotor.set(ControlMode.PercentOutput, set);
     } else if (!retractLimiter.get() && (this.intent == -1 || intent == 0) && extendLimiter.get()) {     //Retract (port 2) LS is pressed
       jointMotor.set(ControlMode.PercentOutput, -0.6);
@@ -156,7 +173,7 @@ public class Shoulder extends SubsystemBase {
       jointMotor.set(ControlMode.PercentOutput, 0.6);
     } else {                                                                                             //Both LS are pressed
       jointMotor.set(ControlMode.PercentOutput, 0);
-    }
+    }*/
   }
   /* 
   public void runVoltage(double volts) 
