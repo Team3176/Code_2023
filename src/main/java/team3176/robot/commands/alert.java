@@ -22,7 +22,7 @@ public class alert extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Signalling.setState(Status.STABLE);
+    //m_Signalling.setState(Status.STABLE);
   }
 
   // Called once the command ends or is interrupted.
