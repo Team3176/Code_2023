@@ -4,6 +4,8 @@
 
 package team3176.robot;
 
+import team3176.robot.commands.IntakeExtendSpin;
+import team3176.robot.commands.IntakeRetractSpinot;
 import team3176.robot.commands.alert;
 import team3176.robot.constants.*;
 
@@ -22,6 +24,9 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import team3176.robot.commands.drivetrain.*;
@@ -36,6 +41,8 @@ import team3176.robot.subsystems.drivetrain.Drivetrain.coordType;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
 //import team3176.robot.subsystems.intake.*;
 import team3176.robot.subsystems.signalling.*;
+import team3176.robot.subsystems.intake.Intake;
+// import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.arm.*;
 //import team3176.robot.commands.autons.*;
 //import team3176.robot.commands.claw.*;
@@ -53,6 +60,8 @@ public class RobotContainer {
   private final Drivetrain m_Drivetrain;
   //private final CoordSys m_CoordSys;
   //private final Arm m_Arm;
+  //private final Claw m_Claw;
+  private final CommandXboxController m_Controller;
   private final Controller m_Controller;
   //private final Vision m_Vision;
   // private final Compressor m_Compressor;
@@ -61,12 +70,15 @@ public class RobotContainer {
   //private final Arm m_Arm;
   // private final Claw m_Claw;
   //private final Drivetrain m_Drivetrain;
+  private final Intake m_Intake;
+  // private final Signalling m_Signalling;
+  // private final Vision m_Vision;
   // private final Intake m_Intake;
   private final Signalling m_Signalling;
   // private final Vision m_Vision;
 
   private SendableChooser<String> m_autonChooser;
-  // private static final String m_B = "s_Block";
+  private static final String m_B = "s_Block";
   private static final String m_M = "s_ExitTarmac";
 
   public RobotContainer() {
@@ -75,15 +87,21 @@ public class RobotContainer {
     //m_Arm = Arm.getInstance();
     //m_Vision = Vision.getInstance();
     // m_Claw = Claw.getInstance();
+    //m_Arm = Arm.getInstance();
+    //m_Claw = Claw.getInstance();
+    m_Controller = new CommandXboxController(0);
     //m_Drivetrain= Drivetrain.getInstance();
     // m_Intake = Intake.getInstance();
     m_Signalling = Signalling.getInstance();
+    // m_Vision = Vision.getInstance();
+    m_Intake = Intake.getInstance();
+    // m_Signalling = Signalling.getInstance();
     // m_Vision = Vision.getInstance();
 
     m_PDH = new PowerDistribution(1, ModuleType.kRev);
     m_PDH.clearStickyFaults();
 
-    //m_Compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+    m_Compressor = new Compressor(PneumaticsModuleType.REVPH);
     // TODO: ADD A WAY TO CLEAR STICKY FAULTS
     // m_Compressor.disable(); //HAVE TO TELL IT TO DISABLE FOR IT TO NOT AUTO START
     //m_Compressor.enableDigital();
@@ -103,12 +121,44 @@ public class RobotContainer {
 
     m_autonChooser = new SendableChooser<>();
     m_autonChooser.setDefaultOption("Auto: ExitTarmac", m_M);
+    m_autonChooser.addOption("Auto: Block", m_B);
+    m_autonChooser.addOption("Auto: Move 6in Left", m_6L);
+    m_autonChooser.addOption("Auto: ExitAndTurn", M_EXITANDTUR_STRING);
+    m_autonChooser.addOption("Auto: Move 6in Right", m_6R);
+    m_autonChooser.addOption("Auto: Move 6in Forward", m_6F);
+    m_autonChooser.addOption("Auto: Move 6in Backwards", m_6B);
+    m_autonChooser.addOption("Auto: Move 9in Forward", m_9F);
+    m_autonChooser.addOption("Auto: Move 9in Backwards", m_9B);
+    m_autonChooser.addOption("Auto: Shoot and Exit Tarmac", m_TS);
+    m_autonChooser.addOption("Auto: 2 Ball (Right)", m_SI);
+    m_autonChooser.addOption("Auto: 2 Ball (Left/Hanger)", m_2H);
+    m_autonChooser.addOption("Auto: 2 Ball (Middle)", m_2M);
+    m_autonChooser.addOption("Auto: Exit and Shoot", m_MS);
+    m_autonChooser.addOption("Auto: 3 Ball (Right)", m_3B);
+    m_autonChooser.addOption("Auto: 3 Ball Slow (Right)", m_3BS);
+    m_autonChooser.addOption("Auto: 3 Ball (Left/Hanger)", m_3H);
+    m_autonChooser.addOption("Auto: 4 Ball", m_4B);
+    m_autonChooser.addOption("Auto: 4 Ball Gyro", m_4G);
+    m_autonChooser.addOption("Auto: 5 Ball", m_5B);
+    m_autonChooser.addOption("Auto: 2 Ball Citrus (Left/Hanger)", m_2C);
+    m_autonChooser.addOption("Auto: 2 Ball Extra Citrus (Left/Hanger)", m_2EC);
+    m_autonChooser.addOption("Auto: Interfere (Left/Hanger)", m_Int);
+    m_autonChooser.addOption("Auto: Rotation", m_Rot);
+    m_autonChooser.addOption("Auto: TrapRotate", m_TrapRot);
+    m_autonChooser.addOption("Auto: TrapDriveRotate", m_TrapDriveRot);
     SmartDashboard.putData("Auton Choice", m_autonChooser);
 
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
+    // m_Controller.a().onTrue(new IntakePosition());
+    // m_Controller.b().onTrue(new IntakeStop());
+    m_Controller.a().onTrue(new IntakeExtendSpin());
+    m_Controller.b().onTrue(new IntakeRetractSpinot());
+    
+    
+    
     m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_Drivetrain));
     m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_Drivetrain));
     m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
