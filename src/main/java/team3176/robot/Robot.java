@@ -65,6 +65,7 @@ public class Robot extends LoggedRobot {
   //private Feeder m_Feeder;
   //private Drivetrain m_Drivetrain;
   //private Controller m_Controller;
+  //private Vision m_Vision;
   //private Clarke m_Clarke;
   //private AnalogPotentiometer m_pressureSensor;
 
@@ -122,53 +123,53 @@ public class Robot extends LoggedRobot {
     }
     */
 
-    if(LoggerConstants.IS_LOGGER_ACTIVE) {
-      setUseTiming(isReal()); // Run as fast as possible during replay
-      Logger m_logger = Logger.getInstance();
-      m_logger.recordMetadata("Robot", RobotConstants.getRobot().toString());
-      m_logger.recordMetadata("TuningMode", Boolean.toString(RobotConstants.tuningMode));
-      m_logger.recordMetadata("RuntimeType", getRuntimeType().toString());
-      m_logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-      m_logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-      m_logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-      m_logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
-      m_logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-      switch (BuildConstants.DIRTY) {
-        case 0:
-          m_logger.recordMetadata("GitDirty", "All changes committed");
-          break;
-        case 1:
-          m_logger.recordMetadata("GitDirty", "Uncomitted changes");
-          break;
-        default:
-          m_logger.recordMetadata("GitDirty", "Unknown");
-          break;
-      }
+    // if(LoggerConstants.IS_LOGGER_ACTIVE) {
+    //   setUseTiming(isReal()); // Run as fast as possible during replay
+    //   Logger m_logger = Logger.getInstance();
+    //   m_logger.recordMetadata("Robot", RobotConstants.getRobot().toString());
+    //   m_logger.recordMetadata("TuningMode", Boolean.toString(RobotConstants.tuningMode));
+    //   m_logger.recordMetadata("RuntimeType", getRuntimeType().toString());
+    //   m_logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    //   m_logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    //   m_logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    //   m_logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    //   m_logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+    //   switch (BuildConstants.DIRTY) {
+    //     case 0:
+    //       m_logger.recordMetadata("GitDirty", "All changes committed");
+    //       break;
+    //     case 1:
+    //       m_logger.recordMetadata("GitDirty", "Uncomitted changes");
+    //       break;
+    //     default:
+    //       m_logger.recordMetadata("GitDirty", "Unknown");
+    //       break;
+    //   }
 
-      switch (RobotConstants.getMode()) {
-        case REAL:
-          String folder = RobotConstants.logFolders.get(RobotConstants.getRobot());
-          if (folder != null) {
-            m_logger.addDataReceiver(new WPILOGWriter(folder));
-          } else {
-            logNoFileAlert.set(true);
-          }
-          m_logger.addDataReceiver(new NT4Publisher());
-          LoggedPowerDistribution.getInstance();
-          break;
+    //   switch (RobotConstants.getMode()) {
+    //     case REAL:
+    //       String folder = RobotConstants.logFolders.get(RobotConstants.getRobot());
+    //       if (folder != null) {
+    //         m_logger.addDataReceiver(new WPILOGWriter(folder));
+    //       } else {
+    //         logNoFileAlert.set(true);
+    //       }
+    //       m_logger.addDataReceiver(new NT4Publisher());
+    //       LoggedPowerDistribution.getInstance();
+    //       break;
 
-         case SIM:
-          m_logger.addDataReceiver(new NT4Publisher());
-          break;
+    //      case SIM:
+    //       m_logger.addDataReceiver(new NT4Publisher());
+    //       break;
 
-      case REPLAY:
-        String path = LogFileUtil.findReplayLog();
-        m_logger.setReplaySource(new WPILOGReader(path));
-        m_logger.addDataReceiver(
-            new WPILOGWriter(LogFileUtil.addPathSuffix(path, "_sim")));
-        break;
-    }
-    m_logger.start();
+    //   case REPLAY:
+    //     String path = LogFileUtil.findReplayLog();
+    //     m_logger.setReplaySource(new WPILOGReader(path));
+    //     m_logger.addDataReceiver(
+    //         new WPILOGWriter(LogFileUtil.addPathSuffix(path, "_sim")));
+    //     break;
+    // }
+    // m_logger.start();
 
 
       /* OLD 2022 AdvantageKit Code for logging.  TODO: RIPE FOR REMOVAL 
@@ -186,7 +187,7 @@ public class Robot extends LoggedRobot {
         Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
       } 
       */
-      }
+      // }
 
     //m_Intake = Intake.getInstance();
     //m_Indexer = Indexer.getInstance();
@@ -197,6 +198,11 @@ public class Robot extends LoggedRobot {
     //m_Controller = Controller.getInstance();
 
     //m_pressureSensor = new AnalogPotentiometer(1/*, scale [ex: 250], offset[ex: -25]*/);
+    // m_Vision = Vision.getInstance();
+
+    //m_pressureSensor = new AnalogPotentiometer(1/*, scale [ex: 250], offset[ex: -25]*/);
+
+    // m_Vision.setActivePipeline(2);
     //CameraServer.startAutomaticCapture(); //Fish-I Camera
     // CameraServer.startAutomaticCapture("Fish-I", 0);
 
@@ -226,10 +232,10 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putBoolean("High Climb", m_pressureSensor.get() > 60);
     */
 
-    if (LoggerConstants.IS_CMD_SCH_LOGGING_ACTIVE) {
-      Logger.getInstance().recordOutput("Scheduler Commands", NetworkTableInstance.getDefault()
-        .getEntry("/LiveWindow/Ungrouped/Scheduler/Names").getStringArray(new String[] {}));
-    }
+    // if (LoggerConstants.IS_CMD_SCH_LOGGING_ACTIVE) {
+    //   Logger.getInstance().recordOutput("Scheduler Commands", NetworkTableInstance.getDefault()
+    //     .getEntry("/LiveWindow/Ungrouped/Scheduler/Names").getStringArray(new String[] {}));
+    // }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

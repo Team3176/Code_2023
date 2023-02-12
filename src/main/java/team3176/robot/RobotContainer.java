@@ -4,6 +4,7 @@
 
 package team3176.robot;
 
+import team3176.robot.commands.alert;
 import team3176.robot.constants.*;
 
 import com.pathplanner.lib.PathConstraints;
@@ -34,7 +35,7 @@ import team3176.robot.subsystems.drivetrain.*;
 import team3176.robot.subsystems.drivetrain.Drivetrain.coordType;
 //import team3176.robot.subsystems.drivetrain.CoordSys.coordType;
 //import team3176.robot.subsystems.intake.*;
-//import team3176.robot.subsystems.signalling.*;
+import team3176.robot.subsystems.signalling.*;
 //import team3176.robot.commands.arm.*;
 //import team3176.robot.commands.autons.*;
 //import team3176.robot.commands.claw.*;
@@ -54,6 +55,15 @@ public class RobotContainer {
   //private final Arm m_Arm;
   private final Controller m_Controller;
   //private final Vision m_Vision;
+  // private final Compressor m_Compressor;
+  //private final SwerveSubsystem m_SwerveSubsystem;
+  //private final CoordSys m_CoordSys;
+  //private final Arm m_Arm;
+  // private final Claw m_Claw;
+  //private final Drivetrain m_Drivetrain;
+  // private final Intake m_Intake;
+  private final Signalling m_Signalling;
+  // private final Vision m_Vision;
 
   private SendableChooser<String> m_autonChooser;
   // private static final String m_B = "s_Block";
@@ -64,6 +74,11 @@ public class RobotContainer {
     m_Drivetrain = Drivetrain.getInstance();
     //m_Arm = Arm.getInstance();
     //m_Vision = Vision.getInstance();
+    // m_Claw = Claw.getInstance();
+    //m_Drivetrain= Drivetrain.getInstance();
+    // m_Intake = Intake.getInstance();
+    m_Signalling = Signalling.getInstance();
+    // m_Vision = Vision.getInstance();
 
     m_PDH = new PowerDistribution(1, ModuleType.kRev);
     m_PDH.clearStickyFaults();
@@ -107,7 +122,7 @@ public class RobotContainer {
     // m_Controller.getTransStick_Button4().whenPressed(new ToggleCoordSys());
     //m_Controller.getTransStick_Button4().whileTrue(new InstantCommand(m_CoordSys::setCoordTypeToRobotCentric,m_CoordSys));
     //m_Controller.getTransStick_Button4().onFalse(new InstantCommand(m_CoordSys::setCoordTypeToFieldCentric,m_CoordSys));
-
+    m_Controller.operator.a().whileTrue(new alert());
     //m_Controller.getRotStick_Button1().whileTrue(new FlywheelAngleVisionIntAutoFire());
     //m_Controller.getRotStick_Button1().whileTrue(new VisionSpinCorrectionOn());
     //m_Controller.getRotStick_Button1().onFalse(new VisionSpinCorrectionOff());
