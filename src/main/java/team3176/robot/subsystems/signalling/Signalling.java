@@ -7,7 +7,10 @@ package team3176.robot.subsystems.signalling;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.util.Color;
 import team3176.robot.constants.RobotConstants.Status;
+import team3176.robot.constants.SignalingConstants;
+
 
 public class Signalling extends SubsystemBase {
   
@@ -15,14 +18,22 @@ public class Signalling extends SubsystemBase {
   private AddressableLED m_led;
   private AddressableLEDBuffer m_ledBuffer;
 
-  private int m_rainbowFirstPixelHue;
+  private int m_flashcounter = 0;
+  private boolean leftflash = false;
+  private boolean rightflash = false;
+  private boolean crossflash = false;
+  private Color leftflcolor = Color.kRed;
+  private Color rightflcolor = Color.kOrange;
+  private Color crossflcolor = Color.kGreen;
 
   
   /**
    * Creates the default references for VisionClient, specifically for Limelight values
    */
-  public Signalling(){
-    m_led = new AddressableLED(9);
+  
+   
+   public Signalling(){
+    m_led = new AddressableLED(0);
     m_ledBuffer = new AddressableLEDBuffer(60);
     m_led.setLength(m_ledBuffer.getLength());
 
@@ -31,162 +42,111 @@ public class Signalling extends SubsystemBase {
 
   }
 
-  private void rainbow() {
-    // For every pixel
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      // Calculate the hue - hue is easier for rainbows because the color
-      // shape is a circle so only one value needs to precess
-      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-      // Set the value
-      m_ledBuffer.setHSV(i, hue, 255, 128);
-    }
-    // Increase by to make the rainbow "move"
-    m_rainbowFirstPixelHue += 3;
-    // Check bounds
-    m_rainbowFirstPixelHue %= 180;
-    
-    m_led.setData(m_ledBuffer);
-  }
-public void setState(Status ledState){
-
-  switch (ledState) {
-    case STABLE:
-      green();
-      break;
-    case OK:
-     yellow();
-     break;
-  case OPTIONALCHECK:
-     orange();
-      break;
-  case WARNING:
-     red();
-      break;
-  case ISCONE:
-    yellow();
-    break;
-  case ISCUBE:
-    blue();
-    break;
-  case REQUESTCONE:
-    yellow();
-    break;
-  case REQUESTCUBE:
-    blue();
-    break;
-  case OFF:
-    turnOff();
-    break;
-
-    default:
-
-
-}
-  
- 
-public void red() {
-  red(STARTINGLED, ENDINGLED);
- }
-
- public void red(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Sets the specified LED to the RGB values for red
-    m_ledBuffer.setRGB(i, 225, 0, 0);
-  }
-
-  m_led.setData(m_ledBuffer);
-}
-public void green() {
-  green(STARTINGLED, ENDINGLED);
- }
-public void green(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Sets the specified LED to the RGB values for green
-    m_ledBuffer.setRGB(i, 0, 225, 0);
-  }
- 
-  m_led.setData(m_ledBuffer);
-}
-public void yellow() {
-  yellow(STARTINGLED, ENDINGLED);
-  
-  public void yellow(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Sets the specified LED to the RGB values for yellow
-    m_ledBuffer.setRGB(i, 225, 225, 0);
-  }
-  
-  m_led.setData(m_ledBuffer);
-}
-public void orange() {
-  orange(STARTINGLED, ENDINGLED);
-  
-  public void orange(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Sets the specified LED to the RGB values for orange
-    m_ledBuffer.setRGB(i, 255, 117, 25);
-  }  
-  
-  m_led.setData(m_ledBuffer);
-}
-public void orange(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Sets the specified LED to the RGB values for orange
-    m_ledBuffer.setRGB(i, 255, 117, 25);
-  }  
-  
-  m_led.setData(m_ledBuffer);
-}
-public void gold() {
-  gold(STARTINGLED, ENDINGLED);
-  
-  public void gold(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Sets the specified LED to the RGB values for gold
-    m_ledBuffer.setRGB(i, 204, 204, 0);
-  }  
-  
-  m_led.setData(m_ledBuffer);
-}
-public void purple() {
-  purple(STARTINGLED, ENDINGLED);
-  
-  public void purple(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Sets the specified LED to the RGB values for purple
-    m_ledBuffer.setRGB(i, 102, 0, 204);
-  }  
-  
-  m_led.setData(m_ledBuffer);
-}
-public void blue() {
-  blue(STARTINGLED, ENDINGLED);
-  
-  public void blue(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Sets the specified LED to the RGB values for blue
-    m_ledBuffer.setRGB(i, 0, 0, 255);
-  }  
-  
-  m_led.setData(m_ledBuffer);
-}
-public void turnOff() {
-  turnOff(STARTINGLED, ENDINGLED);
-
-public void turnOff(int startingLed, int endingLed) {
-  for (var i = startingLed; i < endingLed; i++) {
-    // Turn off all the LEDS
-    m_ledBuffer.setRGB(i, 0, 0, 0);
-  }
-
-  m_led.setData(m_ledBuffer);
-}
-
-public static Signalling getInstance(){
+  public static Signalling getInstance(){
     if (instance == null) {
       instance = new Signalling();
     }
     return instance;
   }
-  
-}
+
+
+    public void setSegment(int start, int end, int red, int green, int blue)
+    {
+      for (var i=start; i < end; i++)
+      {
+        m_ledBuffer.setRGB(i, red , green, blue);
+      }
+    }
+
+    public void setSegment(int start, int end, Color color)
+    {
+      for (var i=start; i < end; i++)
+      {
+        m_ledBuffer.setLED(i, color);
+      }
+      // m_led.setData(m_ledBuffer);
+    }
+
+    public void setleft(Status s)
+    {
+      leftflcolor = LookUpColor(s);
+      leftflash = LookUpFlash(s);
+      setSegment(SignalingConstants.LEFTENDSTART, SignalingConstants.LEFTENDSTOP, leftflcolor);
+      m_led.setData(m_ledBuffer);
+    }
+    public void setright(Status s)
+    {
+      rightflcolor = LookUpColor(s);
+      rightflash = LookUpFlash(s);
+      setSegment(SignalingConstants.RIGHTENDSTART, SignalingConstants.RIGHTENDSTOP, rightflcolor);
+      m_led.setData(m_ledBuffer);
+    }
+    public void setcrossbar(Status s)
+    {
+      crossflcolor = LookUpColor(s);
+      crossflash = LookUpFlash(s);
+      setSegment(SignalingConstants.CROSSENDSTART, SignalingConstants.CROSSENDSTOP, crossflcolor);
+      m_led.setData(m_ledBuffer);
+    }
+  private Color LookUpColor(Status s){
+    Color c = Color.kBlack;
+    switch(s){
+      case STABLE: c = Color.kGreen;
+      break;
+      case OK: c = Color.kDarkRed;
+      break;
+      case OPTIONALCHECK: c = Color.kLightYellow;
+      break;
+      case WARNING: c = Color.kFuchsia;
+      break;
+      case GOOD: c = Color.kLightCoral;
+      break;
+      case ERROR: c = Color.kLime;
+      break;
+      case CONE: c = Color.kOrange;
+      break;
+      case CUBE: c = Color.kPurple;
+      break;
+      case CONEFLASH: c = Color.kOrange;
+      break;
+      case CUBEFLASH: c = Color.kPurple;
+      break;
+    }
+    return c;
+  }
+  private Boolean LookUpFlash(Status s){
+      return ((s == Status.CUBEFLASH) || (s == Status.CONEFLASH));
+  }
+
+  @Override
+  public void periodic() {      
+    m_flashcounter++;
+    if (m_flashcounter == 25){
+     if (leftflash){
+      setSegment(SignalingConstants.LEFTENDSTART, SignalingConstants.LEFTENDSTOP,leftflcolor);
+     }
+     if (rightflash){
+      setSegment(SignalingConstants.RIGHTENDSTART, SignalingConstants.RIGHTENDSTOP, rightflcolor);
+     }
+     if (crossflash){
+      setSegment(SignalingConstants.CROSSENDSTART, SignalingConstants.CROSSENDSTOP, crossflcolor);
+     }
+     m_led.setData(m_ledBuffer);
+     }
+    if (m_flashcounter == 50){
+      if (leftflash){
+        setSegment(SignalingConstants.LEFTENDSTART, SignalingConstants.LEFTENDSTOP, Color.kBlack);
+       }
+       if (rightflash){
+        setSegment(SignalingConstants.RIGHTENDSTART, SignalingConstants.RIGHTENDSTOP, Color.kBlack);
+       }
+       if (crossflash){
+        setSegment(SignalingConstants.CROSSENDSTART, SignalingConstants.CROSSENDSTOP, Color.kBlack);
+       }
+       m_led.setData(m_ledBuffer);
+      m_flashcounter = 0;
+     }
+    }
+   }
+
+
