@@ -7,8 +7,8 @@ package team3176.robot.constants;
 public final class IntakeConstants {
     public static final double INTAKE_PCT = .50;
     public static final int INTAKE_MOTOR_CAN_ID = 5;
-    public static final int DSOLENOID1_FWD_CHAN = 1; // RED WIRE
-    public static final int DSOLENOID1_REV_CHAN = 14; // BLACK WIRE
+    public static final int DSOLENOID1_FWD_CHAN = 6; // RED WIRE
+    public static final int DSOLENOID1_REV_CHAN = 7; // BLACK WIRE
     public static final int DSOLENOID2_FWD_CHAN = 1;
     public static final int DSOLENOID2_REV_CHAN = 14;
     public static final double INTAKE_GEAR_RATIO = 5.0;

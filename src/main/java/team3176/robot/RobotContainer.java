@@ -10,6 +10,13 @@ import team3176.robot.commands.alert;
 import team3176.robot.commands.ClawClose;
 import team3176.robot.commands.ClawIdle;
 import team3176.robot.commands.ClawOpen;
+import team3176.robot.commands.arm.elbow.ElbowFloor;
+import team3176.robot.commands.arm.elbow.ElbowHigh;
+import team3176.robot.commands.arm.elbow.ElbowMid;
+import team3176.robot.commands.arm.elbow.ElbowPickup;
+import team3176.robot.commands.arm.shoulder.ExtendArm;
+import team3176.robot.commands.arm.shoulder.ShoulderClockwise;
+import team3176.robot.commands.arm.shoulder.ShoulderCounterClockwise;
 import team3176.robot.constants.*;
 
 import com.pathplanner.lib.PathConstraints;
@@ -29,6 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import team3176.robot.subsystems.arm.*;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -36,8 +44,9 @@ import team3176.robot.commands.drivetrain.*;
 //import team3176.robot.commands.util.*;
 import team3176.robot.constants.LoggerConstants;
 //import team3176.robot.subsystems.*;
-//import team3176.robot.subsystems.arm.*;
 import team3176.robot.subsystems.claw.*;
+import team3176.robot.subsystems.arm.*;
+//import team3176.robot.subsystems.claw.*;
 import team3176.robot.subsystems.controller.*;
 import team3176.robot.subsystems.drivetrain.*;
 import team3176.robot.subsystems.drivetrain.Drivetrain.coordType;
@@ -48,6 +57,9 @@ import team3176.robot.subsystems.intake.Intake;
 // import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.subsystems.signalling.*;
 //import team3176.robot.subsystems.intake.Intake;
+import team3176.robot.subsystems.vision.*;
+//import team3176.robot.subsystems.intake.Intake;
+import team3176.robot.subsystems.vision.Vision;
 //import team3176.robot.commands.arm.*;
 //import team3176.robot.commands.autons.*;
 //import team3176.robot.commands.claw.*;
@@ -87,6 +99,8 @@ public class RobotContainer {
   // private final Intake m_Intake;
   private final Signalling m_Signalling;
   // private final Vision m_Vision;
+  private final Shoulder m_Shoulder;
+  private final Elbow m_Elbow;
 
   private SendableChooser<String> m_autonChooser;
   private static final String m_B = "s_Block";
@@ -95,6 +109,8 @@ public class RobotContainer {
   public RobotContainer() {
     //m_Arm = Arm.getInstance();
     m_Claw = Claw.getInstance();
+    m_Shoulder = Shoulder.getInstance();
+    m_Elbow = Elbow.getInstance();
     m_Controller = Controller.getInstance();
     m_Drivetrain = Drivetrain.getInstance();
     //m_Arm = Arm.getInstance();
@@ -120,6 +136,17 @@ public class RobotContainer {
     // m_Compressor.disable(); //HAVE TO TELL IT TO DISABLE FOR IT TO NOT AUTO START
     //m_Compressor.enableDigital();
 
+    //m_Intake = Intake.getInstance();
+    //m_Vision = Vision.getInstance();
+  
+
+    //m_PDH = new PowerDistribution(1, ModuleType.kRev);
+    //m_PDH.clearStickyFaults();
+
+    //m_Compressor = new Compressor(1, PneumaticsModuleType.REVPH);
+    // TODO: ADD A WAY TO CLEAR STICKY FAULTS
+    // m_Compressor.disable(); //HAVE TO TELL IT TO DISABLE FOR IT TO NOT AUTO START
+    //m_Compressor.enableDigital();
 
     if (!LoggerConstants.IS_TUNING_MODE) {
       m_Drivetrain.setDefaultCommand(new SwerveDrive(
@@ -161,12 +188,6 @@ public class RobotContainer {
     m_Controller.getTransStick_Button4().onFalse(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.FIELD_CENTRIC), m_Drivetrain));
 
     m_Controller.getRotStick_Button1().onTrue(new teleopPath());
-    //m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_SwerveSubsystem));
-    //m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_SwerveSubsystem));
-    //m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
-    // m_Controller.getTransStick_Button4().whenPressed(new ToggleCoordSys());
-    //m_Controller.getTransStick_Button4().whileTrue(new InstantCommand(m_CoordSys::setCoordTypeToRobotCentric,m_CoordSys));
-    //m_Controller.getTransStick_Button4().onFalse(new InstantCommand(m_CoordSys::setCoordTypeToFieldCentric,m_CoordSys));
     m_Controller.operator.a().whileTrue(new alert());
     //m_Controller.getRotStick_Button1().whileTrue(new FlywheelAngleVisionIntAutoFire());
     //m_Controller.getRotStick_Button1().whileTrue(new VisionSpinCorrectionOn());
@@ -177,10 +198,18 @@ public class RobotContainer {
     // m_Controller.getRotStick_Button5().whenPressed(new
     // SwervePodsAzimuthGoHome());
 
-    m_Controller.operator.a().onTrue(new ClawOpen());
-    m_Controller.operator.b().onTrue(new ClawClose());
-    m_Controller.operator.x().onTrue(new ClawIdle());
+    //m_Controller.operator.a().onTrue(new ClawOpen());
+    //m_Controller.operator.b().onTrue(new ClawClose());
+    //m_Controller.operator.x().onTrue(new ClawIdle());
 
+    //m_Controller.operator.a().whileTrue(new ExtendArm());
+    m_Controller.operator.a().whileTrue(new ShoulderClockwise());
+    m_Controller.operator.b().whileTrue(new ShoulderCounterClockwise());
+    //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
+    //m_Controller.operator.a().whileTrue(new ElbowPickup());
+    //m_Controller.operator.b().whileTrue(new ElbowHigh());
+    //m_Controller.operator.x().whileTrue(new ElbowMid());
+    //m_Controller.operator.y().whileTrue(new ElbowFloor());
     //m_Controller.operator.y().whileTrue(new ShootSetVals());
     //m_Controller.operator.b().onTrue(new FlywheelStop());
 
@@ -201,7 +230,7 @@ public class RobotContainer {
     //m_Controller.operator.povUp().onTrue(new VisionDriverCam());
     //m_Controller.operator.povDown().onTrue(new VisionZoom2x());
 
-    //m_Controller.operator.povLeft().onTrue(new FlywheelAngleFender());
+    //m_Controller.operator.povLeft().onTrue(new ExtendArm());
     //m_Controller.operator.povRight().onTrue(new FlywheelAngleWall());
 
     //m_Controller.operator.a().and(m_Controller.operator.leftBumper()).whileTrue(new AnglerZeroAtMax());
