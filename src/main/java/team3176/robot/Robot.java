@@ -261,7 +261,7 @@ public class Robot extends LoggedRobot {
     //m_robotContainer.AutonInitRobotCentric();
     //*m_robotContainer.TelopInitFieldCentric();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    
     // schedule the autonomous command
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

@@ -94,13 +94,13 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_Drivetrain));
-    m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_Drivetrain));
-    m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
-    m_Controller.getTransStick_Button4().whileTrue(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.ROBOT_CENTRIC), m_Drivetrain));
-    m_Controller.getTransStick_Button4().onFalse(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.FIELD_CENTRIC), m_Drivetrain));
+    // m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_Drivetrain));
+    // m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_Drivetrain));
+    // m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
+    // m_Controller.getTransStick_Button4().whileTrue(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.ROBOT_CENTRIC), m_Drivetrain));
+    // m_Controller.getTransStick_Button4().onFalse(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.FIELD_CENTRIC), m_Drivetrain));
 
-    m_Controller.getRotStick_Button1().onTrue(new teleopPath());
+    // m_Controller.getRotStick_Button1().onTrue(new teleopPath());
     //m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
@@ -165,8 +165,9 @@ public class RobotContainer {
     //String chosen = m_autonChooser.getSelected();
 
     
-    //PathPlannerAuto PPSwerveauto = new PathPlannerAuto();
-    return new WaitCommand(1.0);
+    PathPlannerAuto PPSwerveauto = new PathPlannerAuto();
+    System.out.println("auto");
+    return PPSwerveauto.getauto();
   }
 
   
