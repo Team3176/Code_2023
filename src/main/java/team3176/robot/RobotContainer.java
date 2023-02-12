@@ -61,7 +61,7 @@ public class RobotContainer {
   //private final CoordSys m_CoordSys;
   //private final Arm m_Arm;
   //private final Claw m_Claw;
-  private final CommandXboxController m_Controller;
+  //private final CommandXboxController m_Controller;
   private final Controller m_Controller;
   //private final Vision m_Vision;
   // private final Compressor m_Compressor;
@@ -89,7 +89,6 @@ public class RobotContainer {
     // m_Claw = Claw.getInstance();
     //m_Arm = Arm.getInstance();
     //m_Claw = Claw.getInstance();
-    m_Controller = new CommandXboxController(0);
     //m_Drivetrain= Drivetrain.getInstance();
     // m_Intake = Intake.getInstance();
     m_Signalling = Signalling.getInstance();
@@ -154,8 +153,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // m_Controller.a().onTrue(new IntakePosition());
     // m_Controller.b().onTrue(new IntakeStop());
-    m_Controller.a().onTrue(new IntakeExtendSpin());
-    m_Controller.b().onTrue(new IntakeRetractSpinot());
+    m_Controller.operator.a().onTrue(new IntakeExtendSpin());
+    m_Controller.operator.b().onTrue(new IntakeRetractSpinot());
     
     
     
