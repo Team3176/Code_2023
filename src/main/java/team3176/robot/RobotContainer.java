@@ -4,12 +4,7 @@
 
 package team3176.robot;
 
-import team3176.robot.commands.IntakeExtendSpin;
-import team3176.robot.commands.IntakeRetractSpinot;
 import team3176.robot.commands.alert;
-import team3176.robot.commands.ClawClose;
-import team3176.robot.commands.ClawIdle;
-import team3176.robot.commands.ClawOpen;
 import team3176.robot.commands.arm.elbow.ElbowFloor;
 import team3176.robot.commands.arm.elbow.ElbowHigh;
 import team3176.robot.commands.arm.elbow.ElbowMid;
@@ -17,6 +12,9 @@ import team3176.robot.commands.arm.elbow.ElbowPickup;
 import team3176.robot.commands.arm.shoulder.ExtendArm;
 import team3176.robot.commands.arm.shoulder.ShoulderClockwise;
 import team3176.robot.commands.arm.shoulder.ShoulderCounterClockwise;
+import team3176.robot.commands.claw.ClawClose;
+import team3176.robot.commands.claw.ClawIdle;
+import team3176.robot.commands.claw.ClawOpen;
 import team3176.robot.constants.*;
 
 import com.pathplanner.lib.PathConstraints;
@@ -41,6 +39,8 @@ import team3176.robot.subsystems.arm.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import team3176.robot.commands.drivetrain.*;
+import team3176.robot.commands.intake.IntakeExtendSpin;
+import team3176.robot.commands.intake.IntakeRetractSpinot;
 //import team3176.robot.commands.util.*;
 import team3176.robot.constants.LoggerConstants;
 //import team3176.robot.subsystems.*;

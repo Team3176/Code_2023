@@ -2,41 +2,43 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package team3176.robot.commands;
+package team3176.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import team3176.robot.subsystems.claw.Claw;
+import team3176.robot.subsystems.vision.Vision;
 
-public class ClawClose extends CommandBase {
-  /** Creates a new ClawClose. */
-  private Claw m_Claw = Claw.getInstance();
-  public ClawClose() {
+public class pipeSwitch extends CommandBase {
+  private final Vision m_Vision = Vision.getInstance();
+  public double desiredPipe;
+  public boolean done;
+  /** Creates a new pipeSwitch. */
+  public pipeSwitch(double chosenPipe) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_Claw);
+    desiredPipe = chosenPipe;
+    addRequirements(m_Vision);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    done = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() 
-  {
-    if (m_Claw.isIdle() == false)
-    {
-      m_Claw.Close();
-      m_Claw.spinVelocityPercent(0);
-    }
+  public void execute() {
+    done = true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_Vision.pipeSetter.set(desiredPipe);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return done;
   }
 }
