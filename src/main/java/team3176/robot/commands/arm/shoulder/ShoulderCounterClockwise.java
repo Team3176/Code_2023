@@ -22,7 +22,7 @@ public class ShoulderCounterClockwise extends CommandBase {
 
   @Override
   public void initialize() {
-    System.out.println("Shoulder position:  " + m_Andrew.getCurrentPosition());
+    //System.out.println("Shoulder position:  " + m_Andrew.getCurrentPosition());
   }
 
   @Override

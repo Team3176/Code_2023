@@ -11,13 +11,13 @@ import team3176.robot.subsystems.arm.Shoulder;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
-public class ShoulderClockwise extends CommandBase {
+public class VariableReset extends CommandBase {
   public String mode = "";
   Shoulder m_Andrew = Shoulder.getInstance();
   private double set;
   //private static ExtendArm instance;
 
-  public ShoulderClockwise() {
+  public VariableReset() {
     addRequirements(m_Andrew);
   }
 
@@ -28,11 +28,7 @@ public class ShoulderClockwise extends CommandBase {
 
   @Override
   public void execute() {
-    //ArmConstants.isLimitSwitch = 0;
-    set = -0.3;
-    m_Andrew.setMotorCWithLimiterBound(ControlMode.PercentOutput, set); //Andrew is actually really smart
-    //System.out.println("Extend Limiter:  " + m_Andrew.getExtendLimiter());
-    //System.out.println("Retract Limiter:  " + m_Andrew.getRetractLimiter());
+    ArmConstants.isLimitSwitch = 0;
   }
 
 

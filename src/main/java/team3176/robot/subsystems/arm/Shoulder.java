@@ -34,7 +34,7 @@ public class Shoulder extends SubsystemBase {
   public Shoulder()
   {
     //this.io = io;
-    System.out.println("Shoulder has been constructed");
+    //System.out.println("Shoulder has been constructed");
     jointMotor = new TalonFX(ArmConstants.SHOULDER_FALCON_CAN_ID);
     extendLimiter = new DigitalInput(ArmConstants.SHOULDER_EXTENDED_LIMIT_CHAN);
     retractLimiter = new DigitalInput(ArmConstants.SHOULDER_RETRACTED_LIMIT_CHAN);
@@ -102,6 +102,10 @@ public class Shoulder extends SubsystemBase {
 
   // Called by the engageMotor methods in this class. The engageMotor methods are accessed from outside commands, and that
   // method accesses this one to actually set the motor
+  public void imGonnaShitMyself(ControlMode mode, double set)
+  {
+    jointMotor.set(ControlMode.PercentOutput, 0.5);
+  }
   public void setMotorPosWithLimiterBound(ControlMode mode, double set)
   {
     if (retractLimiter.get() && extendLimiter.get()) {
@@ -117,22 +121,20 @@ public class Shoulder extends SubsystemBase {
   public void setMotorCWithLimiterBound(ControlMode mode, double set)                                    //setMotorC = set motor clockwise
   {
     //System.out.println("fuck");
-    x = 0;
-    while (1 == 1) {
-      if (extendLimiter.get() == true && x ==0) {
+      if (extendLimiter.get() == true && ArmConstants.isLimitSwitch == 0) {
         jointMotor.set(ControlMode.PercentOutput, -0.3);
         //System.out.println(1);
      } else {
        if (!extendLimiter.get()) {
          jointMotor.set(ControlMode.PercentOutput, 0.1);
-          x = 1;
+          ArmConstants.isLimitSwitch = 1;
           //System.out.println(2);
         } else {
           jointMotor.set(ControlMode.PercentOutput, 0);
           //System.out.println(3);
+          //break;
       }
     }
-  }
     /*
     if (retractLimiter.get() && extendLimiter.get()) {                                                   //Neither LS is pressed
       jointMotor.set(ControlMode.PercentOutput, set);

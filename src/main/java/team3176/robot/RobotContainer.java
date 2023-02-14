@@ -9,8 +9,11 @@ import team3176.robot.commands.arm.elbow.ElbowHigh;
 import team3176.robot.commands.arm.elbow.ElbowMid;
 import team3176.robot.commands.arm.elbow.ElbowPickup;
 import team3176.robot.commands.arm.shoulder.ExtendArm;
+import team3176.robot.commands.arm.shoulder.ImGonnaHaveAnAneurysm;
 import team3176.robot.commands.arm.shoulder.ShoulderClockwise;
 import team3176.robot.commands.arm.shoulder.ShoulderCounterClockwise;
+import team3176.robot.commands.arm.shoulder.VariableReset;
+import team3176.robot.commands.arm.shoulder.VariableReset2;
 import team3176.robot.constants.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
@@ -175,12 +178,16 @@ public class RobotContainer {
     // SwervePodsAzimuthGoHome());
 
     //m_Controller.operator.a().whileTrue(new ExtendArm());
+    m_Controller.operator.a().onTrue(new VariableReset());
     m_Controller.operator.a().whileTrue(new ShoulderClockwise());
+    m_Controller.operator.a().onFalse(new VariableReset2());
     m_Controller.operator.b().whileTrue(new ShoulderCounterClockwise());
+    //m_Controller.operator.b().onFalse(new VariableReset());
     //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
     //m_Controller.operator.a().whileTrue(new ElbowPickup());
     //m_Controller.operator.b().whileTrue(new ElbowHigh());
     //m_Controller.operator.x().whileTrue(new ElbowMid());
+    m_Controller.operator.x().whileTrue(new ImGonnaHaveAnAneurysm());
     //m_Controller.operator.y().whileTrue(new ElbowFloor());
     //m_Controller.operator.y().whileTrue(new ShootSetVals());
     //m_Controller.operator.b().onTrue(new FlywheelStop());

@@ -5,20 +5,19 @@
 package team3176.robot.commands.arm.shoulder;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import team3176.robot.constants.ArmConstants;
 import team3176.robot.subsystems.arm.Shoulder;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
-public class ShoulderClockwise extends CommandBase {
+public class ImGonnaHaveAnAneurysm extends CommandBase {
   public String mode = "";
-  Shoulder m_Andrew = Shoulder.getInstance();
+  Shoulder m_SENDHELP = Shoulder.getInstance();
   private double set;
   //private static ExtendArm instance;
 
-  public ShoulderClockwise() {
-    addRequirements(m_Andrew);
+  public ImGonnaHaveAnAneurysm() {
+    addRequirements(m_SENDHELP);
   }
 
   @Override
@@ -28,9 +27,8 @@ public class ShoulderClockwise extends CommandBase {
 
   @Override
   public void execute() {
-    //ArmConstants.isLimitSwitch = 0;
     set = -0.3;
-    m_Andrew.setMotorCWithLimiterBound(ControlMode.PercentOutput, set); //Andrew is actually really smart
+    m_SENDHELP.imGonnaShitMyself(ControlMode.PercentOutput, set); //Andrew is actually really smart
     //System.out.println("Extend Limiter:  " + m_Andrew.getExtendLimiter());
     //System.out.println("Retract Limiter:  " + m_Andrew.getRetractLimiter());
   }
@@ -38,7 +36,7 @@ public class ShoulderClockwise extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    m_Andrew.stopMotors();
+    m_SENDHELP.stopMotors();
   }
 
   @Override
