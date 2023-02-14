@@ -178,10 +178,12 @@ public class RobotContainer {
     // SwervePodsAzimuthGoHome());
 
     //m_Controller.operator.a().whileTrue(new ExtendArm());
-    m_Controller.operator.a().onTrue(new VariableReset());
+    //m_Controller.operator.a().onTrue(new VariableReset());
     m_Controller.operator.a().whileTrue(new ShoulderClockwise());
-    m_Controller.operator.a().onFalse(new VariableReset2());
+    m_Controller.operator.a().onFalse(new VariableReset());
+    //m_Controller.operator.b().onTrue(new VariableReset());
     m_Controller.operator.b().whileTrue(new ShoulderCounterClockwise());
+    m_Controller.operator.b().onFalse(new VariableReset());
     //m_Controller.operator.b().onFalse(new VariableReset());
     //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
     //m_Controller.operator.a().whileTrue(new ElbowPickup());

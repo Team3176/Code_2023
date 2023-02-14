@@ -5,6 +5,7 @@
 package team3176.robot.commands.arm.shoulder;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import team3176.robot.constants.ArmConstants;
 import team3176.robot.subsystems.arm.Shoulder;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -22,7 +23,7 @@ public class ShoulderCounterClockwise extends CommandBase {
 
   @Override
   public void initialize() {
-    //System.out.println("Shoulder position:  " + m_Andrew.getCurrentPosition());
+    ArmConstants.isLimitSwitch = 0;
   }
 
   @Override

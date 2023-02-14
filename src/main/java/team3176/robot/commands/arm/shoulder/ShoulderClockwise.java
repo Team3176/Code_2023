@@ -23,12 +23,11 @@ public class ShoulderClockwise extends CommandBase {
 
   @Override
   public void initialize() {
-    //System.out.println("Shoulder position:  " + m_Andrew.getCurrentPosition());
+    ArmConstants.isLimitSwitch = 0;
   }
 
   @Override
   public void execute() {
-    //ArmConstants.isLimitSwitch = 0;
     set = -0.3;
     m_Andrew.setMotorCWithLimiterBound(ControlMode.PercentOutput, set); //Andrew is actually really smart
     //System.out.println("Extend Limiter:  " + m_Andrew.getExtendLimiter());

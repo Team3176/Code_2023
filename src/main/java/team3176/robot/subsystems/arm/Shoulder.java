@@ -123,59 +123,28 @@ public class Shoulder extends SubsystemBase {
     //System.out.println("fuck");
       if (extendLimiter.get() == true && ArmConstants.isLimitSwitch == 0) {
         jointMotor.set(ControlMode.PercentOutput, -0.3);
-        //System.out.println(1);
      } else {
        if (!extendLimiter.get()) {
-         jointMotor.set(ControlMode.PercentOutput, 0.1);
+          jointMotor.set(ControlMode.PercentOutput, 0.1);
           ArmConstants.isLimitSwitch = 1;
-          //System.out.println(2);
         } else {
           jointMotor.set(ControlMode.PercentOutput, 0);
-          //System.out.println(3);
-          //break;
       }
     }
-    /*
-    if (retractLimiter.get() && extendLimiter.get()) {                                                   //Neither LS is pressed
-      jointMotor.set(ControlMode.PercentOutput, set);
-    } else {
-        if (!extendLimiter.get() && (this.intent == 1 || this.intent == 0) && retractLimiter.get()) { //Extend (port 1) LS is pressed
-      while (!extendLimiter.get() && (this.intent == 1 || this.intent == 0) && retractLimiter.get()) {
-        jointMotor.set(ControlMode.PercentOutput, 0.05);
-      }
-      break;
-    }
-   }
-   */
   }
   public void setMotorACWithLimiterBound(ControlMode mode, double set)                                   //setMotorAC = set motor anticlockwise (counterclockwise)
-  {                                                                                                      //AC was easier to read than CC
-        //System.out.println("fuck");
-        x = 0;
-        while (1 == 1) {
-          if (retractLimiter.get() == true && x ==0) {
-            jointMotor.set(ControlMode.PercentOutput, -0.3);
-            //System.out.println(1);
-         } else {
-           if (!retractLimiter.get()) {
-             jointMotor.set(ControlMode.PercentOutput, 0.1);
-              x = 1;
-              //System.out.println(2);
-            } else {
-              jointMotor.set(ControlMode.PercentOutput, 0);
-              //System.out.println(3);
-          }
-        }
+  {
+    //System.out.println("fuck");
+      if (retractLimiter.get() == true && ArmConstants.isLimitSwitch == 0) {
+        jointMotor.set(ControlMode.PercentOutput, 0.3);
+     } else {
+       if (!retractLimiter.get()) {
+          jointMotor.set(ControlMode.PercentOutput, -0.1);
+          ArmConstants.isLimitSwitch = 1;
+        } else {
+          jointMotor.set(ControlMode.PercentOutput, 0);
       }
-    /*if (retractLimiter.get() && extendLimiter.get()) {                                                   //Neither LS is pressed
-      jointMotor.set(ControlMode.PercentOutput, set);
-    } else if (!retractLimiter.get() && (this.intent == -1 || intent == 0) && extendLimiter.get()) {     //Retract (port 2) LS is pressed
-      jointMotor.set(ControlMode.PercentOutput, -0.6);
-    } else if (!extendLimiter.get() && (this.intent == 1 || this.intent == 0) && retractLimiter.get()) { //Extend (port 1) LS is pressed
-      jointMotor.set(ControlMode.PercentOutput, 0.6);
-    } else {                                                                                             //Both LS are pressed
-      jointMotor.set(ControlMode.PercentOutput, 0);
-    }*/
+    }
   }
   /* 
   public void runVoltage(double volts) 
