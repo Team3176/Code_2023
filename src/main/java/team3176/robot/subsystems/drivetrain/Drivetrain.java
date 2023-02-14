@@ -415,6 +415,23 @@ public class Drivetrain extends SubsystemBase {
     return m_NavX.getRotation2d().minus(this.FieldAngleOffset);
   }
 
+  /**
+   * 
+   * @return navx pitch -180 to 180 around the X axis of the Navx
+   */
+  public double getChassisPitch() {
+    return m_NavX.getPitch();
+  }
+
+  /**
+   * 
+   * @return navx roll -180 to 180 around the X axis of the Navx
+   */
+  public double getChassisRoll() {
+    return m_NavX.getRoll();
+  }
+
+
   public void resetFieldOrientation() {
     // do not need to invert because the navx rotation2D call returns a NWU
     // coordsys!
