@@ -22,12 +22,12 @@ public class AutoBalance extends CommandBase {
 
         //Bang Bang controller! 
         double forward = 0.0;
-        double deadbandDegrees = 2;
+        double deadbandDegrees = 8;
         SmartDashboard.putNumber("pitch", m_Drivetrain.getChassisPitch());
         if(m_Drivetrain.getChassisPitch() > 0 + deadbandDegrees) {
-            forward = 0.3;
+            forward = 0.4;
         } else if(m_Drivetrain.getChassisPitch() < 0 - deadbandDegrees) {
-            forward = -0.3;
+            forward = -0.4;
         }
         m_Drivetrain.drive(forward, 0, 0, Drivetrain.coordType.ROBOT_CENTRIC);
     }
