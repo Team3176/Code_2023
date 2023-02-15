@@ -28,7 +28,7 @@ public class PathPlannerAuto {
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("marker1", new PrintCommand("Passed marker 1"));
         // eventMap.put("intakeDown", new IntakeDown());
-
+        driveSubsystem.resetPose(pathGroup.get(0).getInitialHolonomicPose());
         // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
             driveSubsystem::getPose,
@@ -42,7 +42,7 @@ public class PathPlannerAuto {
             driveSubsystem);
 
 
-        auto = autoBuilder.fullAuto(pathGroup);
+        auto = autoBuilder.followPath(pathGroup.get(0));
     }
     public Command getauto(){
         return auto;

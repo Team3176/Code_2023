@@ -25,9 +25,9 @@ public class AutoBalance extends CommandBase {
         double deadbandDegrees = 8;
         SmartDashboard.putNumber("pitch", m_Drivetrain.getChassisPitch());
         if(m_Drivetrain.getChassisPitch() > 0 + deadbandDegrees) {
-            forward = 0.4;
+            forward = 0.35;
         } else if(m_Drivetrain.getChassisPitch() < 0 - deadbandDegrees) {
-            forward = -0.4;
+            forward = -0.35;
         }
         m_Drivetrain.drive(forward, 0, 0, Drivetrain.coordType.ROBOT_CENTRIC);
     }
