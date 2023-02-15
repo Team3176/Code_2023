@@ -1,8 +1,10 @@
 package team3176.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,11 +15,11 @@ public class Elbow extends SubsystemBase {
 
 private static Elbow instance;
 
-private DigitalInput pickupLimiter;
-private DigitalInput floorLimiter;
 private TalonFX elbowMotor;
 private ElbowState currentState;
 private String currentStateString;
+private CANCoder elbowCANcoder;
+
 
 /* Discrete positions for the arm */
 /* This will likely need to be defined elsewhere so that callers have access to this type
@@ -33,8 +35,6 @@ public enum ElbowState {
 }
 
 public Elbow() {
-    pickupLimiter = new DigitalInput(ArmConstants.ELBOW_PICKUP_LIMIT_CHAN);
-    floorLimiter = new DigitalInput(ArmConstants.ELBOW_FLOOR_LIMIT_CHAN);
     elbowMotor = new TalonFX(ArmConstants.ELBOW_FALCON_CAN_ID);
 
     currentState = ElbowState.UNKNOWN;
@@ -42,8 +42,10 @@ public Elbow() {
 
     System.out.println("Elbow Motor has been constructed");
 
+    CANCoder elbowCANCoder = new CANCoder(11,"rio");
     elbowMotor.configFactoryDefault();
-    elbowMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, ArmConstants.kPIDLoopIndex, ArmConstants.kTimeoutMS);
+    elbowMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, ArmConstants.kPIDLoopIndex, ArmConstants.kTimeoutMS);
+    elbowMotor.configRemoteFeedbackFilter(elbowCANCoder, 0 , ArmConstants.kTimeoutMS);
     elbowMotor.configAllowableClosedloopError(0, ArmConstants.kPIDLoopIndex, ArmConstants.kTimeoutMS);
     elbowMotor.setSensorPhase(true);
     elbowMotor.configClosedloopRamp(ArmConstants.kRampRate, ArmConstants.kTimeoutMS);
@@ -59,6 +61,7 @@ public Elbow() {
     elbowMotor.config_kD(0, ArmConstants.Elbow_PIDFConstants[0][2]);
     elbowMotor.config_kF(0, ArmConstants.Elbow_PIDFConstants[0][3]);
     elbowMotor.config_IntegralZone(0, ArmConstants.Elbow_PIDFConstants[0][4]);
+
 
 }
 

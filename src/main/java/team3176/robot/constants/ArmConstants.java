@@ -16,7 +16,7 @@ public final class ArmConstants {
     public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2; //GREAT HEAVENS >:|
     public static int isLimitSwitch;
     //Elbow
-    public static final int ELBOW_FALCON_CAN_ID = 5;
+    public static final int ELBOW_FALCON_CAN_ID = 52;
     public static final int ELBOW_FLOOR_LIMIT_CHAN = 3;
     public static final int ELBOW_PICKUP_LIMIT_CHAN = 4;
 
