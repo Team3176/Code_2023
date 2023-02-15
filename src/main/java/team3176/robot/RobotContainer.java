@@ -165,7 +165,7 @@ public class RobotContainer {
     //String chosen = m_autonChooser.getSelected();
 
     
-    PathPlannerAuto PPSwerveauto = new PathPlannerAuto();
+    PathPlannerAuto PPSwerveauto = new PathPlannerAuto("auto1");
     System.out.println("auto");
     return PPSwerveauto.getauto().andThen(new AutoBalance());
   }
