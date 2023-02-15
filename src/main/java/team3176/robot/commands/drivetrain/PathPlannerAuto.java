@@ -21,7 +21,7 @@ public class PathPlannerAuto {
     public PathPlannerAuto() {
 
         Drivetrain driveSubsystem = Drivetrain.getInstance();
-        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("auto1", new PathConstraints(1.5, 0.5));
+        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("auto1", new PathConstraints(1.5, 1.5));
 
         // This is just an example event map. It would be better to have a constant, global event map
         // in your code that will be used by all path following commands.
