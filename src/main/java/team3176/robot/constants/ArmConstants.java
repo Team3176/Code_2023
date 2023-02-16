@@ -22,7 +22,7 @@ public final class ArmConstants {
     public static int isLimitSwitch;
     public static int SHOULDER_POSITION;
     //Elbow
-    public static final int ELBOW_FALCON_CAN_ID = 5;
+    public static final int ELBOW_FALCON_CAN_ID = 52;
     public static final int ELBOW_FLOOR_LIMIT_CHAN = 3;
     public static final int ELBOW_PICKUP_LIMIT_CHAN = 4;
 

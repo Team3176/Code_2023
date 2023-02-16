@@ -182,17 +182,17 @@ public class RobotContainer {
     m_Controller.operator.a().whileTrue(new ShoulderPID());
     //m_Controller.operator.a().onTrue(new VariableReset());
     //m_Controller.operator.a().whileTrue(new ShoulderClockwise());
-    m_Controller.operator.a().onFalse(new VariableReset());
+    //m_Controller.operator.a().onFalse(new VariableReset());
     //m_Controller.operator.b().onTrue(new VariableReset());
     //m_Controller.operator.b().whileTrue(new ShoulderCounterClockwise());
     //m_Controller.operator.b().onFalse(new VariableReset());
     //m_Controller.operator.b().onFalse(new VariableReset());
     //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
-    //m_Controller.operator.a().whileTrue(new ElbowPickup());
-    //m_Controller.operator.b().whileTrue(new ElbowHigh());
-    //m_Controller.operator.x().whileTrue(new ElbowMid());
+    m_Controller.operator.a().whileTrue(new ElbowPickup());
+    m_Controller.operator.b().whileTrue(new ElbowHigh());
+    m_Controller.operator.x().whileTrue(new ElbowMid());
     //m_Controller.operator.x().whileTrue(new ImGonnaHaveAnAneurysm());
-    //m_Controller.operator.y().whileTrue(new ElbowFloor());
+    m_Controller.operator.y().whileTrue(new ElbowFloor());
     //m_Controller.operator.y().whileTrue(new ShootSetVals());
     //m_Controller.operator.b().onTrue(new FlywheelStop());
 
