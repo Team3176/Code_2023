@@ -1,5 +1,10 @@
 package team3176.robot.constants;
 
+import edu.wpi.first.networktables.DoubleTopic;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.Topic;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,6 +20,7 @@ public final class ArmConstants {
     public static final int SHOULDER_EXTENDED_LIMIT_CHAN = 1; //PLEASE!!!
     public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2; //GREAT HEAVENS >:|
     public static int isLimitSwitch;
+    public static int SHOULDER_POSITION;
     //Elbow
     public static final int ELBOW_FALCON_CAN_ID = 5;
     public static final int ELBOW_FLOOR_LIMIT_CHAN = 3;
@@ -47,4 +53,11 @@ public final class ArmConstants {
     // Constant order: P, I, D, FF, IZone
     public static final double[][] Shoulder_PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
     public static final double[][] Elbow_PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
+    
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    NetworkTable table = inst.getTable("datatable");
+
+    Topic genericTopic = inst.getTopic("/datatable/X");
+    DoubleTopic dblTopic = new DoubleTopic(genericTopic);
+
 }

@@ -118,7 +118,7 @@ public class Shoulder extends SubsystemBase {
       jointMotor.set(mode, set);
     }
   }
-  public void setMotorCWithLimiterBound(ControlMode mode, double set)                                    //setMotorC = set motor clockwise
+  public void setMotorCWithLimiterBound(ControlMode mode, double set) //setMotorC = set motor clockwise
   {
     //System.out.println("fuck");
       if (extendLimiter.get() == true && ArmConstants.isLimitSwitch == 0) {
@@ -132,7 +132,7 @@ public class Shoulder extends SubsystemBase {
       }
     }
   }
-  public void setMotorACWithLimiterBound(ControlMode mode, double set)                                   //setMotorAC = set motor anticlockwise (counterclockwise)
+  public void setMotorACWithLimiterBound(ControlMode mode, double set) //setMotorAC = set motor anticlockwise (counterclockwise)
   {
     //System.out.println("fuck");
       if (retractLimiter.get() == true && ArmConstants.isLimitSwitch == 0) {
@@ -146,6 +146,39 @@ public class Shoulder extends SubsystemBase {
       }
     }
   }
+  public void setMotorPIDWithLimiterBound(ControlMode mode, double set) //setMotorC = set motor clockwise
+  {
+    //System.out.println("fuck");
+    if (extendLimiter.get() == true && retractLimiter.get() == true && ArmConstants.isLimitSwitch == 0) 
+    {
+      jointMotor.set(ControlMode.Position, ArmConstants.SHOULDER_POSITION);
+    } 
+    else if (extendLimiter.get() == false && retractLimiter.get() == true && ArmConstants.isLimitSwitch == 0) 
+    {
+      if (extendLimiter.get() == false && ArmConstants.isLimitSwitch == 0) 
+      {
+        jointMotor.set(ControlMode.PercentOutput, 0.1);
+        ArmConstants.isLimitSwitch = 1;
+      } 
+      else 
+      {
+        jointMotor.set(ControlMode.PercentOutput, 0);
+      }
+    } 
+    else if (extendLimiter.get() == true && retractLimiter.get() == false && ArmConstants.isLimitSwitch == 0) 
+    {
+      if (retractLimiter.get() == false && ArmConstants.isLimitSwitch == 0) 
+      {
+        jointMotor.set(ControlMode.PercentOutput, -0.1);
+        ArmConstants.isLimitSwitch = 1;
+      } 
+      else 
+      {
+        jointMotor.set(ControlMode.PercentOutput, 0);
+      }
+    }
+  }
+
   /* 
   public void runVoltage(double volts) 
   {
@@ -166,6 +199,12 @@ public class Shoulder extends SubsystemBase {
   public void simulationPeriodic() 
   {
     // This method will be called once per scheduler run during simulation
+  }
+  */
+  /*
+  public void imGonnaShitMyself(ControlMode mode, double set)
+  {
+    jointMotor.set(ControlMode.PercentOutput, 0.5);
   }
   */
   public double getCurrentPosition(){
