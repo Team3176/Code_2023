@@ -13,6 +13,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import team3176.robot.constants.DrivetrainConstants;
 import team3176.robot.subsystems.drivetrain.Drivetrain;
 
@@ -26,7 +27,8 @@ public class PathPlannerAuto {
         // This is just an example event map. It would be better to have a constant, global event map
         // in your code that will be used by all path following commands.
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+        eventMap.put("print", new PrintCommand("action!"));
+        eventMap.put("cube", new WaitCommand(2.0));
         // eventMap.put("intakeDown", new IntakeDown());
         // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
@@ -41,7 +43,7 @@ public class PathPlannerAuto {
             driveSubsystem);
 
         autoBuilder.resetPose(pathGroup.get(0));
-        auto = autoBuilder.followPath(pathGroup.get(0));
+        auto = autoBuilder.followPathWithEvents(pathGroup.get(0));
     }
     public Command getauto(){
         return auto;
