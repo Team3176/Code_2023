@@ -42,11 +42,12 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
+          "cube",
           "print"
         ],
         "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "waitBehavior": "after",
+        "waitTime": 10.0
       }
     },
     {
@@ -104,7 +105,8 @@
     {
       "position": 0.5454545454545454,
       "names": [
-        "event"
+        "event",
+        "print"
       ]
     }
   ]
