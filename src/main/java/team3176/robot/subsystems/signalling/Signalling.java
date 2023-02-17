@@ -111,6 +111,8 @@ public class Signalling extends SubsystemBase {
       break;
       case CUBEFLASH: c = Color.kPurple;
       break;
+      case NONE: c = Color.kBlack;
+      break;
     }
     return c;
   }

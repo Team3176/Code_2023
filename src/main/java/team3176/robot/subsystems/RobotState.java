@@ -6,6 +6,7 @@ package team3176.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.function.Supplier;
@@ -15,6 +16,11 @@ import org.littletonrobotics.junction.Logger;
 import team3176.robot.subsystems.RobotStateIO; 
 import team3176.robot.subsystems.RobotStateIO.RobotStateIOInputs; 
 
+import team3176.robot.subsystems.signalling.Signalling;
+import team3176.robot.subsystems.intake.Intake;
+import team3176.robot.subsystems.claw.Claw;
+import team3176.robot.constants.RobotConstants.Status;
+
 
 
 public class RobotState extends SubsystemBase {
@@ -22,6 +28,10 @@ public class RobotState extends SubsystemBase {
   private final RobotStateIO io;
   private final RobotStateIOInputs inputs = new RobotStateIOInputs();
   private static RobotState instance;
+  private int wantedLEDState;
+  private Signalling m_Signalling;
+  private Intake m_Intake;
+  private Claw m_Claw;
 
   private Alliance alliance; 
 
@@ -85,12 +95,67 @@ public class RobotState extends SubsystemBase {
 
   private RobotState(RobotStateIO io) {
     this.io = io;
+    m_Signalling = Signalling.getInstance();
+    m_Intake = Intake.getInstance();
+    m_Claw = Claw.getInstance();
+    wantedLEDState = 0;
   }
 
   public void update() {
     if (DriverStation.isFMSAttached() && (alliance == null)) {
       alliance = DriverStation.getAlliance();
     }
+  }
+
+  public void setColorWantState()
+  {
+    System.out.println("WAS CALLED");
+    wantedLEDState = 1;
+    if (wantedLEDState == 0)
+    {
+      m_Signalling.setleft(Status.NONE);
+    }
+    else if (wantedLEDState == 1)
+    {
+      m_Signalling.setleft(Status.CONEFLASH);
+    }
+    else if (wantedLEDState == 2)
+    {
+      m_Signalling.setleft(Status.CUBEFLASH);
+    }
+
+    wantedLEDState++;
+    if (wantedLEDState == 3) {wantedLEDState = 0;}
+  }
+
+  public void setColorHoldingState()
+  {
+    if (m_Intake.getLinebreak() == false) // TODO: Replace with Color Sensor
+    {
+      if (wantedLEDState == 1)
+      {
+        m_Signalling.setleft(Status.CONE);
+      }
+      else if (wantedLEDState == 2)
+      {
+        m_Signalling.setleft(Status.CUBE);
+      }
+    }
+    else if (m_Intake.getLinebreak() == true)
+    {
+      m_Signalling.setleft(Status.NONE);
+      wantedLEDState = 0;
+    }
+  }
+
+  public void CentricState()
+  {
+    // if FieldCentric, then light up one color
+  }
+
+  public Command setColorWantStateCommand()
+  {
+    return this.runOnce(() -> setColorWantState());
   }
 
   public static RobotState getInstance() {
@@ -103,7 +168,14 @@ public class RobotState extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.getInstance().processInputs("Intake", inputs);
-
+    
+    for (int i = 0; i < 51; i++)
+    {
+      if (i == 50)
+      {
+        setColorHoldingState();
+      }
+    }
   }
 
   @Override
