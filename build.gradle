@@ -62,9 +62,9 @@ repositories {
         }
     }
 }
-configurations.all {
-    exclude group: "edu.wpi.first.wpilibj"
-}
+// configurations.all {
+//     exclude group: "edu.wpi.first.wpilibj"
+// }
 // END: Block to use AdvantageKit
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
