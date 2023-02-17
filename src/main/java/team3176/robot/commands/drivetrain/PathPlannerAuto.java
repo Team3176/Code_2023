@@ -42,19 +42,8 @@ public class PathPlannerAuto {
             eventMap,
             true,
             driveSubsystem);
-
-        driveSubsystem.resetPose(pathGroup.get(0).getInitialHolonomicPose());
-
-        List<CommandBase> commands = new ArrayList<>();
-        commands.add(autoBuilder.resetPose(pathGroup.get(0)));
     
-        for (PathPlannerTrajectory traj : pathGroup) {
-          //commands.add(autoBuilder.stopEventGroup(traj.getStartStopEvent()));
-          commands.add(autoBuilder.followPathWithEvents(traj));
-        }
-        //commands.add(autoBuilder.stopEventGroup(pathGroup.get(pathGroup.size() - 1).getEndStopEvent()));
-    
-        auto = new WaitCommand(2.0);//Commands.sequence(commands.toArray(CommandBase[]::new));//Commands.sequence(commands.toArray(CommandBase[]::new));
+        auto = autoBuilder.fullAuto(pathGroup);
     }
     public Command getauto(){
         return auto;
