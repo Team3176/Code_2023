@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import team3176.robot.constants.RobotConstants.Status;
+import team3176.robot.subsystems.RobotState.e_CurrentGameElementImWanting;
+import team3176.robot.subsystems.RobotState.e_CurrentGameElementImHolding;
+import team3176.robot.subsystems.RobotState.e_ArmElbowPositionState;
+import team3176.robot.subsystems.RobotState.e_IntakeDetectsImHolding;
 import team3176.robot.constants.SignalingConstants;
 
 
@@ -69,26 +73,85 @@ public class Signalling extends SubsystemBase {
 
     public void setleft(Status s)
     {
-      leftflcolor = LookUpColor(s);
-      leftflash = LookUpFlash(s);
+      leftflcolor = LookUpStatusColor(s);
       setSegment(SignalingConstants.LEFTENDSTART, SignalingConstants.LEFTENDSTOP, leftflcolor);
       m_led.setData(m_ledBuffer);
     }
+
+    public void setleft(e_CurrentGameElementImWanting w)
+    {
+      leftflcolor = LookUpGPColor(w);
+      leftflash = LookUpFlash(w);
+      setSegment(SignalingConstants.LEFTENDSTART, SignalingConstants.LEFTENDSTOP, leftflcolor);
+      m_led.setData(m_ledBuffer);
+    }
+
+    public void setleft(e_CurrentGameElementImHolding h)
+    {
+      leftflcolor = LookUpGPColor(h);
+      setSegment(SignalingConstants.LEFTENDSTART, SignalingConstants.LEFTENDSTOP, leftflcolor);
+      m_led.setData(m_ledBuffer);
+    }
+
+    public void setIntakeGPColor(e_IntakeDetectsImHolding h)
+    {
+      leftflcolor = LookUpIntakeGPColor(h);
+      setSegment(SignalingConstants.LEFTENDSTART, 5, leftflcolor);
+      m_led.setData(m_ledBuffer);
+    }
+
+    public void setArmElbowPosColor(e_ArmElbowPositionState a)
+    {
+      leftflcolor = LookUpElbowPosColor(a);
+      if (a == e_ArmElbowPositionState.IsPICKUP)
+      {
+        setSegment(6, 8, leftflcolor);
+      }
+      else if (a == e_ArmElbowPositionState.IsFLOORCONE || a == e_ArmElbowPositionState.IsFLOORCUBE)
+      {
+        setSegment(7, 9, leftflcolor);
+      }
+      else if (a == e_ArmElbowPositionState.IsMIDCONE || a == e_ArmElbowPositionState.IsMIDCUBE)
+      {
+        setSegment(8, 10, leftflcolor);
+      }
+      else if (a == e_ArmElbowPositionState.IsHIGHCONE || a == e_ArmElbowPositionState.IsHIGHCUBE)
+      {
+        setSegment(9, 11, leftflcolor);
+      }
+    }
+
     public void setright(Status s)
     {
-      rightflcolor = LookUpColor(s);
-      rightflash = LookUpFlash(s);
+      rightflcolor = LookUpStatusColor(s);
       setSegment(SignalingConstants.RIGHTENDSTART, SignalingConstants.RIGHTENDSTOP, rightflcolor);
       m_led.setData(m_ledBuffer);
     }
+
+    public void setright(e_CurrentGameElementImWanting w)
+    {
+      rightflcolor = LookUpGPColor(w);
+      rightflash = LookUpFlash(w);
+      setSegment(SignalingConstants.RIGHTENDSTART, SignalingConstants.RIGHTENDSTOP, rightflcolor);
+      m_led.setData(m_ledBuffer);
+    }
+
     public void setcrossbar(Status s)
     {
-      crossflcolor = LookUpColor(s);
-      crossflash = LookUpFlash(s);
+      crossflcolor = LookUpStatusColor(s);
       setSegment(SignalingConstants.CROSSENDSTART, SignalingConstants.CROSSENDSTOP, crossflcolor);
       m_led.setData(m_ledBuffer);
     }
-  private Color LookUpColor(Status s){
+
+    public void setcrossbar(e_CurrentGameElementImWanting w)
+    {
+      crossflcolor = LookUpGPColor(w);
+      crossflash = LookUpFlash(w);
+      setSegment(SignalingConstants.CROSSENDSTART, SignalingConstants.CROSSENDSTOP, crossflcolor);
+      m_led.setData(m_ledBuffer);
+    }
+
+  private Color LookUpStatusColor(Status s){
     Color c = Color.kBlack;
     switch(s){
       case STABLE: c = Color.kGreen;
@@ -103,21 +166,80 @@ public class Signalling extends SubsystemBase {
       break;
       case ERROR: c = Color.kLime;
       break;
+      case NONE: c = Color.kBlack;
+      break;
+    }
+    return c;
+  }
+
+  private Color LookUpElbowPosColor(e_ArmElbowPositionState a)
+  {
+    Color c = Color.kLightBlue;
+    switch(a){
+      case IsPICKUP: c = Color.kLightBlue; 
+      break;
+      case IsHIGHCONE: c = Color.kYellow;
+      break;
+      case IsHIGHCUBE: c = Color.kPink;
+      break;
+      case IsMIDCONE: c = Color.kOrange;
+      break;
+      case IsMIDCUBE: c = Color.kMagenta;
+      break;
+      case IsFLOORCONE: c = Color.kDarkOrange;
+      break;
+      case IsFLOORCUBE: c = Color.kPurple;
+      break;
+    }
+    return c;
+  }
+
+  private Color LookUpGPColor(e_CurrentGameElementImWanting w)
+  {
+    Color c = Color.kBlack;
+    switch(w){
       case CONE: c = Color.kOrange;
       break;
       case CUBE: c = Color.kPurple;
-      break;
-      case CONEFLASH: c = Color.kOrange;
-      break;
-      case CUBEFLASH: c = Color.kPurple;
       break;
       case NONE: c = Color.kBlack;
       break;
     }
     return c;
   }
-  private Boolean LookUpFlash(Status s){
-      return ((s == Status.CUBEFLASH) || (s == Status.CONEFLASH));
+
+  private Color LookUpGPColor(e_CurrentGameElementImHolding h)
+  {
+    Color c = Color.kBlack;
+    switch(h){
+      case CONE: c = Color.kOrange;
+      break;
+      case CUBE: c = Color.kPurple;
+      break;
+      case NONE: c = Color.kBlack;
+      break;
+    }
+    return c;
+  }
+
+  private Color LookUpIntakeGPColor(e_IntakeDetectsImHolding h)
+  {
+    Color c = Color.kBlack;
+    switch(h){
+      case CONE: c = Color.kOrange;
+      break;
+      case CUBE: c = Color.kPurple;
+      break;
+      case NOTHING: c = Color.kBlack;
+      break;
+      case ERROR: c = Color.kRed;
+      break;
+    }
+    return c;
+  }
+
+  private Boolean LookUpFlash(e_CurrentGameElementImWanting w){
+    return ((w == e_CurrentGameElementImWanting.CUBE) || (w == e_CurrentGameElementImWanting.CONE));
   }
 
   @Override

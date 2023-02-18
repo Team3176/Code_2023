@@ -28,31 +28,36 @@ public class RobotState extends SubsystemBase {
   private final RobotStateIO io;
   private final RobotStateIOInputs inputs = new RobotStateIOInputs();
   private static RobotState instance;
-  private int wantedLEDState;
+  private int wantedGPState;
   private Signalling m_Signalling;
   private Intake m_Intake;
   private Claw m_Claw;
 
   private Alliance alliance; 
 
-  enum e_ClawPositionState {
+  public enum e_CentricWantedState {
+    ROBOT,
+    FIELD
+  }
+
+  public enum e_ClawPositionState {
     OPEN,
     CLOSED,
     IDLE
   }
 
-  enum e_ClawRollersState {
+  public enum e_ClawRollersState {
     PosSPIN,  //Means front-most side of rollers spinning INTO the Claw, toward it's center 
     NegSPIN,  //Means front-most side of rollers spinning OUT-OF the Claw, toward it's exterior
     NoSPIN,  //Means front-most rollers are not spinning
   }
 
-  enum e_IntakePositionState {
+  public enum e_IntakePositionState {
     EXTENDED,
     RETRACTED
   }
 
-  enum e_IntakeDetectsImHolding {
+  public enum e_IntakeDetectsImHolding {
     CONE,
     CUBE,
     NOTHING,
@@ -70,7 +75,7 @@ public class RobotState extends SubsystemBase {
     IsDOWN  // Means Elevator is in down position
   }
 
-  enum e_ArmElbowPositionState {
+  public enum e_ArmElbowPositionState {
     IsPICKUP,   //Means Arms is in position to receive game element from Intake
     IsHIGHCONE,  // Means Arm is in High Position to deposit cone
     IsHIGHCUBE,  // Means Arm is in High Position to deposit cube
@@ -80,13 +85,13 @@ public class RobotState extends SubsystemBase {
     IsFLOORCUBE,  // Means Arm is in Floor Position to deposit cube
   }
 
-  enum e_CurrentGameElementImWanting{
+  public enum e_CurrentGameElementImWanting{
     CONE,
     CUBE,
     NONE
   }
 
-  enum e_CurrentGameElementImHolding{
+  public enum e_CurrentGameElementImHolding{
     CONE,
     CUBE,
     NONE
@@ -98,7 +103,7 @@ public class RobotState extends SubsystemBase {
     m_Signalling = Signalling.getInstance();
     m_Intake = Intake.getInstance();
     m_Claw = Claw.getInstance();
-    wantedLEDState = 0;
+    wantedGPState = 0;
   }
 
   public void update() {
@@ -110,41 +115,59 @@ public class RobotState extends SubsystemBase {
   public void setColorWantState()
   {
     System.out.println("WAS CALLED");
-    wantedLEDState = 1;
-    if (wantedLEDState == 0)
+    wantedGPState++; // wantedGPState tells RobotState what GamePiece the robot wants: 3 = NONE, 2 = CONEFLASH, 1 = CUBEFLASH
+    if (wantedGPState == 3)
     {
-      m_Signalling.setleft(Status.NONE);
+      m_Signalling.setleft(e_CurrentGameElementImWanting.NONE);
     }
-    else if (wantedLEDState == 1)
+    else if (wantedGPState == 2)
     {
-      m_Signalling.setleft(Status.CONEFLASH);
+      m_Signalling.setleft(e_CurrentGameElementImWanting.CONE);
     }
-    else if (wantedLEDState == 2)
+    else if (wantedGPState == 1)
     {
-      m_Signalling.setleft(Status.CUBEFLASH);
+      m_Signalling.setleft(e_CurrentGameElementImWanting.CUBE);
     }
-
-    wantedLEDState++;
-    if (wantedLEDState == 3) {wantedLEDState = 0;}
+    if (wantedGPState == 3) {wantedGPState = 0;}
   }
 
-  public void setColorHoldingState()
+  public void setGPHoldingState()
   {
-    if (m_Intake.getLinebreak() == false) // TODO: Replace with Color Sensor
+    if (m_Intake.getProximity() <= 150)
     {
-      if (wantedLEDState == 1)
+      if (wantedGPState == 1)
       {
-        m_Signalling.setleft(Status.CONE);
+        m_Signalling.setleft(e_CurrentGameElementImHolding.CONE);
       }
-      else if (wantedLEDState == 2)
+      else if (wantedGPState == 2)
       {
-        m_Signalling.setleft(Status.CUBE);
+        m_Signalling.setleft(e_CurrentGameElementImHolding.CUBE);
       }
     }
     else if (m_Intake.getLinebreak() == true)
     {
-      m_Signalling.setleft(Status.NONE);
-      wantedLEDState = 0;
+      m_Signalling.setleft(e_CurrentGameElementImHolding.NONE);
+      wantedGPState = 0;
+    }
+  }
+
+  public void setIntakeHoldingState()
+  {
+    if (m_Intake.isConeThere() == true)
+    {
+      m_Signalling.setIntakeGPColor(e_IntakeDetectsImHolding.CONE);
+    }
+    if (m_Intake.isCubeThere() == true)
+    {
+      m_Signalling.setIntakeGPColor(e_IntakeDetectsImHolding.CUBE);
+    }
+    if (m_Intake.isConeThere() == false && m_Intake.isCubeThere() == false)
+    {
+      m_Signalling.setIntakeGPColor(e_IntakeDetectsImHolding.NOTHING);
+    }
+    if (m_Intake.isConeThere() == true && m_Intake.isCubeThere() == true)
+    {
+      m_Signalling.setIntakeGPColor(e_IntakeDetectsImHolding.ERROR);
     }
   }
 
@@ -173,7 +196,8 @@ public class RobotState extends SubsystemBase {
     {
       if (i == 50)
       {
-        setColorHoldingState();
+        setGPHoldingState();
+        setIntakeHoldingState();
       }
     }
   }

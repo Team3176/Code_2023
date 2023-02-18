@@ -97,6 +97,6 @@ public final class RobotConstants {
   }
 
   public static enum Status {
-    STABLE, OK, OPTIONALCHECK, WARNING, GOOD, ERROR, CONE, CUBE, CONEFLASH, CUBEFLASH, NONE
+    STABLE, OK, OPTIONALCHECK, WARNING, GOOD, ERROR, NONE
   }
 }

@@ -157,6 +157,47 @@ public class Intake extends SubsystemBase {
     return linebreak.get();
   }
 
+  public int getProximity()
+  {
+    return m_ColorSensor.getProximity();
+  }
+
+  public boolean isConeThere()
+  {
+    Color detectedColor = m_ColorSensor.getColor();
+    if ((0.35 <= detectedColor.red && detectedColor.red <= 0.379) && 
+        (0.466 <= detectedColor.green && detectedColor.green <= 0.516) && 
+        (0.083 <= detectedColor.blue && detectedColor.blue <= 0.188))
+    {
+      isCone = true;
+      return isCone;
+      // System.out.println("TRUE");
+    }
+    else 
+    {
+      isCone = true;
+      return isCone;
+      // System.out.println("FALSE");
+    }
+  }
+
+  public boolean isCubeThere()
+  {
+    Color detectedColor = m_ColorSensor.getColor();
+    if ((0.241 <= detectedColor.red && detectedColor.red <= 0.318) && 
+        (0.382 <= detectedColor.green && detectedColor.green <= 0.458) && 
+        (0.227 <= detectedColor.blue && detectedColor.blue <= 0.375))
+    {
+      isSquircle = true;
+      return isSquircle;
+    }
+    else 
+    {
+      isSquircle = false;
+      return isSquircle;
+    }
+  }
+
   //Cool example of a subsystem holding basic commands
   public Command stopIntakeCommand() {
     return this.runOnce(() -> this.spinVelocityPercent(0));
@@ -186,38 +227,8 @@ public class Intake extends SubsystemBase {
     //TimestampedDouble[] tsUpdates = dblSub.readQueue();
     //double[] valUpdates = dblSub.readQueueValues();
 
-  
-
-    if ((0.35 <= detectedColor.red && detectedColor.red <= 0.379) && 
-        (0.466 <= detectedColor.green && detectedColor.green <= 0.516) && 
-        (0.083 <= detectedColor.blue && detectedColor.blue <= 0.188))
-    {
-      isCone = true;
-      // System.out.println("TRUE");
-    }
-    else 
-    {
-      isCone = false;
-      // System.out.println("FALSE");
-    }
-    SmartDashboard.putBoolean("isCone", isCone);
-    
-    if ((0.241 <= detectedColor.red && detectedColor.red <= 0.318) && 
-        (0.382 <= detectedColor.green && detectedColor.green <= 0.458) && 
-        (0.227 <= detectedColor.blue && detectedColor.blue <= 0.375))
-    {
-      isSquircle = true;
-    }
-    else 
-    {
-      isSquircle = false;
-    }
-    SmartDashboard.putBoolean("isSquircle", isSquircle);
-
-
-
     // Code stating if something is in the Intake
-    if (m_ColorSensor.getProximity() <= 150)
+    if (getProximity() <= 150)
     {
     if (linebreak.get() == false)
     {
@@ -235,6 +246,8 @@ public class Intake extends SubsystemBase {
     }
     SmartDashboard.putBoolean("isInIntake", isInIntake);
     SmartDashboard.putBoolean("isExtended", isExtended);
+    SmartDashboard.putBoolean("isCone", isCone);
+    SmartDashboard.putBoolean("isSquircle", isSquircle);
     SmartDashboard.putNumber("getProximity", m_ColorSensor.getProximity());
 
    }
