@@ -45,9 +45,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -170,14 +172,14 @@ public class Drivetrain extends SubsystemBase {
 
     m_NavX = new AHRS(SPI.Port.kMXP);
 
-    odom = new SwerveDriveOdometry(DrivetrainConstants.DRIVE_KINEMATICS, this.getChassisYaw(),
+    odom = new SwerveDriveOdometry(DrivetrainConstants.DRIVE_KINEMATICS, this.getSensorYaw(),
         new SwerveModulePosition[] {
             podFR.getPosition(),
             podFL.getPosition(),
             podBL.getPosition(),
             podBR.getPosition()
         }, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseEstimator = new SwerveDrivePoseEstimator(DrivetrainConstants.DRIVE_KINEMATICS, getChassisYaw(),
+    poseEstimator = new SwerveDrivePoseEstimator(DrivetrainConstants.DRIVE_KINEMATICS, getSensorYaw(),
         getSwerveModulePositions(), odom.getPoseMeters());
     // TODO: update covariance matrix for vision
     // poseEstimator.setVisionMeasurementStdDevs(new MatBuilder<>(Nat.N3(),
@@ -233,7 +235,11 @@ public class Drivetrain extends SubsystemBase {
   public void drive(double forwardCommand, double strafeCommand, double spinCommand, coordType type) {
     ChassisSpeeds speed = new ChassisSpeeds(forwardCommand, strafeCommand, spinCommand);
     if (type == coordType.FIELD_CENTRIC) {
-      speed = ChassisSpeeds.fromFieldRelativeSpeeds(speed, this.getPose().getRotation());
+      Rotation2d fieldOffset = this.getPose().getRotation();
+      if (DriverStation.getAlliance() == Alliance.Red) {
+        fieldOffset.plus(Rotation2d.fromDegrees(180));
+      }
+      speed = ChassisSpeeds.fromFieldRelativeSpeeds(speed, fieldOffset);
     }
     p_drive(speed.vxMetersPerSecond, speed.vyMetersPerSecond, speed.omegaRadiansPerSecond);
   }
@@ -271,7 +277,7 @@ public class Drivetrain extends SubsystemBase {
     // this.spinCommand *= 2;
     // }
     if (isSpinLocked) {
-      this.spinCommand = spinLockPID.calculate(getChassisYaw().getDegrees(), spinLockAngle.getDegrees());
+      this.spinCommand = spinLockPID.calculate(getSensorYaw().getDegrees(), spinLockAngle.getDegrees());
     }
 
     calculateNSetPodPositions(this.forwardCommand, this.strafeCommand, this.spinCommand);
@@ -354,12 +360,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose) {
-    odom.resetPosition(getChassisYaw(), new SwerveModulePosition[] {
+    odom.resetPosition(getSensorYaw(), new SwerveModulePosition[] {
         podFR.getPosition(),
         podFL.getPosition(),
         podBL.getPosition(),
         podBR.getPosition() }, pose);
-    poseEstimator.resetPosition(getChassisYaw(), new SwerveModulePosition[] {
+    poseEstimator.resetPosition(getSensorYaw(), new SwerveModulePosition[] {
           podFR.getPosition(),
           podFL.getPosition(),
           podBL.getPosition(),
@@ -392,18 +398,18 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void setSpinLockAngle() {
-    this.spinLockAngle = getChassisYaw();
+    this.spinLockAngle = getSensorYaw();
   }
 
   /**
    * 
    * @return returns the chassis yaw wrapped between -pi and pi
    */
-  public Rotation2d getChassisYawWrapped() {
+  public Rotation2d getSensorYawWrapped() {
     // its ugly but rotation2d is continuos but I imagine most of our applications
     // we want it bounded between -pi and pi
     return Rotation2d
-        .fromRadians(MathUtil.angleModulus(m_NavX.getRotation2d().minus(this.FieldAngleOffset).getRadians()));
+        .fromRadians(MathUtil.angleModulus(getPose().getRotation().getRadians()));
   }
 
   /**
@@ -411,8 +417,12 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return Rotation2d of the yaw
    */
+  private Rotation2d getSensorYaw() {
+    return m_NavX.getRotation2d();
+  }
+  
   public Rotation2d getChassisYaw() {
-    return m_NavX.getRotation2d().minus(this.FieldAngleOffset);
+    return getPose().getRotation();
   }
 
   /**
@@ -435,7 +445,12 @@ public class Drivetrain extends SubsystemBase {
   public void resetFieldOrientation() {
     // do not need to invert because the navx rotation2D call returns a NWU
     // coordsys!
-    this.FieldAngleOffset = m_NavX.getRotation2d();
+    //this.FieldAngleOffset = m_NavX.getRotation2d();
+    Rotation2d RedorBlue_Zero = new Rotation2d();
+    if (DriverStation.getAlliance() == Alliance.Red) {
+      RedorBlue_Zero.plus(Rotation2d.fromDegrees(180));
+    }
+    resetPose(new Pose2d(getPose().getTranslation(),RedorBlue_Zero));
   }
 
   public double getPodVelocity(int podID) {
@@ -502,8 +517,8 @@ public class Drivetrain extends SubsystemBase {
     
       
     // update encoders
-    this.poseEstimator.update(getChassisYaw(), getSwerveModulePositions());
-    this.odom.update(getChassisYaw(), getSwerveModulePositions());
+    this.poseEstimator.update(getSensorYaw(), getSwerveModulePositions());
+    this.odom.update(getSensorYaw(), getSwerveModulePositions());
     
     // This method will be called once per scheduler every 500ms
     
