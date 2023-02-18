@@ -139,6 +139,7 @@ public class Drivetrain extends SubsystemBase {
   NetworkTable vision;
   private boolean hasvisionsubed = false;
   NetworkTableEntry vision_pose;
+  Pose2d last_pose = new Pose2d();
   double lastVisionTimeStamp = 0.0;
   private final DrivetrainIO io;
   // private final DrivetrainIOInputs inputs = new DrivetrainIOInputs();
@@ -356,7 +357,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return odom.getPoseMeters();
+    return poseEstimator.getEstimatedPosition();
   }
 
   public void resetPose(Pose2d pose) {
@@ -495,12 +496,7 @@ public class Drivetrain extends SubsystemBase {
     
     //update the pose estimator with correct timestamped values
     
-    for (NetworkTableValue v:  vision_pose.readQueue()){
-      double[] vision_pose_array=v.getDoubleArray();
-      Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-      poseEstimator.addVisionMeasurement(cam_pose, v.getTime());
-      SmartDashboard.putNumber("camX",cam_pose.getX());
-    }
+
     
 
     //testing new limelight command
@@ -515,12 +511,26 @@ public class Drivetrain extends SubsystemBase {
 
     //   SmartDashboard.putNumber("camX",cam_pose.getX());
     // }
-    
+    last_pose = odom.getPoseMeters();
       
     // update encoders
     this.poseEstimator.update(getSensorYaw(), getSwerveModulePositions());
     this.odom.update(getSensorYaw(), getSwerveModulePositions());
     
+    for (NetworkTableValue v:  vision_pose.readQueue()){
+      double[] vision_pose_array=v.getDoubleArray();
+      Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+      if(cam_pose.getTranslation().minus(poseEstimator.getEstimatedPosition().getTranslation()).getNorm() < 1.5){
+        Transform2d diff = last_pose.minus(odom.getPoseMeters());
+        double norm = Math.abs(diff.getRotation().getRadians()) + diff.getTranslation().getNorm();
+        if(norm > .01 && !(getPose().getX() > 4.8 && getPose().getX() < 11.5)){
+          poseEstimator.addVisionMeasurement(cam_pose, Timer.getFPGATimestamp() - (15.0/100.0));
+        }
+      }
+      System.out.println("cam_pose"+cam_pose.getX());
+      SmartDashboard.putNumber("camX",cam_pose.getX());
+      SmartDashboard.putNumber("camY",cam_pose.getY());
+    }
     // This method will be called once per scheduler every 500ms
     
     this.arraytrack++;

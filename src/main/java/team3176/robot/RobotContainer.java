@@ -6,6 +6,8 @@ package team3176.robot;
 
 import team3176.robot.constants.*;
 
+import java.io.File;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -15,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -87,7 +90,15 @@ public class RobotContainer {
     }
 
     m_autonChooser = new SendableChooser<>();
-    m_autonChooser.setDefaultOption("Auto: ExitTarmac", m_M);
+    String[] auto_names = {"cube_balance","speed_cube_3", "speed_cube_4", "2_cube_balance"};
+    File paths = new File(Filesystem.getDeployDirectory(), "pathplanner");
+    for (File f:paths.listFiles()){
+      if(!f.isDirectory()){
+       String s = f.getName().split(".",1)[0];
+       m_autonChooser.addOption(s, s);
+      }
+    }
+    //m_autonChooser.setDefaultOption("cube", "cube_balance");
     SmartDashboard.putData("Auton Choice", m_autonChooser);
 
     configureButtonBindings();
@@ -163,12 +174,12 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    //String chosen = m_autonChooser.getSelected();
+    String chosen = m_autonChooser.getSelected();
 
     
-    PathPlannerAuto PPSwerveauto = new PathPlannerAuto("2_cube_balance");
+    PathPlannerAuto PPSwerveauto = new PathPlannerAuto(chosen);
     System.out.println("auto");
-    return PPSwerveauto.getauto().andThen(new AutoBalance());
+    return PPSwerveauto.getauto();
   }
 
   

@@ -30,14 +30,14 @@ public class PathPlannerAuto {
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("print", new PrintCommand("action!"));
         eventMap.put("cube", new WaitCommand(1.0));
-        eventMap.put("autoBalance", new AutoBalance());
+        eventMap.put("autoBalance", new AutoBalance().andThen(new SwerveDefense()));
         // eventMap.put("intakeDown", new IntakeDown());
         // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
             driveSubsystem::getPose,
             driveSubsystem::resetPose,
             DrivetrainConstants.DRIVE_KINEMATICS,
-            new PIDConstants(7.0,0.0,0.0),
+            new PIDConstants(5.0,0.0,0.0),
             new PIDConstants(1.5,0.0,0.0),
             driveSubsystem::setModuleStates,
             eventMap,
