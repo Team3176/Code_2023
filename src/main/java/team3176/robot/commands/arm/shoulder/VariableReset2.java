@@ -28,7 +28,7 @@ public class VariableReset2 extends CommandBase {
 
   @Override
   public void execute() {
-    ArmConstants.isLimitSwitch = 0;
+    ArmConstants.wasLimitSwitchPressed = 0;
   }
 
 

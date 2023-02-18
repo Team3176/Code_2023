@@ -19,7 +19,7 @@ public final class ArmConstants {
     public static final int SHOULDER_FALCON_CAN_ID = 6; //STOP TOUCHING THE GD CAN IDS
     public static final int SHOULDER_EXTENDED_LIMIT_CHAN = 1; //PLEASE!!!
     public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2; //GREAT HEAVENS >:|
-    public static int isLimitSwitch;
+    public static int wasLimitSwitchPressed;
     public static int SHOULDER_POSITION;
     //Elbow
     public static final int ELBOW_FALCON_CAN_ID = 52;
@@ -32,7 +32,7 @@ public final class ArmConstants {
     public static final double HIGH_POSITION = 300;
     public static final double MID_POSITION = 600;
     public static final double FLOOR_POSITION = 900;
-
+    public static int PidTime;
     //Wrist
     public static final int WRIST_FALCON_CAN_ID = 50;
 
@@ -51,7 +51,7 @@ public final class ArmConstants {
     //public static final String kShuffleboardPercentName1 = "ArmShoulder%Set";
 
     // Constant order: P, I, D, FF, IZone
-    public static final double[][] Shoulder_PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
+    public static final double[][] Shoulder_PIDFConstants = { { 0.1, 0.0025, 0.0, 0.0, 1 } };
     public static final double[][] Elbow_PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
     
     NetworkTableInstance inst = NetworkTableInstance.getDefault();

@@ -23,7 +23,7 @@ public class ShoulderClockwise extends CommandBase {
 
   @Override
   public void initialize() {
-    ArmConstants.isLimitSwitch = 0;
+    ArmConstants.wasLimitSwitchPressed = 0;
   }
 
   @Override

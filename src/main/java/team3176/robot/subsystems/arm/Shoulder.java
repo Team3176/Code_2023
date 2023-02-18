@@ -121,12 +121,12 @@ public class Shoulder extends SubsystemBase {
   public void setMotorCWithLimiterBound(ControlMode mode, double set) //setMotorC = set motor clockwise
   {
     //System.out.println("fuck");
-      if (extendLimiter.get() == true && ArmConstants.isLimitSwitch == 0) {
+      if (extendLimiter.get() == true && ArmConstants.wasLimitSwitchPressed == 0) {
         jointMotor.set(ControlMode.PercentOutput, -0.3);
      } else {
        if (!extendLimiter.get()) {
           jointMotor.set(ControlMode.PercentOutput, 0.1);
-          ArmConstants.isLimitSwitch = 1;
+          ArmConstants.wasLimitSwitchPressed = 1;
         } else {
           jointMotor.set(ControlMode.PercentOutput, 0);
       }
@@ -135,47 +135,73 @@ public class Shoulder extends SubsystemBase {
   public void setMotorACWithLimiterBound(ControlMode mode, double set) //setMotorAC = set motor anticlockwise (counterclockwise)
   {
     //System.out.println("fuck");
-      if (retractLimiter.get() == true && ArmConstants.isLimitSwitch == 0) {
+      if (retractLimiter.get() == true && ArmConstants.wasLimitSwitchPressed == 0) {
         jointMotor.set(ControlMode.PercentOutput, 0.3);
      } else {
        if (!retractLimiter.get()) {
           jointMotor.set(ControlMode.PercentOutput, -0.1);
-          ArmConstants.isLimitSwitch = 1;
+          ArmConstants.wasLimitSwitchPressed = 1;
         } else {
           jointMotor.set(ControlMode.PercentOutput, 0);
       }
     }
   }
-  public void setMotorPIDWithLimiterBound(ControlMode mode, double set) //setMotorC = set motor clockwise
+  public void setMotorPIDWithLimiterBound(ControlMode mode, double set)
   {
-    //System.out.println("fuck");
-    if (extendLimiter.get() == true && retractLimiter.get() == true && ArmConstants.isLimitSwitch == 0) 
-    {
-      jointMotor.set(ControlMode.Position, ArmConstants.SHOULDER_POSITION);
-    } 
-    else if (extendLimiter.get() == false && retractLimiter.get() == true && ArmConstants.isLimitSwitch == 0) 
-    {
-      if (extendLimiter.get() == false && ArmConstants.isLimitSwitch == 0) 
-      {
+    if (extendLimiter.get() == true && retractLimiter.get() == true && ArmConstants.wasLimitSwitchPressed == 0) {
+      x = 1;
+    } else if (extendLimiter.get() == true && retractLimiter.get() == true && ArmConstants.wasLimitSwitchPressed == 1) {
+      x = 2;
+    } else if (extendLimiter.get() == false && retractLimiter.get() == true && ArmConstants.wasLimitSwitchPressed == 0) {
+      x = 3;
+    } else if (extendLimiter.get() == false && retractLimiter.get() == true && ArmConstants.wasLimitSwitchPressed == 1) {
+      x = 4;
+    } else if (extendLimiter.get() == true && retractLimiter.get() == false && ArmConstants.wasLimitSwitchPressed == 0) {
+      x = 5;
+    } else if (extendLimiter.get() == true && retractLimiter.get() == false && ArmConstants.wasLimitSwitchPressed == 1) {
+      x = 6;
+    } else if (extendLimiter.get() == false && retractLimiter.get() == false && ArmConstants.wasLimitSwitchPressed == 0) {
+      x = 7; //BAD
+    } else if (extendLimiter.get() == false && retractLimiter.get() == false && ArmConstants.wasLimitSwitchPressed == 1) {
+      x = 8; //BAD
+    }
+    switch (x) {
+      case 1: //Nothing is or was pressed
+        jointMotor.set(ControlMode.Position, ArmConstants.SHOULDER_POSITION);
+        if (ArmConstants.PidTime == 5) {System.out.println(1);}
+        break;
+      case 2: //Nothing is pressed, something was pressed
+        jointMotor.set(ControlMode.PercentOutput, 0);
+        if (ArmConstants.PidTime == 5) {System.out.println(2);}
+        break;
+      case 3: //EL pressed, nothing was pressed
+        ArmConstants.wasLimitSwitchPressed = 1;
         jointMotor.set(ControlMode.PercentOutput, 0.1);
-        ArmConstants.isLimitSwitch = 1;
-      } 
-      else 
-      {
-        jointMotor.set(ControlMode.PercentOutput, 0);
-      }
-    } 
-    else if (extendLimiter.get() == true && retractLimiter.get() == false && ArmConstants.isLimitSwitch == 0) 
-    {
-      if (retractLimiter.get() == false && ArmConstants.isLimitSwitch == 0) 
-      {
+        if (ArmConstants.PidTime == 5) {System.out.println(3);}
+        break;
+      case 4: //EL pressed, something was pressed
+        //how
+        if (ArmConstants.PidTime == 5) {System.out.println(4);}
+        break;
+      case 5: //RL pressed, nothing was pressed
+        ArmConstants.wasLimitSwitchPressed = 1;
         jointMotor.set(ControlMode.PercentOutput, -0.1);
-        ArmConstants.isLimitSwitch = 1;
-      } 
-      else 
-      {
+        if (ArmConstants.PidTime == 5) {System.out.println(5);}
+        break;
+      case 6: //RL pressed, something was pressed
+        //how
+        if (ArmConstants.PidTime == 5) {System.out.println(6);}
+        break;
+      case 7: //Both pressed, nothing was pressed
+        //BAD CASE!! Stop motor immediately
         jointMotor.set(ControlMode.PercentOutput, 0);
-      }
+        if (ArmConstants.PidTime == 5) {System.out.println(7);}
+        break;
+      case 8: //Both pressed, something was pressed
+        //BAD CASE!! Stop motor immediately
+        jointMotor.set(ControlMode.PercentOutput, 0);
+        if (ArmConstants.PidTime == 5) {System.out.println(8);}
+        break;
     }
   }
 

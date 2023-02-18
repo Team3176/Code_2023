@@ -15,7 +15,6 @@ public class ShoulderPID extends CommandBase {
   public String mode = "";
   Shoulder m_Andrew = Shoulder.getInstance();
   private double set;
-  private int PidTime;
   //private static ExtendArm instance;
 
   public ShoulderPID() {
@@ -24,19 +23,19 @@ public class ShoulderPID extends CommandBase {
 
   @Override
   public void initialize() {
-    ArmConstants.isLimitSwitch = 0;
-    PidTime = 0;
+    ArmConstants.wasLimitSwitchPressed = 0;
+    ArmConstants.PidTime = 0;
   }
 
   @Override
   public void execute() {
     ArmConstants.SHOULDER_POSITION = 0;
     m_Andrew.setMotorPIDWithLimiterBound(ControlMode.Position, ArmConstants.SHOULDER_POSITION); //Andrew is actually really smart
-    if (PidTime == 5) {
-      System.out.println("Shoulder position:  " + m_Andrew.getCurrentPosition());
-      PidTime = 0;
+    if (ArmConstants.PidTime == 5) {
+      //System.out.println("Shoulder position:  " + m_Andrew.getCurrentPosition());
+      ArmConstants.PidTime = 0;
     } else {
-      PidTime++;
+      ArmConstants.PidTime++;
     }
 
     //System.out.println("Extend Limiter:  " + m_Andrew.getExtendLimiter());
