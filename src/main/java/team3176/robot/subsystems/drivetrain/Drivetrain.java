@@ -420,7 +420,7 @@ public class Drivetrain extends SubsystemBase {
   private Rotation2d getSensorYaw() {
     return m_NavX.getRotation2d();
   }
-  
+
   public Rotation2d getChassisYaw() {
     return getPose().getRotation();
   }
@@ -482,11 +482,11 @@ public class Drivetrain extends SubsystemBase {
     dblPub.set(3.0);
     
     vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue");
-    double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
-    //System.out.println(vision_pose_array[0]);
-    Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-    //poseEstimator.addVisionMeasurement(cam_pose,  Timer.getFPGATimestamp() - (15) / 1000);
-    SmartDashboard.putNumber("camX",cam_pose.getX());
+    // double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
+    // //System.out.println(vision_pose_array[0]);
+    // Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+    // //poseEstimator.addVisionMeasurement(cam_pose,  Timer.getFPGATimestamp() - (15) / 1000);
+    
     //commenting out because I believe we should update the limelight apriltag map
 
     // double xoffset = Units.inchesToMeters(285.16+ 40.45);
@@ -495,11 +495,12 @@ public class Drivetrain extends SubsystemBase {
     
     //update the pose estimator with correct timestamped values
     
-    // for (NetworkTableValue v:  vision_pose.readQueue()){
-    //   double[] vision_pose_array=v.getDoubleArray();
-    //   Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-    //   poseEstimator.addVisionMeasurement(cam_pose, v.getTime());
-    // }
+    for (NetworkTableValue v:  vision_pose.readQueue()){
+      double[] vision_pose_array=v.getDoubleArray();
+      Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+      poseEstimator.addVisionMeasurement(cam_pose, v.getTime());
+      SmartDashboard.putNumber("camX",cam_pose.getX());
+    }
     
 
     //testing new limelight command
@@ -529,6 +530,8 @@ public class Drivetrain extends SubsystemBase {
     
     SmartDashboard.putNumber("odomx", getPose().getX());
     SmartDashboard.putNumber("odomy", getPose().getY());
+    SmartDashboard.putNumber("v_odomx", poseEstimator.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("v_odomy", poseEstimator.getEstimatedPosition().getY());
     SmartDashboard.putBoolean("Turbo", isTurboOn);
     // SmartDashboard.putBoolean("Defense", currentDriveMode == driveMode.DEFENSE);
   }
