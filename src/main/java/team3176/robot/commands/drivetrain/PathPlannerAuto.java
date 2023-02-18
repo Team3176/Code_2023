@@ -23,7 +23,7 @@ public class PathPlannerAuto {
     public PathPlannerAuto(String autoPathName) {
 
         Drivetrain driveSubsystem = Drivetrain.getInstance();
-        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(autoPathName, new PathConstraints(3, 1));
+        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(autoPathName, new PathConstraints(2, 0.7));
         System.out.println("length" + pathGroup.size());
         // This is just an example event map. It would be better to have a constant, global event map
         // in your code that will be used by all path following commands.
@@ -37,7 +37,7 @@ public class PathPlannerAuto {
             driveSubsystem::getPose,
             driveSubsystem::resetPose,
             DrivetrainConstants.DRIVE_KINEMATICS,
-            new PIDConstants(5.0,0.0,0.0),
+            new PIDConstants(7.0,0.0,0.0),
             new PIDConstants(1.5,0.0,0.0),
             driveSubsystem::setModuleStates,
             eventMap,
