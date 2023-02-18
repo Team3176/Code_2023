@@ -23,13 +23,14 @@ public class PathPlannerAuto {
     public PathPlannerAuto(String autoPathName) {
 
         Drivetrain driveSubsystem = Drivetrain.getInstance();
-        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(autoPathName, new PathConstraints(1.5, 0.5));
+        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(autoPathName, new PathConstraints(3, 1));
         System.out.println("length" + pathGroup.size());
         // This is just an example event map. It would be better to have a constant, global event map
         // in your code that will be used by all path following commands.
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("print", new PrintCommand("action!"));
-        eventMap.put("cube", new WaitCommand(5.0));
+        eventMap.put("cube", new WaitCommand(1.0));
+        eventMap.put("autoBalance", new AutoBalance());
         // eventMap.put("intakeDown", new IntakeDown());
         // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
@@ -37,7 +38,7 @@ public class PathPlannerAuto {
             driveSubsystem::resetPose,
             DrivetrainConstants.DRIVE_KINEMATICS,
             new PIDConstants(5.0,0.0,0.0),
-            new PIDConstants(1.0,0.0,0.0),
+            new PIDConstants(1.5,0.0,0.0),
             driveSubsystem::setModuleStates,
             eventMap,
             true,

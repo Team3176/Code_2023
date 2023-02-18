@@ -233,7 +233,7 @@ public class Drivetrain extends SubsystemBase {
   public void drive(double forwardCommand, double strafeCommand, double spinCommand, coordType type) {
     ChassisSpeeds speed = new ChassisSpeeds(forwardCommand, strafeCommand, spinCommand);
     if (type == coordType.FIELD_CENTRIC) {
-      speed = ChassisSpeeds.fromFieldRelativeSpeeds(speed, this.getChassisYaw());
+      speed = ChassisSpeeds.fromFieldRelativeSpeeds(speed, this.getPose().getRotation());
     }
     p_drive(speed.vxMetersPerSecond, speed.vyMetersPerSecond, speed.omegaRadiansPerSecond);
   }

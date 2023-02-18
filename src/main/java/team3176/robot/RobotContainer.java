@@ -101,6 +101,7 @@ public class RobotContainer {
     m_Controller.getTransStick_Button4().onFalse(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.FIELD_CENTRIC), m_Drivetrain));
 
     m_Controller.getRotStick_Button1().onTrue(new WaitCommand(2));
+    m_Controller.getRotStick_Button8().onTrue(new InstantCommand( () -> m_Drivetrain.resetFieldOrientation(), m_Drivetrain));
     //m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_SwerveSubsystem));
     //m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
