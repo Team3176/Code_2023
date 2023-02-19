@@ -16,34 +16,27 @@ import edu.wpi.first.networktables.Topic;
 public final class ArmConstants {
 
     //Shoulder 
-    public static final int SHOULDER_FALCON_CAN_ID = 6; //STOP TOUCHING THE GD CAN IDS
-    public static final int SHOULDER_EXTENDED_LIMIT_CHAN = 1; //PLEASE!!!
-    public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2; //GREAT HEAVENS >:|
+    public static final int SHOULDER_FALCON_CAN_ID = 6; 
+    public static final int SHOULDER_EXTENDED_LIMIT_CHAN = 1;
+    public static final int SHOULDER_RETRACTED_LIMIT_CHAN = 2; 
+
+    //TODO: This file is for Constants only. Move non-constants to the appropriate classes
     public static int wasLimitSwitchPressed;
     public static int SHOULDER_POSITION;
-    //Elbow
-    public static final int ELBOW_FALCON_CAN_ID = 52;
-    public static final int ELBOW_FLOOR_LIMIT_CHAN = 3;
-    public static final int ELBOW_PICKUP_LIMIT_CHAN = 4;
 
-    //Elbow Discrete Positions
-    //TODO: These values are just for testing purposes only
-    public static final double PICKUP_POSITION = 0;
-    public static final double HIGH_POSITION = 300;
-    public static final double MID_POSITION = 600;
-    public static final double FLOOR_POSITION = 900;
     public static int PidTime;
+
     //Wrist
-    public static final int WRIST_FALCON_CAN_ID = 50;
+    public static final int WRIST_MOTOR_CID = 50;
 
     //PID 
+    public static final int kSlotIdx = 0;
     public static final int kPIDLoopIndex = 0;
     public static final int kTimeoutMS = 30;
 
     public static final double kRampRate = 0.5; // seconds from 0 to full speed...?
 
     public static final int TICKS_PER_REV = 4096;
-
     public static final int MAX_TICKSPER100MS = 2048; 
 
     //public static final String kShuffleboardPercentName1 = "Flywheel1%Set";
@@ -52,12 +45,46 @@ public final class ArmConstants {
 
     // Constant order: P, I, D, FF, IZone
     public static final double[][] Shoulder_PIDFConstants = { { 0.1, 0.0025, 0.0, 0.0, 1 } };
-    public static final double[][] Elbow_PIDFConstants = { { 0.25, 0.0, 0.0, 0.0, 0.0 } };
     
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("datatable");
 
     Topic genericTopic = inst.getTopic("/datatable/X");
     DoubleTopic dblTopic = new DoubleTopic(genericTopic);
+
+
+    //ELBOW Constants
+
+    public static final int ELBOW_FALCON_MOTOR_CID = 52;
+    public static final int ELBOW_CANCODER_CID = 11;
+	public static final int ELBOW_PICKUP_LIMIT_CHAN = 3;
+	public static final int ELBOW_FLOOR_LIMIT_CHAN = 4;
+
+	//Elbow Discrete Positions
+    //TODO: These values are just for testing purposes only
+    public static final double ELBOW_PICKUP_POSITION_DEG = 30;
+    public static final double ELBOW_HIGH_POSITION_DEG = 120;
+    public static final double ELBOW_MID_POSITION_DEG = 180;
+    public static final double ELBOW_FLOOR_POSITION_DEG = 330;
+
+    //Encoder Ticks/360degrees
+    public static final double ELBOW_TICKS_PER_DEG_ROTATION = 11.37778; 	// 4096/360
+    public static final double ELBOW_MOTOR_TO_ROTATING_SHAFT_RATIO = 0.7; //1.42;   // 38/54
+    public static final double ELBOW_CANCODER_MAGNET_OFFSET_DEG = -324.0;   //Test fixture with 0deg at the bottom
+
+    static final double ELBOW_MM_FEED_FORWARD = 0.047164592;
+	static final double ELBOW_MM_CRUISE_VELOCITY = 5423;
+	static final double ELBOW_MM_ACCELERATION = 7230;
+	static final int    ELBOW_MM_SMOOTHING = 0;
+
+    /**
+	 * Gains used in Motion Magic, to be adjusted accordingly
+     * Gains(kp, ki, kd, kf, izone, peak output);
+     */
+    //static final Gains kGains = new Gains(0.069, 0.0, 0.0, ELBOW_MM_FEED_FORWARD, 0, 1.0);
+
+    // Constant order: P, I, D, FF, IZone
+    public static final double[] Elbow_PIDFConstants = { 0.069, 0.0, 0.0, ELBOW_MM_FEED_FORWARD, 0.0 };
+
 
 }

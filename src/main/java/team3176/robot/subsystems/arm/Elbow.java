@@ -35,14 +35,14 @@ public enum ElbowState {
 }
 
 public Elbow() {
-    elbowMotor = new TalonFX(ArmConstants.ELBOW_FALCON_CAN_ID);
+    elbowMotor = new TalonFX(ArmConstants.ELBOW_FALCON_MOTOR_CID);
 
     currentState = ElbowState.UNKNOWN;
     currentStateString = "Unknown";
 
     System.out.println("Elbow Motor has been constructed");
 
-    CANCoder elbowCANCoder = new CANCoder(11,"rio");
+    CANCoder elbowCANCoder = new CANCoder(ArmConstants.ELBOW_CANCODER_CID,"rio");
     elbowMotor.configFactoryDefault();
     elbowMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, ArmConstants.kPIDLoopIndex, ArmConstants.kTimeoutMS);
     elbowMotor.configRemoteFeedbackFilter(elbowCANCoder, 0 , ArmConstants.kTimeoutMS);
@@ -50,17 +50,11 @@ public Elbow() {
     elbowMotor.setSensorPhase(true);
     elbowMotor.configClosedloopRamp(ArmConstants.kRampRate, ArmConstants.kTimeoutMS);
     
-    elbowMotor.config_kP(0, ArmConstants.Elbow_PIDFConstants[0][0]);
-    elbowMotor.config_kI(0, ArmConstants.Elbow_PIDFConstants[0][1]);
-    elbowMotor.config_kD(0, ArmConstants.Elbow_PIDFConstants[0][2]);
-    elbowMotor.config_kF(0, ArmConstants.Elbow_PIDFConstants[0][3]);
-    elbowMotor.config_IntegralZone(0, ArmConstants.Elbow_PIDFConstants[0][4]);
-
-    elbowMotor.config_kP(0, ArmConstants.Elbow_PIDFConstants[0][0]);
-    elbowMotor.config_kI(0, ArmConstants.Elbow_PIDFConstants[0][1]);
-    elbowMotor.config_kD(0, ArmConstants.Elbow_PIDFConstants[0][2]);
-    elbowMotor.config_kF(0, ArmConstants.Elbow_PIDFConstants[0][3]);
-    elbowMotor.config_IntegralZone(0, ArmConstants.Elbow_PIDFConstants[0][4]);
+    elbowMotor.config_kP(0, ArmConstants.Elbow_PIDFConstants[0]);
+    elbowMotor.config_kI(0, ArmConstants.Elbow_PIDFConstants[1]);
+    elbowMotor.config_kD(0, ArmConstants.Elbow_PIDFConstants[2]);
+    elbowMotor.config_kF(0, ArmConstants.Elbow_PIDFConstants[3]);
+    elbowMotor.config_IntegralZone(0, ArmConstants.Elbow_PIDFConstants[4]);
 
 
 }
@@ -70,25 +64,25 @@ public void setElbowState(ElbowState targetState ) {
 
     switch (targetState) {
         case PICKUP:
-            elbowMotor.set(ControlMode.Position, ArmConstants.PICKUP_POSITION);
+            elbowMotor.set(ControlMode.Position, ArmConstants.ELBOW_PICKUP_POSITION_DEG);
             currentState = targetState;
             currentStateString = "Pickup";
             break;
        
         case HIGH:
-            elbowMotor.set(ControlMode.Position, ArmConstants.HIGH_POSITION);
+            elbowMotor.set(ControlMode.Position, ArmConstants.ELBOW_HIGH_POSITION_DEG);
             currentState = targetState;
             currentStateString = "High";
             break;
 
         case MID:
-            elbowMotor.set(ControlMode.Position, ArmConstants.MID_POSITION);
+            elbowMotor.set(ControlMode.Position, ArmConstants.ELBOW_MID_POSITION_DEG);
             currentState= targetState;
             currentStateString = "mid";
             break;
 
         case FLOOR:
-            elbowMotor.set(ControlMode.Position, ArmConstants.FLOOR_POSITION);
+            elbowMotor.set(ControlMode.Position, ArmConstants.ELBOW_FLOOR_POSITION_DEG);
             currentState = targetState;
             currentStateString = "Floor";
             break;

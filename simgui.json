@@ -4,5 +4,15 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auton Choice": "String Chooser"
     }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      }
+    }
   }
 }
