@@ -5,6 +5,7 @@
 package team3176.robot.commands.arm.elbow;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import team3176.robot.constants.ArmConstants;
 import team3176.robot.subsystems.arm.Elbow;
 import team3176.robot.subsystems.arm.Elbow.ElbowState;
 
@@ -29,6 +30,9 @@ public class ElbowPickup extends CommandBase {
   @Override
   public void execute() {
     m_Elbow.setElbowState(ElbowState.PICKUP);
+    
+			m_Elbow.setPosition(ArmConstants.ELBOW_PICKUP_POSITION_DEG);
+
   }
 
 

@@ -5,6 +5,7 @@
 package team3176.robot.commands.arm.elbow;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import team3176.robot.constants.ArmConstants;
 import team3176.robot.subsystems.arm.Elbow;
 import team3176.robot.subsystems.arm.Elbow.ElbowState;
 
@@ -28,6 +29,8 @@ public class ElbowMid extends CommandBase {
 
   @Override
   public void execute() {
+    m_Elbow.setPosition(ArmConstants.ELBOW_MID_POSITION_DEG);
+    
     m_Elbow.setElbowState(ElbowState.MID);
   }
 

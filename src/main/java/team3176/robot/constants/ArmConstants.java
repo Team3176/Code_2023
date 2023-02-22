@@ -72,10 +72,15 @@ public final class ArmConstants {
     public static final double ELBOW_MOTOR_TO_ROTATING_SHAFT_RATIO = 0.7; //1.42;   // 38/54
     public static final double ELBOW_CANCODER_MAGNET_OFFSET_DEG = -324.0;   //Test fixture with 0deg at the bottom
 
-    static final double ELBOW_MM_FEED_FORWARD = 0.047164592;
-	static final double ELBOW_MM_CRUISE_VELOCITY = 5423;
-	static final double ELBOW_MM_ACCELERATION = 7230;
-	static final int    ELBOW_MM_SMOOTHING = 0;
+    public static final double ELBOW_MM_FEED_FORWARD = 0.04716;
+	public static final double ELBOW_MM_CRUISE_VELOCITY = 2000;
+	public static final double ELBOW_MM_ACCELERATION = 3000;
+	public static final int    ELBOW_MM_SMOOTHING = 0;
+
+    public static final double ELBOW_MAX_GRAVITY_FF = 0.07;
+    
+    public static final double ELBOW_SOFT_LIMIT_PICKUP_DEG = 20;  
+	public static final double ELBOW_SOFT_LIMIT_FLOOR_DEG = 340; 
 
     /**
 	 * Gains used in Motion Magic, to be adjusted accordingly
@@ -84,7 +89,7 @@ public final class ArmConstants {
     //static final Gains kGains = new Gains(0.069, 0.0, 0.0, ELBOW_MM_FEED_FORWARD, 0, 1.0);
 
     // Constant order: P, I, D, FF, IZone
-    public static final double[] Elbow_PIDFConstants = { 0.069, 0.0, 0.0, ELBOW_MM_FEED_FORWARD, 0.0 };
+    public static final double[] Elbow_PIDFConstants = { 0.125, 0.0, 0.0, ELBOW_MM_FEED_FORWARD, 0.1 };
 
 
 }
