@@ -15,7 +15,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 public class ElbowMid extends CommandBase {
   public String mode = "";
   Elbow m_Elbow = Elbow.getInstance();
-  private int set;
+
   //private static ExtendArm instance;
 
   public ElbowMid() {
@@ -30,7 +30,6 @@ public class ElbowMid extends CommandBase {
   @Override
   public void execute() {
     m_Elbow.setPosition(ArmConstants.ELBOW_MID_POSITION_DEG);
-    
     m_Elbow.setElbowState(ElbowState.MID);
   }
 

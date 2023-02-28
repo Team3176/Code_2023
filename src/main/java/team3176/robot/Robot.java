@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import jdk.jfr.Enabled;
 
 import org.littletonrobotics.junction.inputs.*;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -36,6 +37,7 @@ import org.littletonrobotics.junction.io.LogSocketServer;
 //import team3176.robot.commands.drivetrain.SwerveDrive;
 import team3176.robot.constants.LoggerConstants;
 import team3176.robot.constants.RobotConstants;
+import team3176.robot.subsystems.arm.Elbow;
 //import team3176.robot.subsystems.*;
 //import team3176.robot.subsystems.angler.Angler;
 //import team3176.robot.subsystems.clarke.Clarke;
@@ -68,6 +70,7 @@ public class Robot extends LoggedRobot {
   //private Drivetrain m_Drivetrain;
   //private Controller m_Controller;
   private Vision m_Vision;
+  //private Elbow m_Elbow;
   //private Clarke m_Clarke;
   //private AnalogPotentiometer m_pressureSensor;
 
@@ -199,6 +202,7 @@ public class Robot extends LoggedRobot {
     //m_Drivetrain = Drivetrain.getInstance();
     //m_Controller = Controller.getInstance();
     m_Vision = Vision.getInstance();
+    //m_Elbow = Elbow.getInstance();
 
     //m_pressureSensor = new AnalogPotentiometer(1/*, scale [ex: 250], offset[ex: -25]*/);
 
@@ -288,6 +292,13 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    /*With motionmagic control it's very important that we properly account
+    for the pit crew moving the arm while the robot is disabled. If this
+    occurs the arm will attempt to go to the set position when the robot
+    is re-enabled.
+    */
+    //m_Elbow.initArmPosition();
 
     /*
     m_Intake.mode = "teleop";

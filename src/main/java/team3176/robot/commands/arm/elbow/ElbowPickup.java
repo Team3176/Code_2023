@@ -15,7 +15,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 public class ElbowPickup extends CommandBase {
   public String mode = "";
   Elbow m_Elbow = Elbow.getInstance();
-  private int set;
+
   //private static ExtendArm instance;
 
   public ElbowPickup() {
@@ -29,10 +29,9 @@ public class ElbowPickup extends CommandBase {
 
   @Override
   public void execute() {
-    m_Elbow.setElbowState(ElbowState.PICKUP);
-    
-			m_Elbow.setPosition(ArmConstants.ELBOW_PICKUP_POSITION_DEG);
 
+    m_Elbow.setPosition(ArmConstants.ELBOW_PICKUP_POSITION_DEG);
+    m_Elbow.setElbowState(ElbowState.PICKUP);
   }
 
 

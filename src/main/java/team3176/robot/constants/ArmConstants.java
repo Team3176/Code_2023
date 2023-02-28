@@ -54,7 +54,6 @@ public final class ArmConstants {
 
 
     //ELBOW Constants
-
     public static final int ELBOW_FALCON_MOTOR_CID = 52;
     public static final int ELBOW_CANCODER_CID = 11;
 	public static final int ELBOW_PICKUP_LIMIT_CHAN = 3;

@@ -15,10 +15,10 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 public class ElbowHigh extends CommandBase {
   public String mode = "";
   Elbow m_Elbow = Elbow.getInstance();
-  private int set;
+
   //private static ExtendArm instance;
 
-  public void ElbowPickup() {
+  public ElbowHigh() {
     addRequirements(m_Elbow);
   }
 

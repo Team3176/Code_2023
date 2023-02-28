@@ -56,6 +56,7 @@ public Elbow() {
 
     currentState = ElbowState.UNKNOWN;
     currentStateString = "Unknown";
+    robotInit();
 
     System.out.println("Elbow Motor has been constructed");
 
@@ -129,36 +130,48 @@ public void robotInit() {
     elbowMotor.configMotionCruiseVelocity(ArmConstants.ELBOW_MM_CRUISE_VELOCITY, ArmConstants.kTimeoutMS);
     elbowMotor.configMotionAcceleration(ArmConstants.ELBOW_MM_ACCELERATION, ArmConstants.kTimeoutMS);
 
-    /* Zero the sensor once on robot boot up */
-    double initialTickPosition = ArmConstants.ELBOW_TICKS_PER_DEG_ROTATION*ArmConstants.ELBOW_MOTOR_TO_ROTATING_SHAFT_RATIO*elbowCANCoder.getAbsolutePosition();
+    //Initialize the arm position on startup
+    initArmPosition();
+}
+
+
+public void initArmPosition() {
+
+    /* Set the integrated sensor to the arm position. Translate from the CANCoder
+    degrees to ticks in the Talon. Execute once on robot boot up and any time
+    that it could be out of sync (like when enabling the robot)
+     */
+    double initialTickPosition = ArmConstants.ELBOW_TICKS_PER_DEG_ROTATION
+                                        * ArmConstants.ELBOW_MOTOR_TO_ROTATING_SHAFT_RATIO
+                                        * elbowCANCoder.getAbsolutePosition();
     elbowMotor.setSelectedSensorPosition(initialTickPosition, ArmConstants.kPIDLoopIndex, ArmConstants.kTimeoutMS);
     System.out.println("initialTickPosition:"+initialTickPosition);
 }
+
 /* Set the desired discrete position of the elbow */
 public void setElbowState(ElbowState targetState ) {
 
     switch (targetState) {
         case PICKUP:
-            elbowMotor.set(ControlMode.Position, (team3176.robot.constants.ArmConstants.ELBOW_PICKUP_POSITION_DEG));
+//            elbowMotor.set(ControlMode.Position, (team3176.robot.constants.ArmConstants.ELBOW_PICKUP_POSITION_DEG));
             currentState = targetState;
             currentStateString = "Pickup";
             break;
        
         case HIGH:
-            elbowMotor.set(ControlMode.Position,(team3176.robot.constants.ArmConstants.ELBOW_HIGH_POSITION_DEG));
+  //          elbowMotor.set(ControlMode.Position,(team3176.robot.constants.ArmConstants.ELBOW_HIGH_POSITION_DEG));
             currentState = targetState;
             currentStateString = "High";
             break;
 
         case MID:
-            elbowMotor.set(ControlMode.Position, (team3176.robot.constants.ArmConstants.ELBOW_MID_POSITION_DEG));
+//            elbowMotor.set(ControlMode.Position, (team3176.robot.constants.ArmConstants.ELBOW_MID_POSITION_DEG));
             currentState= targetState;
-            currentStateString = "mid";
+            currentStateString = "Mid";
             break;
 
         case FLOOR:
-        OOR:
-            elbowMotor.set(ControlMode.Position, (team3176.robot.constants.ArmConstants.ELBOW_FLOOR_POSITION_DEG));
+ //           elbowMotor.set(ControlMode.Position, (team3176.robot.constants.ArmConstants.ELBOW_FLOOR_POSITION_DEG));
             currentState = targetState;
             currentStateString = "Floor";
             break;

@@ -179,20 +179,23 @@ public class RobotContainer {
     // SwervePodsAzimuthGoHome());
 
     //m_Controller.operator.a().whileTrue(new ExtendArm());
-    m_Controller.operator.a().whileTrue(new ShoulderPID());
+    //m_Controller.operator.a().whileTrue(new ShoulderPID());
     //m_Controller.operator.a().onTrue(new VariableReset());
     //m_Controller.operator.a().whileTrue(new ShoulderClockwise());
-    m_Controller.operator.a().onFalse(new VariableReset());
+   // m_Controller.operator.a().onFalse(new VariableReset());
     //m_Controller.operator.b().onTrue(new VariableReset());
     //m_Controller.operator.b().whileTrue(new ShoulderCounterClockwise());
     //m_Controller.operator.b().onFalse(new VariableReset());
     //m_Controller.operator.b().onFalse(new VariableReset());
     //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
-    //m_Controller.operator.a().whileTrue(new ElbowPickup());
-    //m_Controller.operator.b().whileTrue(new ElbowHigh());
-    //m_Controller.operator.x().whileTrue(new ElbowMid());
+
+   m_Controller.operator.a().onTrue(new ElbowPickup());
+   m_Controller.operator.x().onTrue(new ElbowHigh());
+   m_Controller.operator.y().onTrue(new ElbowMid());
+   m_Controller.operator.b().onTrue(new ElbowFloor());
+
     //m_Controller.operator.x().whileTrue(new ImGonnaHaveAnAneurysm());
-   //m_Controller.operator.y().whileTrue(new ElbowFloor());
+
     //m_Controller.operator.y().whileTrue(new ShootSetVals());
     //m_Controller.operator.b().onTrue(new FlywheelStop());
 
@@ -210,8 +213,10 @@ public class RobotContainer {
     //m_Controller.operator.a().and(m_Controller.operator.leftBumper()).and(m_Controller.operator.rightBumper()).onTrue(new ClimbPistonEngage());
     //m_Controller.operator.y().and(m_Controller.operator.leftBumper()).and(m_Controller.operator.rightBumper()).onTrue(new AnglerZeroAtMax());
 
-    //m_Controller.operator.povUp().onTrue(new VisionDriverCam());
-    //m_Controller.operator.povDown().onTrue(new VisionZoom2x());
+    //m_Controller.operator.povDown().onTrue(new ElbowPickup());
+    //m_Controller.operator.povLeft().onTrue(new ElbowHigh());
+    //m_Controller.operator.povRight().onTrue(new ElbowFloor());
+    //m_Controller.operator.povUp().onTrue(new ElbowMid());
 
     //m_Controller.operator.povLeft().onTrue(new ExtendArm());
     m_Controller.operator.povLeft().whileTrue(new ShoulderClockwise());
