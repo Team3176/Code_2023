@@ -220,8 +220,8 @@ public static Elbow getInstance() {
        double arbitraryFF = 0.0;
 
        if (clawIsHoldingCone()) {
-           int kMeasuredPosHorizontal = 840; //Position measured when arm is horizontal
-           
+             //motor sensor position measured when arm is horizontal 
+            double kMeasuredPosHorizontal = ArmConstants.ELBOW_TICKS_PER_DEG_ROTATION * ArmConstants.ELBOW_MOTOR_TO_ROTATING_SHAFT_RATIO * 270.0; 
            double currentPos = elbowMotor.getSelectedSensorPosition();
            double degrees = (currentPos - kMeasuredPosHorizontal) / 
                                    ArmConstants.ELBOW_TICKS_PER_DEG_ROTATION * ArmConstants.ELBOW_MOTOR_TO_ROTATING_SHAFT_RATIO;

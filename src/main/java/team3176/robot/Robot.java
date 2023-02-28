@@ -70,7 +70,7 @@ public class Robot extends LoggedRobot {
   //private Drivetrain m_Drivetrain;
   //private Controller m_Controller;
   private Vision m_Vision;
-  //private Elbow m_Elbow;
+  private Elbow m_Elbow;
   //private Clarke m_Clarke;
   //private AnalogPotentiometer m_pressureSensor;
 
@@ -202,7 +202,7 @@ public class Robot extends LoggedRobot {
     //m_Drivetrain = Drivetrain.getInstance();
     //m_Controller = Controller.getInstance();
     m_Vision = Vision.getInstance();
-    //m_Elbow = Elbow.getInstance();
+    m_Elbow = Elbow.getInstance();
 
     //m_pressureSensor = new AnalogPotentiometer(1/*, scale [ex: 250], offset[ex: -25]*/);
 
@@ -260,6 +260,7 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_Elbow.initArmPosition();
     /*
     m_Intake.mode = "auto";
     m_Indexer.mode = "auto";
@@ -298,7 +299,7 @@ public class Robot extends LoggedRobot {
     occurs the arm will attempt to go to the set position when the robot
     is re-enabled.
     */
-    //m_Elbow.initArmPosition();
+    m_Elbow.initArmPosition();
 
     /*
     m_Intake.mode = "teleop";
@@ -320,6 +321,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void testInit() {
+    m_Elbow.initArmPosition();
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     /*
@@ -353,7 +355,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    m_Elbow.initArmPosition();
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
