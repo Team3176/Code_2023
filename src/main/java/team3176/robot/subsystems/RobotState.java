@@ -197,7 +197,7 @@ public class RobotState extends SubsystemBase {
       if (i == 50)
       {
         setGPHoldingState();
-        setIntakeHoldingState();
+        //setIntakeHoldingState();
       }
     }
   }

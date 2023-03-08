@@ -30,7 +30,7 @@ public class Arm extends SubsystemBase {
     
     
     public Arm() {
-        System.out.println("Gobblygook");
+        //System.out.println("Gobblygook");
         //m_wrist = new JointSparkmax(6);
         //m_reverseLimit = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
         //m_forwardLimit = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);

@@ -5,6 +5,7 @@
 package team3176.robot.commands.arm.elbow;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import team3176.robot.constants.ArmConstants;
 import team3176.robot.subsystems.arm.Elbow;
 import team3176.robot.subsystems.arm.Elbow.ElbowState;
 
@@ -14,7 +15,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 public class ElbowFloor extends CommandBase {
   public String mode = "";
   Elbow m_Elbow = Elbow.getInstance();
-  private int set;
+
   //private static ExtendArm instance;
 
   public ElbowFloor() {
@@ -28,6 +29,7 @@ public class ElbowFloor extends CommandBase {
 
   @Override
   public void execute() {
+    m_Elbow.setPosition(ArmConstants.ELBOW_FLOOR_POSITION_DEG);
     m_Elbow.setElbowState(ElbowState.FLOOR);
   }
 

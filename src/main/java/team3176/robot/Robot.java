@@ -36,6 +36,7 @@ import org.littletonrobotics.junction.io.LogSocketServer;
 //import team3176.robot.commands.drivetrain.SwerveDrive;
 import team3176.robot.constants.LoggerConstants;
 import team3176.robot.constants.RobotConstants;
+import team3176.robot.subsystems.arm.Elbow;
 //import team3176.robot.subsystems.*;
 //import team3176.robot.subsystems.angler.Angler;
 //import team3176.robot.subsystems.clarke.Clarke;
@@ -45,7 +46,6 @@ import team3176.robot.constants.RobotConstants;
 //import team3176.robot.subsystems.flywheel.Flywheel;
 //import team3176.robot.subsystems.indexer.Indexer;
 import team3176.robot.subsystems.intake.Intake;
-//import team3176.robot.subsystems.intake.Intake;
 import team3176.robot.subsystems.vision.Vision;
 import team3176.robot.util.God.Alert;
 import team3176.robot.util.God.Alert.AlertType;
@@ -68,8 +68,9 @@ public class Robot extends LoggedRobot {
   //private Feeder m_Feeder;
   //private Drivetrain m_Drivetrain;
   //private Controller m_Controller;
-  //private Vision m_Vision;
+  private Vision m_Vision;
   //private Clarke m_Clarke;
+  private Elbow m_Elbow;
   //private AnalogPotentiometer m_pressureSensor;
 
    private final Alert logNoFileAlert =
@@ -126,53 +127,53 @@ public class Robot extends LoggedRobot {
     }
     */
 
-    // if(LoggerConstants.IS_LOGGER_ACTIVE) {
-    //   setUseTiming(isReal()); // Run as fast as possible during replay
-    //   Logger m_logger = Logger.getInstance();
-    //   m_logger.recordMetadata("Robot", RobotConstants.getRobot().toString());
-    //   m_logger.recordMetadata("TuningMode", Boolean.toString(RobotConstants.tuningMode));
-    //   m_logger.recordMetadata("RuntimeType", getRuntimeType().toString());
-    //   m_logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-    //   m_logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-    //   m_logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-    //   m_logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
-    //   m_logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-    //   switch (BuildConstants.DIRTY) {
-    //     case 0:
-    //       m_logger.recordMetadata("GitDirty", "All changes committed");
-    //       break;
-    //     case 1:
-    //       m_logger.recordMetadata("GitDirty", "Uncomitted changes");
-    //       break;
-    //     default:
-    //       m_logger.recordMetadata("GitDirty", "Unknown");
-    //       break;
-    //   }
+    if(LoggerConstants.IS_LOGGER_ACTIVE) {
+      setUseTiming(isReal()); // Run as fast as possible during replay
+      Logger m_logger = Logger.getInstance();
+      m_logger.recordMetadata("Robot", RobotConstants.getRobot().toString());
+      m_logger.recordMetadata("TuningMode", Boolean.toString(RobotConstants.tuningMode));
+      m_logger.recordMetadata("RuntimeType", getRuntimeType().toString());
+      m_logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+      m_logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+      m_logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+      m_logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+      m_logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+      switch (BuildConstants.DIRTY) {
+        case 0:
+          m_logger.recordMetadata("GitDirty", "All changes committed");
+          break;
+        case 1:
+          m_logger.recordMetadata("GitDirty", "Uncomitted changes");
+          break;
+        default:
+          m_logger.recordMetadata("GitDirty", "Unknown");
+          break;
+      }
 
-    //   switch (RobotConstants.getMode()) {
-    //     case REAL:
-    //       String folder = RobotConstants.logFolders.get(RobotConstants.getRobot());
-    //       if (folder != null) {
-    //         m_logger.addDataReceiver(new WPILOGWriter(folder));
-    //       } else {
-    //         logNoFileAlert.set(true);
-    //       }
-    //       m_logger.addDataReceiver(new NT4Publisher());
-    //       LoggedPowerDistribution.getInstance();
-    //       break;
+      switch (RobotConstants.getMode()) {
+        case REAL:
+          String folder = RobotConstants.logFolders.get(RobotConstants.getRobot());
+          if (folder != null) {
+            m_logger.addDataReceiver(new WPILOGWriter(folder));
+          } else {
+            logNoFileAlert.set(true);
+          }
+          m_logger.addDataReceiver(new NT4Publisher());
+          LoggedPowerDistribution.getInstance();
+          break;
 
-    //      case SIM:
-    //       m_logger.addDataReceiver(new NT4Publisher());
-    //       break;
+         case SIM:
+          m_logger.addDataReceiver(new NT4Publisher());
+          break;
 
-    //   case REPLAY:
-    //     String path = LogFileUtil.findReplayLog();
-    //     m_logger.setReplaySource(new WPILOGReader(path));
-    //     m_logger.addDataReceiver(
-    //         new WPILOGWriter(LogFileUtil.addPathSuffix(path, "_sim")));
-    //     break;
-    // }
-    // m_logger.start();
+      case REPLAY:
+        String path = LogFileUtil.findReplayLog();
+        m_logger.setReplaySource(new WPILOGReader(path));
+        m_logger.addDataReceiver(
+            new WPILOGWriter(LogFileUtil.addPathSuffix(path, "_sim")));
+        break;
+    }
+    m_logger.start();
 
 
       /* OLD 2022 AdvantageKit Code for logging.  TODO: RIPE FOR REMOVAL 
@@ -199,12 +200,12 @@ public class Robot extends LoggedRobot {
     //m_Feeder = Feeder.getInstance();
     //m_Drivetrain = Drivetrain.getInstance();
     //m_Controller = Controller.getInstance();
-    // m_Vision = Vision.getInstance();
+    m_Vision = Vision.getInstance();
+    m_Elbow = Elbow.getInstance();
 
     //m_pressureSensor = new AnalogPotentiometer(1/*, scale [ex: 250], offset[ex: -25]*/);
-    // m_Vision = Vision.getInstance();
 
-    // m_Vision.setActivePipeline(2);
+    m_Vision.setActivePipeline(2);
     //m_pressureSensor = new AnalogPotentiometer(1/*, scale [ex: 250], offset[ex: -25]*/);
 
     // m_Vision.setActivePipeline(2);
@@ -214,6 +215,7 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard
     m_robotContainer = new RobotContainer();
+    }
   }
 
   /**
@@ -237,10 +239,10 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putBoolean("High Climb", m_pressureSensor.get() > 60);
     */
 
-    // if (LoggerConstants.IS_CMD_SCH_LOGGING_ACTIVE) {
-    //   Logger.getInstance().recordOutput("Scheduler Commands", NetworkTableInstance.getDefault()
-    //     .getEntry("/LiveWindow/Ungrouped/Scheduler/Names").getStringArray(new String[] {}));
-    // }
+    if (LoggerConstants.IS_CMD_SCH_LOGGING_ACTIVE) {
+      Logger.getInstance().recordOutput("Scheduler Commands", NetworkTableInstance.getDefault()
+        .getEntry("/LiveWindow/Ungrouped/Scheduler/Names").getStringArray(new String[] {}));
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -271,7 +273,7 @@ public class Robot extends LoggedRobot {
     
     //m_robotContainer.AutonInitRobotCentric();
     //*m_robotContainer.TelopInitFieldCentric();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command
     if (m_autonomousCommand != null) {
@@ -347,7 +349,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    m_Elbow.initArmPosition();
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override

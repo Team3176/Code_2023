@@ -10,22 +10,30 @@ import team3176.robot.commands.arm.elbow.ElbowHigh;
 import team3176.robot.commands.arm.elbow.ElbowMid;
 import team3176.robot.commands.arm.elbow.ElbowPickup;
 import team3176.robot.commands.arm.shoulder.ExtendArm;
+import team3176.robot.commands.arm.shoulder.ImGonnaHaveAnAneurysm;
 import team3176.robot.commands.arm.shoulder.ShoulderClockwise;
 import team3176.robot.commands.arm.shoulder.ShoulderCounterClockwise;
+import team3176.robot.commands.arm.shoulder.ShoulderPID;
+import team3176.robot.commands.arm.shoulder.VariableReset;
+import team3176.robot.commands.arm.shoulder.VariableReset2;
 import team3176.robot.commands.claw.ClawClose;
 import team3176.robot.commands.claw.ClawIdle;
 import team3176.robot.commands.claw.ClawOpen;
 import team3176.robot.constants.*;
+
+import java.io.File;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -41,6 +49,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import team3176.robot.commands.drivetrain.*;
 import team3176.robot.commands.intake.IntakeExtendSpin;
 import team3176.robot.commands.intake.IntakeRetractSpinot;
+import team3176.robot.commands.vision.pipeSwitch;
+import team3176.robot.commands.vision.switchLED;
 //import team3176.robot.commands.util.*;
 import team3176.robot.constants.LoggerConstants;
 //import team3176.robot.subsystems.*;
@@ -60,6 +70,7 @@ import team3176.robot.subsystems.intake.Intake;
 import team3176.robot.subsystems.vision.*;
 //import team3176.robot.subsystems.intake.Intake;
 import team3176.robot.subsystems.vision.Vision;
+import team3176.robot.subsystems.vision.Vision.LEDState;
 //import team3176.robot.commands.arm.*;
 //import team3176.robot.commands.autons.*;
 //import team3176.robot.commands.claw.*;
@@ -77,34 +88,27 @@ public class RobotContainer {
   private final Drivetrain m_Drivetrain;
   //private final CoordSys m_CoordSys;
   //private final Arm m_Arm;
-  //private final Claw m_Claw;
   //private final CommandXboxController m_Controller;
-  //           private final PowerDistribution m_PDH;
   //private final Compressor m_Compressor;
   //private final SwerveSubsystem m_SwerveSubsystem;
   //private final CoordSys m_CoordSys;
-  //private final Arm m_Arm;
   private final Claw m_Claw;
   private final Controller m_Controller;
-  //private final Vision m_Vision;
   // private final Compressor m_Compressor;
   //private final SwerveSubsystem m_SwerveSubsystem;
   //private final CoordSys m_CoordSys;
   //private final Arm m_Arm;
-  // private final Claw m_Claw;
   //private final Drivetrain m_Drivetrain;
   private final Intake m_Intake;
   // private final Signalling m_Signalling;
-  // private final Vision m_Vision;
-  // private final Intake m_Intake;
+  private final Vision m_Vision;
   private final Signalling m_Signalling;
-  // private final Vision m_Vision;
   private final Shoulder m_Shoulder;
   private final Elbow m_Elbow;
 
   private SendableChooser<String> m_autonChooser;
-  private static final String m_B = "s_Block";
-  private static final String m_M = "s_ExitTarmac";
+    // private static final String m_B = "s_Block";
+    private static final String m_M = "s_ExitTarmac";
 
   public RobotContainer() {
     //m_Arm = Arm.getInstance();
@@ -114,36 +118,15 @@ public class RobotContainer {
     m_Controller = Controller.getInstance();
     m_Drivetrain = Drivetrain.getInstance();
     //m_Arm = Arm.getInstance();
-    //m_Vision = Vision.getInstance();
-    // m_Claw = Claw.getInstance();
-    //m_Arm = Arm.getInstance();
-    //m_Claw = Claw.getInstance();
-    //m_Drivetrain= Drivetrain.getInstance();
-    // m_Intake = Intake.getInstance();
+    m_Vision = Vision.getInstance();
     m_Signalling = Signalling.getInstance();
-    // m_Vision = Vision.getInstance();
     m_Intake = Intake.getInstance();
-    // m_Signalling = Signalling.getInstance();
-    // m_Vision = Vision.getInstance();
-    //m_Intake = Intake.getInstance();
     //m_Signalling = Signalling.getInstance();
 
     // m_PDH = new PowerDistribution(1, ModuleType.kRev);
     //m_PDH.clearStickyFaults();
 
     //m_Compressor = new Compressor(PneumaticsModuleType.REVPH);
-    // TODO: ADD A WAY TO CLEAR STICKY FAULTS
-    // m_Compressor.disable(); //HAVE TO TELL IT TO DISABLE FOR IT TO NOT AUTO START
-    //m_Compressor.enableDigital();
-
-    //m_Intake = Intake.getInstance();
-    //m_Vision = Vision.getInstance();
-  
-
-    //m_PDH = new PowerDistribution(1, ModuleType.kRev);
-    //m_PDH.clearStickyFaults();
-
-    //m_Compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     // TODO: ADD A WAY TO CLEAR STICKY FAULTS
     // m_Compressor.disable(); //HAVE TO TELL IT TO DISABLE FOR IT TO NOT AUTO START
     //m_Compressor.enableDigital();
@@ -160,15 +143,17 @@ public class RobotContainer {
       m_Drivetrain.setDefaultCommand(new SwerveDriveTune());
     }
 
-    /* 
     m_autonChooser = new SendableChooser<>();
-    m_autonChooser.setDefaultOption("Auto: ExitTarmac", m_M);
-    m_autonChooser.addOption("Auto: Block", m_B);
-    m_autonChooser.addOption("Auto: Move 6in Left", m_6L);
-    m_autonChooser.addOption("Auto: TrapRotate", m_TrapRot);
-    m_autonChooser.addOption("Auto: TrapDriveRotate", m_TrapDriveRot);
+    String[] auto_names = {"cube_balance","speed_cube_3", "speed_cube_4", "2_cube_balance"};
+    File paths = new File(Filesystem.getDeployDirectory(), "pathplanner");
+    for (File f:paths.listFiles()){
+      if(!f.isDirectory()){
+       String s = f.getName().split(".",1)[0];
+       m_autonChooser.addOption(s, s);
+      }
+    }
+    //m_autonChooser.setDefaultOption("cube", "cube_balance");
     SmartDashboard.putData("Auton Choice", m_autonChooser);
-    */
 
     configureButtonBindings();
   }
@@ -179,13 +164,18 @@ public class RobotContainer {
     m_Controller.operator.a().onTrue(new IntakeExtendSpin());
     m_Controller.operator.b().onTrue(new IntakeRetractSpinot());
     
-    
+    // m_Controller.operator.a().onTrue(new switchLED());
+    // m_Controller.operator.b().onTrue(new pipeSwitch(0));
+    // m_Controller.operator.y().onTrue(new pipeSwitch(1));
     
     m_Controller.getTransStick_Button1().whileTrue(new InstantCommand( () -> m_Drivetrain.setTurbo(true), m_Drivetrain));
     m_Controller.getTransStick_Button1().onFalse(new InstantCommand( () -> m_Drivetrain.setTurbo(false), m_Drivetrain));
     m_Controller.getTransStick_Button3().whileTrue(new SwerveDefense());
     m_Controller.getTransStick_Button4().whileTrue(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.ROBOT_CENTRIC), m_Drivetrain));
     m_Controller.getTransStick_Button4().onFalse(new InstantCommand( () -> m_Drivetrain.setCoordType(coordType.FIELD_CENTRIC), m_Drivetrain));
+
+    m_Controller.getRotStick_Button1().onTrue(new WaitCommand(2));
+    m_Controller.getRotStick_Button8().onTrue(new InstantCommand( () -> m_Drivetrain.resetFieldOrientation(), m_Drivetrain));
 
     m_Controller.getRotStick_Button1().onTrue(new teleopPath());
     m_Controller.operator.a().whileTrue(new alert());
@@ -204,7 +194,9 @@ public class RobotContainer {
 
     //m_Controller.operator.a().whileTrue(new ExtendArm());
     m_Controller.operator.a().whileTrue(new ShoulderClockwise());
+    m_Controller.operator.povLeft().onFalse(new VariableReset());
     m_Controller.operator.b().whileTrue(new ShoulderCounterClockwise());
+    m_Controller.operator.povRight().onFalse(new VariableReset());
     //m_Controller.operator.a().onFalse(new DelayedIntakeStop());
     //m_Controller.operator.a().whileTrue(new ElbowPickup());
     //m_Controller.operator.b().whileTrue(new ElbowHigh());
@@ -252,12 +244,12 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
-    //String chosen = m_autonChooser.getSelected();
+    String chosen = m_autonChooser.getSelected();
 
     
-    //PathPlannerAuto PPSwerveauto = new PathPlannerAuto();
-    return new WaitCommand(1.0);
+    PathPlannerAuto PPSwerveauto = new PathPlannerAuto(chosen);
+    System.out.println("auto");
+    return PPSwerveauto.getauto();
   }
 
-  
 }

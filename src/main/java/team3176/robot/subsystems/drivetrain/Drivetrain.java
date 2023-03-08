@@ -45,9 +45,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -137,6 +139,7 @@ public class Drivetrain extends SubsystemBase {
   NetworkTable vision;
   private boolean hasvisionsubed = false;
   NetworkTableEntry vision_pose;
+  Pose2d last_pose = new Pose2d();
   double lastVisionTimeStamp = 0.0;
   private final DrivetrainIO io;
   // private final DrivetrainIOInputs inputs = new DrivetrainIOInputs();
@@ -170,14 +173,14 @@ public class Drivetrain extends SubsystemBase {
 
     m_NavX = new AHRS(SPI.Port.kMXP);
 
-    odom = new SwerveDriveOdometry(DrivetrainConstants.DRIVE_KINEMATICS, this.getChassisYaw(),
+    odom = new SwerveDriveOdometry(DrivetrainConstants.DRIVE_KINEMATICS, this.getSensorYaw(),
         new SwerveModulePosition[] {
             podFR.getPosition(),
             podFL.getPosition(),
             podBL.getPosition(),
             podBR.getPosition()
         }, new Pose2d(0.0, 0.0, new Rotation2d()));
-    poseEstimator = new SwerveDrivePoseEstimator(DrivetrainConstants.DRIVE_KINEMATICS, getChassisYaw(),
+    poseEstimator = new SwerveDrivePoseEstimator(DrivetrainConstants.DRIVE_KINEMATICS, getSensorYaw(),
         getSwerveModulePositions(), odom.getPoseMeters());
     // TODO: update covariance matrix for vision
     // poseEstimator.setVisionMeasurementStdDevs(new MatBuilder<>(Nat.N3(),
@@ -233,7 +236,11 @@ public class Drivetrain extends SubsystemBase {
   public void drive(double forwardCommand, double strafeCommand, double spinCommand, coordType type) {
     ChassisSpeeds speed = new ChassisSpeeds(forwardCommand, strafeCommand, spinCommand);
     if (type == coordType.FIELD_CENTRIC) {
-      speed = ChassisSpeeds.fromFieldRelativeSpeeds(speed, this.getChassisYaw());
+      Rotation2d fieldOffset = this.getPose().getRotation();
+      if (DriverStation.getAlliance() == Alliance.Red) {
+        fieldOffset.plus(Rotation2d.fromDegrees(180));
+      }
+      speed = ChassisSpeeds.fromFieldRelativeSpeeds(speed, fieldOffset);
     }
     p_drive(speed.vxMetersPerSecond, speed.vyMetersPerSecond, speed.omegaRadiansPerSecond);
   }
@@ -271,7 +278,7 @@ public class Drivetrain extends SubsystemBase {
     // this.spinCommand *= 2;
     // }
     if (isSpinLocked) {
-      this.spinCommand = spinLockPID.calculate(getChassisYaw().getDegrees(), spinLockAngle.getDegrees());
+      this.spinCommand = spinLockPID.calculate(getSensorYaw().getDegrees(), spinLockAngle.getDegrees());
     }
 
     calculateNSetPodPositions(this.forwardCommand, this.strafeCommand, this.spinCommand);
@@ -350,16 +357,16 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return odom.getPoseMeters();
+    return poseEstimator.getEstimatedPosition();
   }
 
   public void resetPose(Pose2d pose) {
-    odom.resetPosition(getChassisYaw(), new SwerveModulePosition[] {
+    odom.resetPosition(getSensorYaw(), new SwerveModulePosition[] {
         podFR.getPosition(),
         podFL.getPosition(),
         podBL.getPosition(),
         podBR.getPosition() }, pose);
-    poseEstimator.resetPosition(getChassisYaw(), new SwerveModulePosition[] {
+    poseEstimator.resetPosition(getSensorYaw(), new SwerveModulePosition[] {
           podFR.getPosition(),
           podFL.getPosition(),
           podBL.getPosition(),
@@ -392,18 +399,18 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void setSpinLockAngle() {
-    this.spinLockAngle = getChassisYaw();
+    this.spinLockAngle = getSensorYaw();
   }
 
   /**
    * 
    * @return returns the chassis yaw wrapped between -pi and pi
    */
-  public Rotation2d getChassisYawWrapped() {
+  public Rotation2d getSensorYawWrapped() {
     // its ugly but rotation2d is continuos but I imagine most of our applications
     // we want it bounded between -pi and pi
     return Rotation2d
-        .fromRadians(MathUtil.angleModulus(m_NavX.getRotation2d().minus(this.FieldAngleOffset).getRadians()));
+        .fromRadians(MathUtil.angleModulus(getPose().getRotation().getRadians()));
   }
 
   /**
@@ -411,14 +418,40 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return Rotation2d of the yaw
    */
-  public Rotation2d getChassisYaw() {
-    return m_NavX.getRotation2d().minus(this.FieldAngleOffset);
+  private Rotation2d getSensorYaw() {
+    return m_NavX.getRotation2d();
   }
+
+  public Rotation2d getChassisYaw() {
+    return getPose().getRotation();
+  }
+
+  /**
+   * 
+   * @return navx pitch -180 to 180 around the X axis of the Navx
+   */
+  public double getChassisPitch() {
+    return m_NavX.getPitch();
+  }
+
+  /**
+   * 
+   * @return navx roll -180 to 180 around the X axis of the Navx
+   */
+  public double getChassisRoll() {
+    return m_NavX.getRoll();
+  }
+
 
   public void resetFieldOrientation() {
     // do not need to invert because the navx rotation2D call returns a NWU
     // coordsys!
-    this.FieldAngleOffset = m_NavX.getRotation2d();
+    //this.FieldAngleOffset = m_NavX.getRotation2d();
+    Rotation2d RedorBlue_Zero = new Rotation2d();
+    if (DriverStation.getAlliance() == Alliance.Red) {
+      RedorBlue_Zero.plus(Rotation2d.fromDegrees(180));
+    }
+    resetPose(new Pose2d(getPose().getTranslation(),RedorBlue_Zero));
   }
 
   public double getPodVelocity(int podID) {
@@ -450,11 +483,11 @@ public class Drivetrain extends SubsystemBase {
     dblPub.set(3.0);
     
     vision_pose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_wpiblue");
-    double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
-    //System.out.println(vision_pose_array[0]);
-    Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-    //poseEstimator.addVisionMeasurement(cam_pose,  Timer.getFPGATimestamp() - (15) / 1000);
-    SmartDashboard.putNumber("camX",cam_pose.getX());
+    // double[] vision_pose_array=vision_pose.getDoubleArray(new double[6]);
+    // //System.out.println(vision_pose_array[0]);
+    // Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+    // //poseEstimator.addVisionMeasurement(cam_pose,  Timer.getFPGATimestamp() - (15) / 1000);
+    
     //commenting out because I believe we should update the limelight apriltag map
 
     // double xoffset = Units.inchesToMeters(285.16+ 40.45);
@@ -463,11 +496,7 @@ public class Drivetrain extends SubsystemBase {
     
     //update the pose estimator with correct timestamped values
     
-    // for (NetworkTableValue v:  vision_pose.readQueue()){
-    //   double[] vision_pose_array=v.getDoubleArray();
-    //   Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-    //   poseEstimator.addVisionMeasurement(cam_pose, v.getTime());
-    // }
+
     
 
     //testing new limelight command
@@ -482,12 +511,26 @@ public class Drivetrain extends SubsystemBase {
 
     //   SmartDashboard.putNumber("camX",cam_pose.getX());
     // }
-    
+    last_pose = odom.getPoseMeters();
       
     // update encoders
-    this.poseEstimator.update(getChassisYaw(), getSwerveModulePositions());
-    this.odom.update(getChassisYaw(), getSwerveModulePositions());
+    this.poseEstimator.update(getSensorYaw(), getSwerveModulePositions());
+    this.odom.update(getSensorYaw(), getSwerveModulePositions());
     
+    for (NetworkTableValue v:  vision_pose.readQueue()){
+      double[] vision_pose_array=v.getDoubleArray();
+      Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+      if(cam_pose.getTranslation().minus(poseEstimator.getEstimatedPosition().getTranslation()).getNorm() < 1.5){
+        Transform2d diff = last_pose.minus(odom.getPoseMeters());
+        double norm = Math.abs(diff.getRotation().getRadians()) + diff.getTranslation().getNorm();
+        if(norm > .01 && !(getPose().getX() > 4.8 && getPose().getX() < 11.5)){
+          poseEstimator.addVisionMeasurement(cam_pose, Timer.getFPGATimestamp() - (15.0/100.0));
+        }
+      }
+      System.out.println("cam_pose"+cam_pose.getX());
+      SmartDashboard.putNumber("camX",cam_pose.getX());
+      SmartDashboard.putNumber("camY",cam_pose.getY());
+    }
     // This method will be called once per scheduler every 500ms
     
     this.arraytrack++;
@@ -497,6 +540,8 @@ public class Drivetrain extends SubsystemBase {
     
     SmartDashboard.putNumber("odomx", getPose().getX());
     SmartDashboard.putNumber("odomy", getPose().getY());
+    SmartDashboard.putNumber("v_odomx", poseEstimator.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("v_odomy", poseEstimator.getEstimatedPosition().getY());
     SmartDashboard.putBoolean("Turbo", isTurboOn);
     // SmartDashboard.putBoolean("Defense", currentDriveMode == driveMode.DEFENSE);
   }
