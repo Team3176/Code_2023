@@ -1,0 +1,11 @@
+Distance Area
+1ft 45
+2ft 13
+3ft 7
+4ft 4.5
+Distance Area (x2 Zoom)
+5ft 10
+Distance Area (x3 Zoom)
+6ft 15
+7ft 11
+8ft 9.5
