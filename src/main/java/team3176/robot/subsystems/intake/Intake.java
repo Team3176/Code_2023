@@ -36,7 +36,13 @@ import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import team3176.robot.subsystems.intake.IntakeIO;
+import org.littletonrobotics.junction.Logger;
+import team3176.robot.subsystems.intake.IntakeIO.IntakeIOInputs;
+
 public class Intake extends SubsystemBase {
+    private final IntakeIO io;
+    private final IntakeIOInputs inputs = new IntakeIOInputs();
     private TalonSRX backMotorControl = new TalonSRX(22);
     private TalonSRX frontMotorControl = new TalonSRX(23);
     private TalonFX rollermotor = new TalonFX(20);
@@ -55,7 +61,8 @@ public class Intake extends SubsystemBase {
     DoublePublisher XPub;
     DoublePublisher YPub;
   /** Creates a new Intake. */
-  public Intake(){
+  public Intake(IntakeIO io){
+    this.io = io;
     //dblSub = dblTopic.subscribe(0,PubSubOption.keepDuplicates(true), PubSubOption.pollStorage(10));
     //dblPub.setDefault(0.0);
     //dblPub = dblTopic.publish();
@@ -147,7 +154,7 @@ public class Intake extends SubsystemBase {
 
   public static Intake getInstance(){
     if ( instance == null ) {
-      instance = new Intake();
+      instance = new Intake(new IntakeIO() {});
     }
     return instance;
   }

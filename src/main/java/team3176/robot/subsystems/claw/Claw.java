@@ -22,10 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3176.robot.constants.IntakeConstants;
 import team3176.robot.subsystems.claw.ClawIO.ClawIOInputs;
 
-import edu.wpi.first.wpilibj.I2C;
-import com.revrobotics.ColorSensorV3;
-import edu.wpi.first.wpilibj.util.Color;
-
 public class Claw extends SubsystemBase {
   private DoubleSolenoid piston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
   //private DoubleSolenoid piston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.DSOLENOID2_FWD_CHAN, IntakeConstants.DSOLENOID2_REV_CHAN);
@@ -112,7 +108,9 @@ public class Claw extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.getInstance().processInputs("Claw", inputs);
     Logger.getInstance().recordOutput("Claw/Velocity", getClawVelocity());
-    Logger.getInstance().recordOutput("Claw/PistonState", getPistonState());
+    Logger.getInstance().recordOutput("Claw/isOpen", getClawOpen());
+    Logger.getInstance().recordOutput("Claw/isIdle", getClawIdle());
+    Logger.getInstance().recordOutput("Claw/isClose", getClawClose());
 
   }
 
@@ -124,16 +122,24 @@ public class Claw extends SubsystemBase {
     io.setVelocity(intakeVelocity);
   }
 
-  public void setPiston(boolean isExtend) {
-    io.setPiston(isExtend);
+  public void setClawState(boolean isOpen, boolean isClose, boolean isIdle) {
+    io.setClawState(isOpen, isClose, isIdle);
   }
 
   public double getClawVelocity() {
     return inputs.velocity;
   }
 
-  public boolean getPistonState() {
-    return inputs.isExtend;
+  public boolean getClawOpen() {
+    return inputs.isOpen;
+  }
+
+  public boolean getClawIdle() {
+    return inputs.isIdle;
+  }
+
+  public boolean getClawClose() {
+    return inputs.isClose;
   }
 
   @Override
