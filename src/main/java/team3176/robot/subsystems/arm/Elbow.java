@@ -280,6 +280,51 @@ public static Elbow getInstance() {
 
    }
 
+   /* Call this to determine if the forward direction limit switch connected to the 
+    * TalonFX is closed. 
+    */
+   public boolean isFwdLimitSwitchClosed()
+   {
+        boolean limitSwitchTriggered = false;
+        
+        if (elbowMotor.isFwdLimitSwitchClosed() == 1)
+        {
+            limitSwitchTriggered = true;
+            SmartDashboard.putString("ARM FwdLimitSwitch", "Closed");
+            System.out.println("Hardware TalonFX forward limit switch is CLOSED");
+        }
+        else 
+        {
+            limitSwitchTriggered = true;
+            SmartDashboard.putString("ARM FwdLimitSwitch", "Open");
+        }
+
+        return limitSwitchTriggered;
+   } 
+
+
+   /* Call this to determine if the reverse direction limit switch connected to the 
+    * TalonFX is closed. 
+    */
+   public boolean isRevLimitSwitchClosed()
+   {
+        boolean limitSwitchTriggered = false;
+        
+        if (elbowMotor.isFwdLimitSwitchClosed() == 1)
+        {
+            limitSwitchTriggered = true;
+            SmartDashboard.putString("ARM RevLimitSwitch", "Closed");
+            System.out.println("Hardware TalonFX reverse limit switch is CLOSED");
+        }
+        else 
+        {
+            limitSwitchTriggered = true;
+            SmartDashboard.putString("ARM RevLimitSwitch", "Open");
+        }
+
+        return limitSwitchTriggered;
+   } 
+
 
 }
 
