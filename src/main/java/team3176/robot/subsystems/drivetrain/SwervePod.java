@@ -2,6 +2,7 @@ package team3176.robot.subsystems.drivetrain;
 
 import java.util.Map;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import com.revrobotics.CANSparkMax;
@@ -111,9 +112,9 @@ public class SwervePod {
 
 
         
-      
+        
         m_turningPIDController2 = new PIDController(kP_Azimuth, kI_Azimuth, kD_Azimuth);
-        m_turningPIDController2.setTolerance(0.1);
+        m_turningPIDController2.setTolerance(4);
         m_turningPIDController2.enableContinuousInput(-180, 180);
 
         m_turningPIDController2.reset();
@@ -145,6 +146,7 @@ public class SwervePod {
         this.thrustController.configFactoryDefault();
         //this.azimuthController.restoreFactoryDefaults();
         this.azimuthController.setOpenLoopRampRate(0.5);
+        this.azimuthController.setSmartCurrentLimit(20);
         this.azimuthController.setInverted(true);
         //this.azimuthController.setClosedLoopRampRate(0.5);
         //this.azimuthController.burnFlash();
@@ -188,6 +190,7 @@ public class SwervePod {
      * @param desiredState 
      */
     public void set_module(SwerveModuleState desiredState) {
+        updateAzimuthAbsEncoder();  
         this.azimuthEncoderAbsPosition = azimuthEncoder.getAbsolutePosition();
         SwerveModuleState desired_optimized = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(this.azimuthEncoderAbsPosition));
         if (desiredState.speedMetersPerSecond > (-Math.pow(10,-10)) && desiredState.speedMetersPerSecond  < (Math.pow(10,-10))) {      
@@ -288,6 +291,14 @@ public class SwervePod {
         this.thrustController.configClosedloopRamp(0.5);   
     }
 
+    public void setThrustCoast() {
+        this.thrustController.setNeutralMode(NeutralMode.Coast);
+    }
+
+
+    public void setThrustBrake() {
+        this.thrustController.setNeutralMode(NeutralMode.Brake);
+    }
 
     public void initializeSmartDashboard() {
 

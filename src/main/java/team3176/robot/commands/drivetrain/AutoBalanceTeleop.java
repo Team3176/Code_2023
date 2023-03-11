@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import team3176.robot.subsystems.drivetrain.Drivetrain;
 import team3176.robot.subsystems.drivetrain.Drivetrain.driveMode;
 
-public class AutoBalance extends CommandBase {
+public class AutoBalanceTeleop extends CommandBase {
     private Drivetrain m_Drivetrain;
     private boolean isDone = false;
     private int num_balanced = 0;
-    public AutoBalance() {
+    public AutoBalanceTeleop() {
         m_Drivetrain = Drivetrain.getInstance();
         addRequirements(m_Drivetrain);
     }
@@ -18,7 +18,7 @@ public class AutoBalance extends CommandBase {
     public void initialize() {
         // TODO Auto-generated method stub
         m_Drivetrain.setBrakeMode();
-
+        num_balanced=0;
     }
     @Override
     public void execute() {
@@ -26,16 +26,16 @@ public class AutoBalance extends CommandBase {
 
         //Bang Bang controller! 
         double forward = 0.0;
-        double deadbandDegrees = 8;
+        double deadbandDegrees = 6;
         SmartDashboard.putNumber("pitch", m_Drivetrain.getChassisPitch());
         if(m_Drivetrain.getChassisPitch() > 0 + deadbandDegrees) {
-            forward = 0.37 * Math.pow(.96,num_balanced);
+            forward = 0.40 * Math.pow(.96,num_balanced);
         } else if(m_Drivetrain.getChassisPitch() < 0 - deadbandDegrees) {
-            forward = -0.37 * Math.pow(.96,num_balanced);
+            forward = -0.40 * Math.pow(.96,num_balanced);
         } else if(Math.abs(m_Drivetrain.getChassisPitch()) < 2){
             num_balanced ++;
         }
-        m_Drivetrain.drive(forward, 0, 0, Drivetrain.coordType.ROBOT_CENTRIC);
+        m_Drivetrain.drive(forward, 0, 0, Drivetrain.coordType.FIELD_CENTRIC);
     }
     @Override
     public void end(boolean interrupted) {
@@ -43,7 +43,7 @@ public class AutoBalance extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return Timer.getMatchTime() < 0.5 || num_balanced>10;
+        return false;
     }
 
 }

@@ -265,20 +265,10 @@ public class Drivetrain extends SubsystemBase {
   private void p_drive(double forwardCommand, double strafeCommand, double spinCommand) {
     this.spinCommandInit = spinCommand;
     this.forwardCommand = forwardCommand;
-    this.strafeCommand = strafeCommand; // TODO: The y is inverted because it is backwards for some reason, why?
+    this.strafeCommand = strafeCommand;
     this.spinCommand = spinCommand;
-    // System.out.println("forward: "+ forwardCommand + "strafe: " + strafeCommand +
-    // "spin: " + spinCommand);
-    // if (!isTurboOn) {
-    // this.forwardCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
-    // this.strafeCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
-    // //this.spinCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
-    // this.spinCommand *= DrivetrainConstants.NON_TURBO_PERCENT_OUT_CAP;
-    // } else {
-    // this.spinCommand *= 2;
-    // }
     if (isSpinLocked) {
-      this.spinCommand = spinLockPID.calculate(getSensorYaw().getDegrees(), spinLockAngle.getDegrees());
+      this.spinCommand = spinLockPID.calculate(getPoseYawWrapped().getDegrees(), spinLockAngle.getDegrees());
     }
 
     calculateNSetPodPositions(this.forwardCommand, this.strafeCommand, this.spinCommand);
@@ -406,7 +396,7 @@ public class Drivetrain extends SubsystemBase {
    * 
    * @return returns the chassis yaw wrapped between -pi and pi
    */
-  public Rotation2d getSensorYawWrapped() {
+  public Rotation2d getPoseYawWrapped() {
     // its ugly but rotation2d is continuos but I imagine most of our applications
     // we want it bounded between -pi and pi
     return Rotation2d
@@ -471,6 +461,18 @@ public class Drivetrain extends SubsystemBase {
     };
   }
 
+  public void setCoastMode() {
+    for (int idx = 0; idx < (pods.size()); idx++) {
+      pods.get(idx).setThrustCoast();
+    }
+  }
+
+  public void setBrakeMode() {
+    for (int idx = 0; idx < (pods.size()); idx++) {
+      pods.get(idx).setThrustBrake();
+    }
+  }
+
   /*
    * public ChassisSpeeds getChassisSpeed() {
    * return DrivetrainConstants.DRIVE_KINEMATICS.toChassisSpeeds(podFR.getState(),
@@ -516,21 +518,28 @@ public class Drivetrain extends SubsystemBase {
     // update encoders
     this.poseEstimator.update(getSensorYaw(), getSwerveModulePositions());
     this.odom.update(getSensorYaw(), getSwerveModulePositions());
+   
     
-    for (NetworkTableValue v:  vision_pose.readQueue()){
-      double[] vision_pose_array=v.getDoubleArray();
-      Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
-      if(cam_pose.getTranslation().minus(poseEstimator.getEstimatedPosition().getTranslation()).getNorm() < 1.5){
-        Transform2d diff = last_pose.minus(odom.getPoseMeters());
-        double norm = Math.abs(diff.getRotation().getRadians()) + diff.getTranslation().getNorm();
-        if(norm > .01 && !(getPose().getX() > 4.8 && getPose().getX() < 11.5)){
-          poseEstimator.addVisionMeasurement(cam_pose, Timer.getFPGATimestamp() - (15.0/100.0));
-        }
-      }
-      System.out.println("cam_pose"+cam_pose.getX());
-      SmartDashboard.putNumber("camX",cam_pose.getX());
-      SmartDashboard.putNumber("camY",cam_pose.getY());
-    }
+    // for (NetworkTableValue v:  vision_pose.readQueue()){
+    //   try {
+    //   double[] vision_pose_array = v.getDoubleArray();
+    //   Pose2d cam_pose =new Pose2d(vision_pose_array[0],vision_pose_array[1],Rotation2d.fromDegrees(vision_pose_array[5]));
+    //   if(cam_pose.getTranslation().minus(poseEstimator.getEstimatedPosition().getTranslation()).getNorm() < 1.5){
+    //     Transform2d diff = last_pose.minus(odom.getPoseMeters());
+    //     double norm = Math.abs(diff.getRotation().getRadians()) + diff.getTranslation().getNorm();
+    //     if(norm > .01 && !(getPose().getX() > 4.8 && getPose().getX() < 11.5)){
+    //       poseEstimator.addVisionMeasurement(cam_pose, Timer.getFPGATimestamp() - (15.0/100.0));
+    //     }
+    //   }
+    //   System.out.println("cam_pose"+cam_pose.getX());
+    //   SmartDashboard.putNumber("camX",cam_pose.getX());
+    //   SmartDashboard.putNumber("camY",cam_pose.getY());
+    // }
+    // catch (ClassCastException e) {
+    //   System.out.println("vision error" + e);
+    // }
+    // }
+    
     // This method will be called once per scheduler every 500ms
     
     this.arraytrack++;

@@ -36,13 +36,13 @@ public class teleopPath extends CommandBase{
         Pose2d pose = m_Drivetrain.getPose();
         double xposition = pose.getX();
         double yposition = pose.getY();
-        System.out.println("pose" + xposition + "," + yposition);
+        //System.out.println("pose" + xposition + "," + yposition);
         traj1 = PathPlanner.generatePath(
           new PathConstraints(1, 1), 
           new PathPoint(new Translation2d(xposition, yposition),new Rotation2d(0), pose.getRotation()), // position, heading
           new PathPoint(new Translation2d(xposition + 1,yposition),new Rotation2d(0), pose.getRotation()) // position, heading
         );
-        System.out.println("traj" + traj1.getTotalTimeSeconds());
+        //System.out.println("traj" + traj1.getTotalTimeSeconds());
         swerveCommand = new PPSwerveControllerCommand(traj1, m_Drivetrain::getPose, DrivetrainConstants.DRIVE_KINEMATICS, // SwerveDriveKinematics
         new PIDController(5.0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
         new PIDController(5.0, 0, 0), // Y controller (usually the same values as X controller)
