@@ -12,14 +12,18 @@ public interface ShoulderIO{
   /** Contains all of the input data received from hardware. */
   public static class ShoulderIOInputs implements LoggableInputs {
     public double velocity = 0.0;
+    public double position = 0.0;
     public double appliedVolts = 0.0;
-    public boolean isExtend = false;
+    public boolean isExtendLimiter = false;
+    public boolean isRetractLimiter = true;
     public double[] currentAmps = new double[] {};
     public double[] tempCelcius = new double[] {};
 
     public void toLog(LogTable table) {
       table.put("VelocityOutputPercent", velocity);
-      table.put("isExtend", isExtend);
+      table.put("Position", position);
+      table.put("isExtendLimiter", isExtendLimiter);
+      table.put("isRetractLimiter", isRetractLimiter);
       table.put("AppliedVolts", appliedVolts);
       table.put("CurrentAmps", currentAmps);
       table.put("TempCelcius", tempCelcius);
@@ -27,7 +31,9 @@ public interface ShoulderIO{
 
     public void fromLog(LogTable table) {
       velocity = table.getDouble("VelocityOutputPercent", velocity);
-      isExtend = table.getBoolean("isExtend", isExtend);
+      position = table.getDouble("Position", position);
+      isExtendLimiter = table.getBoolean("isExtendLimiter", isExtendLimiter);
+      isRetractLimiter = table.getBoolean("isRetractLimiter", isRetractLimiter);
       appliedVolts = table.getDouble("AppliedVolts", appliedVolts);
       currentAmps = table.getDoubleArray("CurrentAmps", currentAmps);
       tempCelcius = table.getDoubleArray("TempCelcius", tempCelcius);
@@ -47,6 +53,5 @@ public interface ShoulderIO{
    */
   public default void setVelocity(double velocityRadPerSec) {}
 
-  /** Retract or Extend pistons */
-  public default void setPiston(boolean isExtend) {}
+  public default void setPosition(double position) {}
 }

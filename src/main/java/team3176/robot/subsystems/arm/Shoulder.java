@@ -18,6 +18,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import team3176.robot.subsystems.arm.ShoulderIO;
+import team3176.robot.subsystems.arm.ShoulderIO.ShoulderIOInputs;
+import org.littletonrobotics.junction.Logger;
+
 public class Shoulder extends SubsystemBase {
 
   private TalonFX jointMotor;
@@ -25,15 +29,17 @@ public class Shoulder extends SubsystemBase {
  // private final FlywheelIO io;
  // private final FlywheelIOInputs inputs = new FlywheelIOInputs();
   private static Shoulder instance;
+  private final ShoulderIO io;
+  private final ShoulderIOInputs inputs = new ShoulderIOInputs();
   private boolean isSmartDashboardTestControlsShown;
   public String mode = "";
   private DigitalInput extendLimiter;
   private DigitalInput retractLimiter;
   private int intent;
   public int x;
-  public Shoulder()
+  public Shoulder(ShoulderIO io)
   {
-    //this.io = io;
+    this.io = io;
     //System.out.println("Shoulder has been constructed");
     jointMotor = new TalonFX(ArmConstants.SHOULDER_FALCON_CAN_ID);
     extendLimiter = new DigitalInput(ArmConstants.SHOULDER_EXTENDED_LIMIT_CHAN);
@@ -242,7 +248,53 @@ public class Shoulder extends SubsystemBase {
     return retractLimiter.get();
   }
   public static Shoulder getInstance() {
-    if(instance == null) {instance = new Shoulder();}
+    if(instance == null) {instance = new Shoulder(new ShoulderIO() {});}
     return instance;
+  }
+
+  @Override
+  public void periodic()
+  {
+    io.updateInputs(inputs);
+    Logger.getInstance().processInputs("Shoulder", inputs);
+    Logger.getInstance().recordOutput("Shoulder/Velocity", getVelocity());
+    Logger.getInstance().recordOutput("Shoulder/Position", getPosition());
+    Logger.getInstance().recordOutput("Shoulder/ExtendLimiter", getIsExtendLimiter());
+    Logger.getInstance().recordOutput("Shoulder/RetractLimiter", getIsRetractLimiter());
+  }
+
+  public boolean getIsExtendLimiter()
+  {
+    return inputs.isExtendLimiter;
+  }
+
+  public boolean getIsRetractLimiter()
+  {
+    return inputs.isRetractLimiter;
+  }
+
+  public double getVelocity()
+  {
+    return inputs.velocity;
+  }
+
+  public double getPosition()
+  {
+    return inputs.position;
+  }
+
+  public void runVoltage(double volts)
+  {
+    io.setVoltage(volts);
+  }
+
+  public void setVelocity(double velocity)
+  {
+    io.setVelocity(velocity);
+  }
+
+  public void setPosition(double position)
+  {
+    io.setPosition(position);
   }
 }

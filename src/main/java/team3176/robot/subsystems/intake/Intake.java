@@ -305,6 +305,11 @@ public class Intake extends SubsystemBase {
     return inputs.proximity;
    }
 
+   public void runVoltage(double volts)
+   {
+    io.setVoltage(volts);
+   }
+
    public void setVelocity(double velocity)
    {
     io.setVelocity(velocity);

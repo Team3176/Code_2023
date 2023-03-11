@@ -19,9 +19,15 @@ import team3176.robot.constants.ArmConstants;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
+import team3176.robot.subsystems.arm.ElbowIO;
+import team3176.robot.subsystems.arm.ElbowIO.ElbowIOInputs;
+import org.littletonrobotics.junction.Logger;
+
 public class Elbow extends SubsystemBase {
 
 private static Elbow instance;
+private final ElbowIO io;
+private final ElbowIOInputs inputs = new ElbowIOInputs();
 
 private WPI_TalonFX elbowMotor;
 private ElbowState currentState;
@@ -41,8 +47,8 @@ public enum ElbowState {
     TRANSITIONING   //Optional state that is currently not used
 }
 
-public Elbow() {
-
+public Elbow(ElbowIO io) {
+    this.io = io;
     elbowMotor = new WPI_TalonFX (ArmConstants.ELBOW_FALCON_MOTOR_CID, "rio");
 	elbowCANCoder = new CANCoder(ArmConstants.ELBOW_CANCODER_CID,"rio");
 	SlewRateLimiter filterLeftYStick = new SlewRateLimiter(0.1);
@@ -198,7 +204,7 @@ public double getCurrentPosition() {
 }
 
 public static Elbow getInstance() {
-    if(instance == null) {instance = new Elbow();}
+    if(instance == null) {instance = new Elbow(new ElbowIO() {});}
     return instance;
   }
   public boolean clawIsHoldingCone() {
@@ -280,5 +286,37 @@ public static Elbow getInstance() {
 
    }
 
+   @Override
+   public void periodic() 
+   {
+    io.updateInputs(inputs);
+    Logger.getInstance().processInputs("Elbow", inputs);
+    Logger.getInstance().recordOutput("Elbow/Velocity", getVelocity());
+    Logger.getInstance().recordOutput("Elbow/Position", getPosition());
+   }
 
+   public double getVelocity()
+   {
+    return inputs.velocity;
+   }
+
+   public double getPosition()
+   {
+    return inputs.position;
+   }
+
+   public void runVoltage(double volts)
+   {
+    io.setVoltage(volts);
+   }
+
+   public void setVelocity(double velocity)
+   {
+    io.setVelocity(velocity);
+   }
+
+   public void setPositionLogger(double position)
+   {
+    io.setPosition(position);
+   }
 }
