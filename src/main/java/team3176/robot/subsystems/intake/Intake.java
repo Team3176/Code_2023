@@ -63,6 +63,7 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   public Intake(IntakeIO io){
     this.io = io;
+    
     //dblSub = dblTopic.subscribe(0,PubSubOption.keepDuplicates(true), PubSubOption.pollStorage(10));
     //dblPub.setDefault(0.0);
     //dblPub = dblTopic.publish();
@@ -221,6 +222,17 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
+    io.updateInputs(inputs);
+    Logger.getInstance().processInputs("Intake", inputs);
+    Logger.getInstance().recordOutput("Intake/Velocity", getVelocity());
+    Logger.getInstance().recordOutput("linebreak", getIsLinebreak());
+    Logger.getInstance().recordOutput("PositionFront", getPositionFront());
+    Logger.getInstance().recordOutput("PositionBack", getPositionBack());
+    Logger.getInstance().recordOutput("iscone", getisCone());
+    Logger.getInstance().recordOutput("iscube", getisCube());
+    Logger.getInstance().recordOutput("isExtended", getisextended());
+    
+
     XPub.set(1.0);
     YPub.set(2.0, 0);
     long time = NetworkTablesJNI.now();
@@ -258,6 +270,52 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("getProximity", m_ColorSensor.getProximity());
 
    }
+
+   public double getVelocity()
+   {
+    return inputs.velocity;
+   }
+
+   public boolean getIsLinebreak()
+   {
+    return inputs.isLinebreak;
+   }
+   public double getPositionFront()
+   {
+    return inputs.PositionFront;
+   }
+   public double getPositionBack()
+   {
+    return inputs.PositionBack;
+   }
+   public boolean getisCone()
+   {
+    return inputs.isCone;
+   }
+   public boolean getisCube()
+   {
+    return inputs.isCube;
+   }
+   public boolean getisextended()
+   {
+    return inputs.isextended;
+   }
+   public double getproximity()
+   {
+    return inputs.proximity;
+   }
+
+   public void setVelocity(double velocity)
+   {
+    io.setVelocity(velocity);
+   }
+
+   public void setIntakePosition(boolean isExtended)
+   {
+    io.setIntakePosition(isExtended);
+   }
+
+
 
 }
 
